@@ -1,0 +1,232 @@
+/* Basic reset (only inside footer) */
+.ft-footer * {
+  box-sizing: border-box;
+}
+
+/* FOOTER WRAPPER */
+.ft-footer {
+  width: 100%;
+  padding-left: clamp(1.5rem, 6vw, 6rem);
+  padding-right: clamp(1.5rem, 6vw, 6rem);
+  background: #050b1f;
+  color: #e5e7eb;
+  position: relative;
+  overflow: hidden;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+/* TOP AREA */
+.ft-top {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 5% 0%;
+  padding-bottom: 0;
+  gap: 40px;
+  justify-content: space-between;
+  position: relative;
+  z-index: 2;
+}
+
+/* COLUMN INITIAL STATE */
+.ft-column {
+  flex: 1 1 180px;
+  min-width: 180px;
+  opacity: 0;
+  transform: translateX(-50px);
+}
+
+/* ANIMATE ONCE */
+.ft-visible .ft-column {
+  animation: ft-move 0.9s ease-out forwards;
+}
+
+/* STAGGER USING nth-child */
+.ft-visible .ft-column:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.ft-visible .ft-column:nth-child(2) {
+  animation-delay: 0.25s;
+}
+.ft-visible .ft-column:nth-child(3) {
+  animation-delay: 0.4s;
+}
+.ft-visible .ft-column:nth-child(4) {
+  animation-delay: 0.55s;
+}
+
+/* KEYFRAMES */
+@keyframes ft-move {
+  from {
+    transform: translateX(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* BRAND */
+.ft-brand {
+  max-width: 260px;
+}
+
+/* HEADINGS */
+.ft-logo,
+.ft-title {
+  background: linear-gradient(
+    130deg,
+    var(--color-main) 0%,
+    var(--color-main) 20%,
+    var(--color-bg) 50%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.ft-logo {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.ft-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.ft-desc {
+  font-size: 14px;
+  color: #d1d5db;
+  line-height: 1.5;
+}
+
+/* LINKS */
+.ft-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.ft-links li {
+  font-size: 14px;
+  color: #e5e7eb;
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+
+.ft-links li:hover {
+  color: var(--color-main);
+}
+
+/* SOCIAL ICONS */
+.ft-socials {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.ft-social-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: 1px solid #4b5563;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(45deg, rgb(1, 1, 46) 30%, var(--color-main) 50%);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+.ft-social-icon:hover {
+  border: 1.2px solid #8bb7f4;
+}
+/* NEWSLETTER */
+.ft-newsletter {
+  max-width: 280px;
+}
+
+.ft-form {
+  margin-top: 14px;
+  display: flex;
+  border-radius: 10px;
+  border: 1px solid #4b5563;
+  overflow: hidden;
+}
+
+.ft-input {
+  flex: 1;
+  padding: 10px 14px;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #e5e7eb;
+}
+
+.ft-submit {
+  width: 45px;
+  background: linear-gradient(130deg, rgb(116, 142, 168), var(--color-main));
+  border: none;
+  cursor: pointer;
+}
+
+/* BIG TEXT (NO TRIGGER) */
+.ft-bottom-text {
+  width: 100%;
+  /* padding-bottom: 1%; */
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  /* border: 2px solid green; */
+}
+.ft-logo {
+  width: 100%;
+  /* max-height: 80%; */
+}
+.ft-final-text {
+  font-size: 9.5rem;
+  font-weight: 800;
+  background: linear-gradient(130deg, rgb(116, 142, 168), #385893);
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: shine 8s linear infinite;
+}
+
+@keyframes shine {
+  0% {
+    background-position: 200% center;
+  }
+  100% {
+    background-position: 0% center;
+  }
+}
+@media (min-width: 1200px) {
+  .ft-final-text {
+    font-size: 15rem;
+  }
+}
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .ft-top {
+    flex-direction: column;
+    gap: 5px;
+    padding-bottom: 2%;
+    /* padding:23px; */
+  }
+  .ft-bottom-text {
+    margin-top: -5%;
+  }
+  .ft-final-text {
+    font-size: clamp(4rem, 14vw, 8rem);
+    text-align: center;
+    margin-top: -10%;
+    margin-bottom: 10%;
+  }
+}

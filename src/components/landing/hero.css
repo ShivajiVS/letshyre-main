@@ -1,0 +1,1047 @@
+/* RESET */
+
+* {
+  margin: 0;
+
+  padding: 0;
+
+  box-sizing: border-box;
+
+  font-family: "DM Sans", "Inter", sans-serif;
+}
+
+/* ================== BUTTONS ================== */
+
+.button01 {
+  border-radius: 99px; /* Pill shape is very modern */
+
+  padding: 16px 28px;
+
+  font-size: 0.95rem;
+
+  font-weight: 600;
+
+  background-color: #0f172a; /* Slate 900 - softer than pure black */
+
+  color: white;
+
+  border: none;
+
+  /* Soft, diffused shadow instead of harsh drop shadow */
+
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.15);
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.button02 {
+  border-radius: 99px;
+
+  padding: 16px 28px;
+
+  font-size: 0.95rem;
+
+  font-weight: 600;
+
+  background: linear-gradient(135deg, #e0e7ff 0%, #dbeafe 100%);
+
+  color: #0f172a;
+
+  border: 1px solid rgba(255, 255, 255, 0.8);
+
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.08);
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.button01:hover {
+  transform: translateY(-2px);
+
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.25);
+}
+
+.button02:hover {
+  transform: translateY(-2px);
+
+  box-shadow: 0 12px 24px rgba(37, 99, 235, 0.15);
+
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+}
+
+/* ================== HERO SECTION ================== */
+
+.Hero-section {
+  padding: 5% 0;
+
+  padding-left: clamp(1.5rem, 6vw, 6rem);
+
+  padding-right: clamp(1.5rem, 6vw, 6rem);
+
+  display: flex;
+
+  align-items: start;
+
+  justify-content: space-between;
+
+  position: relative;
+
+  background-color: #ffffff;
+}
+
+.FP-triangle {
+  position: absolute;
+
+  top: 0;
+
+  right: 0;
+
+  display: flex;
+
+  justify-content: end;
+}
+
+.FP-triangle > img {
+  width: 90%;
+}
+
+@keyframes move-triangle {
+  from {
+    right: 20%;
+
+    rotate: 270deg;
+  }
+
+  to {
+    top: 0;
+
+    right: 0;
+
+    rotate: 360deg;
+  }
+}
+
+.hero-text-part {
+  width: 50%;
+
+  margin-top: 6%;
+}
+
+@keyframes hero-right-move {
+  from {
+    transform: translateX(-110%);
+  }
+
+  to {
+    transform: translateX(0%);
+  }
+}
+
+.blue-text {
+  color: #2563eb; /* Vibrant, modern primary blue */
+
+  font-weight: 800; /* Bolder for better hierarchy */
+
+  font-size: clamp(2rem, 4vw, 3.5rem);
+
+  line-height: 1.15;
+
+  letter-spacing: -0.02em;
+
+  display: block;
+}
+
+.grey-text {
+  color: #64748b; /* Slate 500 - excellent readable grey */
+
+  margin-top: 1.5rem;
+
+  font-weight: 500;
+
+  font-size: 1.1rem;
+
+  line-height: 1.6;
+}
+
+.buttons-section {
+  margin-top: 6%;
+}
+
+.job-button {
+  width: 35%;
+}
+
+.hiring-button {
+  margin-left: 2%;
+
+  width: 35%;
+}
+
+/* ================== PERCENTAGE BOXES ================== */
+
+.percetage-box {
+  display: flex;
+
+  gap: 24px;
+
+  margin-top: 2.5rem;
+}
+
+.percetage-box-inner01 {
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+
+  align-items: center;
+
+  border-radius: 12px;
+
+  padding: 16px 20px;
+
+  width: 23%;
+
+  background-color: #eff6ff; /* Very soft blue background */
+
+  border: 1px solid #bfdbfe;
+}
+
+.percetage-box-inner01 > span {
+  color: #2563eb;
+
+  font-size: 1.75rem;
+
+  font-weight: 700;
+
+  line-height: 1;
+}
+
+.percetage-box-inner01 > p {
+  color: #64748b;
+
+  font-weight: 600;
+
+  font-size: 0.75rem;
+
+  margin-top: 4px;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.05em;
+}
+
+.percetage-box-inner02 {
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+
+  width: 23%;
+}
+
+.percetage-box-inner02 > .grey-text {
+  margin-top: 0;
+
+  font-size: 0.85rem;
+
+  line-height: 1.2;
+}
+
+.percetage-box-inner02 > span {
+  color: #0f172a;
+
+  font-size: 1.5rem;
+
+  font-weight: 700;
+
+  margin: 4px 0;
+}
+
+.percetage-box-inner02 > a {
+  font-size: 0.85rem;
+
+  color: #2563eb;
+
+  text-decoration: none;
+
+  font-weight: 600;
+
+  transition: opacity 0.2s;
+}
+
+.percetage-box-inner02 > a:hover {
+  opacity: 0.8;
+}
+
+/* ================== HERO IMAGE & FLOATING ELEMENTS ================== */
+
+.hero-image-part {
+  width: 35%;
+
+  margin-top: 7%;
+
+  z-index: 1;
+
+  aspect-ratio: 16 / 9;
+
+  position: relative;
+
+  animation: hero-move-left02 1s ease-out forwards;
+}
+
+@keyframes hero-move-left {
+  from {
+    opacity: 0;
+
+    scale: 0.7;
+
+    transform: translateX(10%) rotate(-180deg);
+  }
+
+  to {
+    scale: 1;
+
+    opacity: 1;
+
+    transform: translateX(0) rotate(0deg);
+  }
+}
+
+@keyframes hero-move-left02 {
+  from {
+    opacity: 0;
+
+    scale: 0.5;
+
+    transform: translateX(10%);
+  }
+
+  to {
+    scale: 1;
+
+    opacity: 1;
+
+    transform: translateX(0);
+  }
+}
+
+@keyframes hero-move-left03 {
+  from {
+    opacity: 0;
+
+    transform: translateX(140%);
+  }
+
+  to {
+    opacity: 1;
+
+    transform: translateX(0%);
+  }
+}
+
+.hero-image-part:hover .robo-box {
+  right: -11%;
+}
+
+.hero-image-part:hover .Users-box {
+  bottom: -12%;
+
+  transition-duration: 0.5s;
+}
+
+.hero-image-part:hover .notification-box {
+  left: -22%;
+}
+
+.hero-image-part > img {
+  width: 100%;
+
+  border-radius: 16px;
+
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.08),
+    0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* Glassmorphism effect for all floating elements */
+
+.robo-box,
+.notification-box,
+.Users-box {
+  background: rgba(255, 255, 255, 0.85);
+
+  backdrop-filter: blur(12px);
+
+  -webkit-backdrop-filter: blur(12px);
+
+  border: 1px solid rgba(255, 255, 255, 0.5);
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.robo-box {
+  position: absolute;
+
+  border-radius: 16px;
+
+  width: 110px;
+
+  height: 110px;
+
+  right: -10%;
+
+  top: -10%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  transition: right 0.8s ease;
+
+  opacity: 0;
+
+  animation: hero-box03 1s ease-in-out forwards;
+
+  animation-delay: 2s;
+}
+
+.robo-box > img {
+  width: 50%;
+
+  animation: robo-move 2s ease-in-out infinite;
+}
+
+@keyframes robo-move {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.notification-box {
+  position: absolute;
+
+  top: 10%;
+
+  left: -20%;
+
+  padding: 12px 16px;
+
+  border-radius: 12px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  transition: left 0.8s ease;
+
+  opacity: 0;
+
+  animation: hero-box02 1s ease-in-out forwards;
+
+  animation-delay: 1.5s;
+}
+
+.notifictaion-text {
+  font-size: 0.85rem;
+
+  font-weight: 600;
+
+  color: #0f172a;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+}
+
+.notifictaion-text > img {
+  aspect-ratio: 1/1;
+
+  width: 15px;
+}
+
+.Users-box {
+  padding: 16px;
+
+  position: absolute;
+
+  width: 45%;
+
+  border-radius: 16px;
+
+  left: -22%;
+
+  bottom: -10%;
+
+  display: grid;
+
+  justify-content: center;
+
+  align-items: center;
+
+  opacity: 0;
+
+  transition: bottom 0.8s ease;
+
+  animation: hero-box01 1s ease-in-out forwards;
+
+  animation-delay: 1s;
+}
+
+.Users-box > img {
+  width: 95%;
+}
+
+@keyframes hero-box01 {
+  from {
+    scale: 0.6;
+
+    transform: translate(80px, -80px);
+  }
+
+  to {
+    scale: 1;
+
+    transform: translate(0, 0);
+
+    opacity: 1;
+  }
+}
+
+@keyframes hero-box02 {
+  from {
+    scale: 0.6;
+
+    transform: translate(80px, 30px);
+  }
+
+  to {
+    scale: 1;
+
+    transform: translate(0, 0);
+
+    opacity: 1;
+  }
+}
+
+@keyframes hero-box03 {
+  from {
+    scale: 0.6;
+
+    transform: translate(-80px, 30px);
+  }
+
+  to {
+    scale: 1;
+
+    transform: translate(0, 0);
+
+    opacity: 1;
+  }
+}
+
+/* ================== TAGLINE SECTION ================== */
+
+.tagline-wrapper {
+  width: 100%;
+
+  padding: 80px 16px; /* Gives it more breathing room to stand out */
+
+  display: flex;
+
+  justify-content: center;
+
+  background-color: #ffffff;
+}
+
+.tagline {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  width: 100%;
+}
+
+.tag-right-lines {
+  display: flex;
+
+  flex-direction: row;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 1.2rem; /* Clean spacing between the two sentences */
+
+  line-height: 1;
+
+  z-index: 2;
+
+  flex-wrap: wrap;
+}
+
+/* Base styling for both lines */
+
+.tag-line01,
+.tag-line02 {
+  font-size: clamp(2rem, 4vw, 4.5rem); /* Scaled slightly larger for impact */
+
+  white-space: nowrap;
+}
+
+/* The "Old Way" - Lighter, softer, faded */
+
+.tag-line01 {
+  color: #94a3b8; /* A softer, elegant slate grey */
+
+  font-weight: 500; /* Medium weight, not too heavy */
+
+  letter-spacing: -0.01em; /* Relaxed letter spacing */
+}
+
+/* The "New Way" - Bold, vibrant, draws the eye */
+
+.tag-line02 {
+  color: #2563eb; /* Strong primary blue */
+
+  font-weight: 800; /* Extra bold for maximum emphasis */
+
+  letter-spacing: -0.03em; /* Tighter tracking for bold text looks cleaner */
+}
+
+/* ================== SCROLL ANIMATION ================== */
+
+.scroll-start.animate {
+  animation: startFromLeft 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* ================== SCROLL ANIMATION ================== */
+
+.scroll-start {
+  color: #2563eb;
+}
+
+.scroll-start.animate {
+  animation: startFromLeft 1.8s ease-in-out forwards;
+}
+
+@keyframes startFromLeft {
+  from {
+    opacity: 0.6;
+
+    transform: translateX(-70px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform: translateX(0);
+  }
+}
+
+/* ================== MEDIA QUERIES ================== */
+
+/* -------- Tablet: 768px–1068px -------- */
+
+@media (min-width: 768px) and (max-width: 1068px) {
+  .hero-text-part {
+    width: 52%;
+
+    margin-top: 6%;
+  }
+
+  .FP-triangle {
+    position: absolute;
+
+    top: 0;
+
+    right: 0;
+
+    display: flex;
+
+    justify-content: end;
+  }
+
+  .FP-triangle > img {
+    width: 60%;
+  }
+
+  .buttons-section {
+    flex-direction: column !important; /* Stacks the buttons one under the other */
+
+    align-items: stretch !important; /* Forces children to stretch to the edges */
+
+    gap: 16px !important; /* Slightly tighter gap when stacked vertically */
+  }
+
+  .hero-image-part {
+    width: 30%;
+
+    margin-top: 1%;
+
+    z-index: 1;
+
+    aspect-ratio: 16 / 9;
+  }
+
+  .notifictaion-text {
+    font-size: 0.5rem;
+
+    text-align: center;
+
+    margin-left: 2px;
+  }
+
+  .job-button,
+  .hiring-button {
+    width: 100% !important; /* Forces both buttons to stretch the entire width */
+  }
+
+  .tag-right-lines {
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 0.5rem;
+  }
+
+  .tag-line01,
+  .tag-line02 {
+    font-size: clamp(1.8rem, 6vw, 2.5rem);
+  }
+
+  .hero-image-part {
+    margin-top: 6%;
+  }
+
+  .robo-box {
+    width: 80px;
+
+    height: 80px;
+  }
+}
+
+/* -------- Smaller tablet: 768px–888px (triangle tweak) -------- */
+
+@media (min-width: 768px) and (max-width: 888px) {
+  .FP-triangle > img {
+    width: 50%;
+  }
+}
+
+/* -------- Max-width: 768px (tablets + big phones) -------- */
+
+@media (min-width: 768px) and (max-width: 1068px) {
+  .hero-text-part {
+    width: 52%;
+
+    margin-top: 10%;
+  }
+
+  .FP-triangle {
+    position: absolute;
+
+    top: 0;
+
+    right: 0;
+
+    display: flex;
+
+    justify-content: end;
+  }
+
+  .FP-triangle > img {
+    width: 60%;
+  }
+
+  .hero-image-part {
+    width: 30%;
+
+    margin-top: 1%;
+
+    z-index: 1;
+
+    aspect-ratio: 16 / 9;
+  }
+
+  .notifictaion-text {
+    font-size: 0.5rem;
+
+    text-align: center;
+
+    margin-left: 2px;
+  }
+
+  .job-button {
+    width: 39%;
+  }
+
+  .hiring-button {
+    width: 50%;
+  }
+
+  .tag-right-lines {
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 0.5rem;
+  }
+
+  .tag-line01,
+  .tag-line02 {
+    font-size: clamp(1.8rem, 6vw, 2.5rem);
+  }
+
+  .hero-image-part {
+    margin-top: 6%;
+  }
+
+  .robo-box {
+    width: 80px;
+
+    height: 80px;
+  }
+}
+
+/* ================== MEDIA QUERIES ================== */
+
+/* -------- Tablet: 768px–1068px -------- */
+
+@media (min-width: 768px) and (max-width: 1068px) {
+  .hero-text-part {
+    width: 55%; /* Given slightly more room for tablet */
+
+    margin-top: 8%;
+  }
+
+  .FP-triangle {
+    position: absolute;
+
+    top: 0;
+
+    right: 0;
+
+    display: flex;
+
+    justify-content: end;
+  }
+
+  .FP-triangle > img {
+    width: 60%;
+  }
+
+  .hero-image-part {
+    width: 40%; /* Given slightly more room */
+
+    margin-top: 1%;
+
+    z-index: 1;
+
+    aspect-ratio: 16 / 9;
+  }
+
+  .notifictaion-text {
+    font-size: 0.6rem;
+
+    text-align: center;
+
+    margin-left: 2px;
+  }
+
+  /* Buttons will now auto-size based on the flex-wrap we added above! */
+
+  .tag-right-lines {
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 0.5rem;
+  }
+
+  .tag-line01,
+  .tag-line02 {
+    font-size: clamp(1.8rem, 6vw, 2.5rem);
+  }
+
+  .hero-image-part {
+    margin-top: 6%;
+  }
+
+  .robo-box {
+    width: 80px;
+
+    height: 80px;
+  }
+}
+
+/* -------- Smaller tablet: 768px–888px -------- */
+
+@media (min-width: 768px) and (max-width: 888px) {
+  .FP-triangle > img {
+    width: 50%;
+  }
+}
+
+/* -------- Max-width: 768px (Phones & Tablets) -------- */
+
+@media (max-width: 768px) {
+  .Hero-section {
+    padding: 80px 6% 10%; /* Fixed overlapping with top navigation */
+
+    display: block;
+  }
+
+  .hero-text-part {
+    width: 100%;
+
+    margin-top: 1.5rem;
+  }
+
+  .hero-image-part,
+  .FP-triangle {
+    display: none;
+  }
+
+  .blue-text {
+    font-size: clamp(2rem, 8vw, 2.6rem);
+
+    line-height: 1.2;
+  }
+
+  .hero-text-part > .grey-text {
+    font-size: 1rem;
+
+    margin-top: 1rem;
+
+    margin-bottom: 2rem;
+  }
+
+  .buttons-section {
+    display: flex;
+
+    flex-direction: row; /* Puts buttons side-by-side */
+
+    align-items: center;
+
+    gap: 20px; /* The gap between the two buttons */
+
+    margin-top: 2.5rem;
+
+    width: 100%;
+  }
+
+  .job-button,
+  .hiring-button {
+    width: fit-content !important; /* Only takes up as much space as the text needs */
+
+    white-space: nowrap !important; /* Text will never break to a second line */
+
+    margin-left: 0 !important; /* Resets old margins */
+
+    flex-shrink: 0;
+  }
+
+  .percetage-box {
+    display: flex;
+
+    align-items: center;
+
+    gap: 16px;
+
+    margin-top: 2.5rem;
+  }
+
+  .percetage-box-inner01 {
+    flex: 0 0 auto;
+
+    width: 130px;
+
+    padding: 14px 10px;
+  }
+
+  .percetage-box-inner01 > span {
+    font-size: 1.5rem;
+  }
+
+  .percetage-box-inner01 > p {
+    font-size: 0.65rem;
+  }
+
+  .percetage-box-inner02 {
+    flex: 1 1 auto;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    gap: 2px;
+  }
+
+  .percetage-box-inner02 > .grey-text {
+    margin: 0;
+
+    font-size: 0.8rem;
+  }
+
+  .percetage-box-inner02 > span {
+    margin: 0;
+
+    font-size: 1.3rem;
+  }
+
+  .tagline-wrapper {
+    padding: 30px 16px 60px;
+  }
+
+  .tag-right-lines {
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 0.5rem;
+  }
+
+  .tag-line01,
+  .tag-line02 {
+    font-size: clamp(1.8rem, 6vw, 2.5rem);
+  }
+}
+
+/* -------- Max-width: 480px (Very Small Phones) -------- */
+
+@media (max-width: 480px) {
+  .Hero-section {
+    padding: 12% 5%;
+  }
+
+  .blue-text {
+    font-size: 2.1rem;
+  }
+
+  .hero-text-part > .grey-text {
+    font-size: 0.95rem;
+  }
+}

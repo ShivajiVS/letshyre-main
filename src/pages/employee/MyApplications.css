@@ -1,0 +1,643 @@
+/* ================= WRAPPER ================= */
+.apps-wrapper {
+  padding: 10px;
+  height: 100%;
+}
+
+/* ================= HERO ================= */
+.apps-hero {
+  /* background: linear-gradient(180deg,#C4D9FF); */
+  background: linear-gradient(180deg, #90b4f0 14%, #a9c5f5 45%, #c1d5f9 77%);
+  border-radius: 18px;
+  height: 30vh;
+  padding: 22px;
+  margin-bottom: 20px;
+  color: white;
+  position: relative;
+  overflow: visible;
+}
+.apps-hero-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden; /* only background clipped */
+  z-index: 0;
+}
+.apps-hero h3 {
+  font-size: 20px;
+  margin-bottom: 5px;
+  color: black;
+}
+.apps-hero p {
+  font-size: 14px;
+  opacity: 0.9;
+}
+/* ================= SUMMARY ================= */
+.apps-summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  width: 96%;
+  margin-top: 18px;
+  position: absolute;
+  left: 2%;
+}
+.my-app-bg {
+  position: absolute;
+  right: -360px;
+  top: -360px;
+  width: 80%;
+  /* border: 2px solid green; */
+  animation: bg-rotate 15s linear infinite;
+}
+/* smooth continuous rotation */
+@keyframes bg-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.apps-summary,
+.apps-hero h3,
+.apps-hero p {
+  position: relative;
+  z-index: 1;
+}
+.apps-stat {
+  background: var(--primary-lite-blue);
+  color: black;
+  padding: 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: 0.25s;
+  border: 1px solid var(--secondary-sky-blue);
+  position: relative;
+}
+.apps-stat-arrow {
+  position: absolute;
+  right: 3%;
+  top: 5%;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid black;
+}
+.apps-stat-arrow.active {
+  border: 0px solid black;
+}
+.apps-stat.active {
+  box-shadow: 5px 5px 8px rgba(16, 16, 16, 0.523);
+  background: linear-gradient(130deg, #90b4f0 14%, #a9c5f5 45%, #c1d5f9 77%);
+  border: none;
+  color: white;
+}
+.apps-stat-sub {
+  font-size: 12px;
+  opacity: 0.8;
+  margin-top: 4px;
+}
+.apps-stat span {
+  font-size: 14px;
+  color: #666;
+}
+
+.apps-stat h2 {
+  margin-top: 15px;
+  font-size: 28px;
+}
+
+/* ================= FILTER BAR ================= */
+.apps-filter-bar {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 8%;
+  margin-bottom: 18px;
+  padding: 2px;
+  border-radius: 12px;
+}
+.apps-filter-bar-inner {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  padding: 8px;
+  border: 1.5px solid var(--secondary-sky-blue);
+  border-radius: 8px;
+  box-shadow: 0 0 15px #6296efac;
+}
+.apps-filter-bar button {
+  padding: 8px 18px;
+  border-radius: 8px;
+  border: 1px solid var(--secondary-sky-blue);
+  background: transparent;
+  cursor: pointer;
+}
+
+.apps-filter-bar button.active {
+  background: linear-gradient(90deg, var(--secondary-sky-blue), #a9c6f9);
+  box-shadow: 3px 3px 3px rgba(16, 16, 16, 0.523);
+  color: white;
+  border: none;
+}
+
+/* ================= STATUS BADGE ================= */
+.apps-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 5px;
+}
+
+.apps-badge.rejected {
+  background: #f8e0e070;
+  color: #b40000;
+}
+.apps-badge.pending {
+  background: #fff3c9bd;
+  color: #a57400;
+}
+.apps-badge.shortlisted {
+  background: #d9ffd894;
+  color: #008a00;
+}
+.apps-badge.applied {
+  background: #e3ecff;
+  color: #2a60d8;
+}
+
+/* ================= JOB LIST ================= */
+.apps-job-list {
+  display: grid;
+  gap: 14px;
+}
+.apps-mobile-count {
+  display: none;
+}
+.apps-job-list .cd-job-card {
+  animation: jobMove 0.3s ease;
+}
+
+@keyframes jobMove {
+  from {
+    opacity: 0.85;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* ================= RESPONSIVE ================= */
+
+/* tablet */
+@media (max-width: 1000px) {
+  .apps-mobile-count {
+    display: inline-block;
+    color: black;
+    font-weight: bold;
+  }
+  .apps-summary {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 5px;
+  }
+  .apps-stat-sub,
+  .apps-stat-arrow,
+  .apps-stat h2 {
+    display: none;
+  }
+  .apps-stat h3 {
+    font-size: 0.8rem;
+  }
+  .apps-filter-bar-inner {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .my-app-bg {
+    position: absolute;
+    right: -260px;
+    top: -260px;
+    width: 80%;
+  }
+}
+
+/* mobile */
+@media (max-width: 600px) {
+  .apps-hero {
+    padding: 10px;
+  }
+  .apps-summary {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 5px;
+  }
+  .my-app-bg {
+    position: absolute;
+    right: -160px;
+    top: -160px;
+    width: 80%;
+  }
+  .apps-filter-bar {
+    margin-top: 10%;
+    flex-wrap: wrap;
+  }
+  .apps-stat {
+    padding: 7px 10px;
+  }
+
+  .cd-job-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .apps-stat-job {
+    display: none;
+  }
+  .job-logo {
+    width: 50px;
+    height: 50px;
+  }
+}
+@media (max-width: 390px) {
+  .my-app-bg {
+    position: absolute;
+    right: -100px;
+    top: -100px;
+    width: 80%;
+  }
+  .apps-filter-bar {
+    margin-top: 21%;
+    flex-wrap: wrap;
+  }
+  .apps-stat h3 {
+    font-size: 0.7rem;
+  }
+}
+
+/* ====================================================
+         Score Card Section
+========================================================= */
+
+/* ================= MAIN SECTION ================= */
+.sc-section-main {
+  padding: 10px;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #f6faff 0%, #deeaf8 50%, #c7dafa 100%);
+}
+/* ================= HEADER ================= */
+.sc-section-main h3 {
+  color: var(--secondary-sky-blue);
+  margin-bottom: 5px;
+}
+/* ================= CANDIDATE DETAILS ================= */
+.sc-cand-details-box {
+  background: white;
+  border-radius: 16px;
+  padding: 15px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+.sc-cand-details {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.sc-role-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.sc-role-tag {
+  background: #ebf0fa;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  color: var(--secondary-sky-blue);
+  font-weight: 600;
+}
+
+/* ================= MAIN WRAPPER ================= */
+.sc-wrapper {
+  width: 100%;
+}
+
+/* ================= GRID LAYOUT ================= */
+.sc-top-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 2.2fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+.sc-left-part-main {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+/* ================= LEFT COLUMN ================= */
+.sc-left-part {
+  display: grid;
+  grid-template-columns: 0.6fr 1fr;
+  gap: 20px;
+  /* border: 2px solid green; */
+}
+
+/* ================= PROFILE CARD ================= */
+.sc-profile-card {
+  position: relative;
+  height: 220px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 0 5px rgba(185, 183, 183, 0.776);
+}
+/* image */
+.sc-profile-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* overlay */
+.sc-profile-overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 5px;
+  color: white;
+  z-index: 2;
+  text-align: center;
+  backdrop-filter: blur(2px);
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.6),
+    rgba(0, 0, 0, 0.363),
+    transparent
+  );
+  border-radius: 0 0 16px 16px;
+}
+
+/* text styling */
+.sc-profile-overlay h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: white;
+}
+
+.sc-profile-overlay p {
+  margin: 4px 0 0;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+/* ================= PERFORMANCE CARD ================= */
+.sc-performance-card {
+  background: linear-gradient(
+    200deg,
+    white 0%,
+    #d1dff5 25%,
+    var(--secondary-sky-blue) 100%
+  );
+  border-radius: 16px;
+  padding: 15px;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 5px rgba(185, 183, 183, 0.776);
+}
+
+.sc-performance-card h1 {
+  font-size: 56px;
+  margin: 0;
+}
+
+.sc-performance-card h3 {
+  margin-top: 10px;
+  color: whitesmoke;
+}
+
+.sc-circle-bg {
+  position: absolute;
+  right: -60px;
+  top: -10px;
+  width: 230px;
+  height: 230px;
+  border-radius: 50%;
+  /* border: 2px solid rgba(255,255,255,0.2); */
+}
+.sc-circle-bg > img {
+  width: 100%;
+}
+/* ================= SKILLS CARD ================= */
+.sc-skills-card {
+  background: white;
+  border-radius: 18px;
+  padding: 15px;
+  height: 100%;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+}
+
+.sc-skills-card h3 {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.sc-skills-list {
+  background: linear-gradient(180deg, #97baf7 10%, #c9daf8 100%);
+  border-radius: 16px;
+  padding: 20px;
+  height: 90%;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  position: relative;
+}
+.sc-skills-list::before {
+  content: "";
+  position: absolute;
+  left: 6%;
+  right: 0;
+  top: -2%;
+  width: 88%;
+  height: 2%;
+  border-radius: 10px 10px 0px 0px;
+  background-color: #ecf2fc;
+}
+.sc-skill {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: white;
+  font-weight: 500;
+}
+
+.sc-skill span {
+  background: white;
+  color: #4f7fe6;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+/* ================= METRICS CARD ================= */
+
+.sc-metrics-card {
+  background: white;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+.sc-bar-chart {
+  display: flex;
+  align-items: flex-end; /* IMPORTANT: bottom alignment */
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 15px;
+  width: 100%;
+}
+
+.sc-bar-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 1;
+}
+.sc-bar-value {
+  font-weight: 600;
+  margin-bottom: 8px;
+  font-size: 15px;
+  text-align: center;
+}
+.sc-bar-container {
+  width: 80px;
+  height: 200px; /* Equal height for all */
+  background: #eef2fb;
+  border-radius: 8px;
+  display: flex;
+  align-items: flex-end; /* Bottom anchor */
+  justify-content: center;
+  overflow: hidden;
+}
+
+.sc-bar {
+  width: 100%;
+  border-radius: 8px 8px 0 0;
+  background: repeating-linear-gradient(
+    135deg,
+    #7fa4e6,
+    #7fa4e6 8px,
+    #e5eaf2 8px,
+    #eaeef6 10px
+  );
+  transition: 0.6s ease;
+}
+/* LABEL BELOW */
+.sc-bar-label {
+  width: 100%;
+  padding-top: 10px;
+  /* border: 2px solid green; */
+  display: flex;
+  /* justify-content: space-between; */
+  gap: 10px;
+}
+.sc-bar-label span {
+  width: 19%;
+  font-size: 14px;
+  text-align: center;
+}
+/* ================= TABLET ================= */
+@media (max-width: 992px) {
+  .sc-top-grid {
+    grid-template-columns: 1fr;
+  }
+  .sc-skills-card {
+    order: 1;
+  }
+  .sc-skills-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .sc-skills-list {
+    width: 80%;
+  }
+}
+
+/* ================= MOBILE ================= */
+@media (max-width: 600px) {
+  .sc-performance-card h1 {
+    font-size: 44px;
+  }
+  .sc-left-part {
+    display: grid;
+    grid-template-columns: 1fr;
+    /* gap: 20px; */
+  }
+  .sc-profile-card {
+    height: 180px;
+  }
+  .sc-bar-container {
+    width: 45px;
+    height: 200px;
+  }
+  .sc-bar-chart {
+    height: 160px;
+    gap: 1px;
+  }
+  .sc-bar-container {
+    height: 120px;
+  }
+}
+@media (max-width: 480px) {
+  .sc-cand-details {
+    flex-direction: column;
+    align-items: start;
+  }
+  .sc-circle-bg {
+    right: -40px;
+    top: -6px;
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    /* border: 2px solid rgba(255,255,255,0.2); */
+  }
+  .sc-bar-container {
+    width: 35px;
+    /* height:200px;  */
+  }
+  .sc-bar-label {
+    width: 100%;
+    padding-top: 10px;
+    /* border: 2px solid green; */
+    display: flex;
+    /* justify-content: space-between; */
+    gap: 5px;
+  }
+  .sc-bar-label span {
+    width: 19%;
+    font-size: 8.5px;
+    text-align: center;
+  }
+  .sc-skills-list {
+    width: 95%;
+  }
+}
+
+/* https://i.pravatar.cc/300 */

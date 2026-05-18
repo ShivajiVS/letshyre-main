@@ -1,0 +1,121 @@
+:root {
+  --primary-blue: #2563eb;
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  --bg-light: #f8fafc;
+  --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.faq-wrapper {
+  width: 100%;
+  background-color: var(--bg-light);
+  /* Fluid padding as requested */
+  padding-left: clamp(1.5rem, 6vw, 6rem);
+  padding-right: clamp(1.5rem, 6vw, 6rem);
+  padding-top: 80px;
+  padding-bottom: 80px;
+  font-family:
+    "Inter",
+    -apple-system,
+    sans-serif;
+}
+
+.faq-container {
+  /* Increased from 900px to 100% to follow the wrapper's flow */
+  width: 100%;
+  max-width: 1178px; /* Optional: Sets a reasonable limit for ultra-wide monitors */
+  margin: 0 auto;
+}
+
+.faq-header-group {
+  text-align: center;
+  margin-bottom: 35px;
+}
+
+/* Accordion List */
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%; /* Ensures list fills container */
+}
+
+.faq-item {
+  width: 100%; /* Ensures items fill the width defined by the wrapper padding */
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  transition: var(--transition-smooth);
+}
+
+/* Question Trigger - Typography & Layout */
+.faq-trigger {
+  width: 100%;
+  padding: 28px 24px; /* Slightly more vertical padding for a premium feel */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  outline: none;
+}
+
+.faq-question-text {
+  font-size: 1.1rem; /* Slightly larger for the wider layout */
+  font-weight: 600;
+  color: var(--text-main);
+  text-align: left;
+  line-height: 1.4;
+}
+
+/* Icon Animation */
+.faq-icon-wrapper {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  color: var(--text-muted);
+  transition: var(--transition-smooth);
+}
+
+.faq-item.active .faq-icon-wrapper {
+  transform: rotate(180deg);
+  color: var(--primary-blue);
+}
+
+/* Content Expansion Logic */
+.faq-content {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s ease-out;
+}
+
+.faq-item.active .faq-content {
+  grid-template-rows: 1fr;
+}
+
+.faq-content-inner {
+  overflow: hidden;
+}
+
+.faq-content-inner p {
+  padding: 0 24px 32px 24px;
+  color: var(--text-muted);
+  line-height: 1.8;
+  font-size: 1.05rem;
+  max-width: 90%; /* Keeps text readable on very wide screens */
+}
+
+/* Mobile Tweaks */
+@media (max-width: 600px) {
+  .faq-wrapper {
+    padding-top: 60px;
+    padding-bottom: 60px;
+  }
+  .faq-trigger {
+    padding: 20px 16px;
+  }
+  .faq-question-text {
+    font-size: 1rem;
+  }
+}

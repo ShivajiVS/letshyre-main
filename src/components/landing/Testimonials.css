@@ -1,0 +1,297 @@
+/* Basic reset on this section only */
+.ts-section * {
+  box-sizing: border-box;
+   
+}
+
+/* SECTION WRAPPER */
+.ts-section {
+  width: 100%;
+  padding: 50px 0px 96px;
+  background: var(--primary-lite-blue);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  /* overflow-x: scroll;
+  scrollbar-width: none; */
+  
+}
+/* Soft gradient shade – Left side */
+.ts-section::before {
+  content: "";
+  position: absolute;
+  top: 20%;
+  left: -80px;
+  width: 280px;
+  height: 280px;
+  background: radial-gradient(
+    circle,
+    rgba(99, 102, 241, 0.18),
+    rgba(255, 255, 255, 0)
+  );
+  filter: blur(40px);
+  z-index: 1;
+  pointer-events: none;
+}
+.ts-header{
+  animation: appearHeading linear;
+  animation-timeline: view();
+  animation-range: entry 0% cover 40%;
+}
+/* HEADER */
+.ts-header>h2 {
+ font-weight: 500;
+  font-size: 2.7rem;
+  margin-bottom: 6px;
+  font-family: var(--font-primary02);
+  
+}
+
+.ts-header>p {
+  color: grey;
+ font-weight: 500;
+  margin-bottom: 70px;
+}
+
+/* COLUMNS WRAPPER */
+.ts-columns {
+  width: 100%;
+  /* max-width: 1200px; */
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 22px;
+  background: linear-gradient(180deg, var(--primary-lite-blue) 0%, #D8E7FF 14%, #aec8f5 60%, #D8E7FF 91%, var(--primary-lite-blue) 100%);
+  /* border: 2px solid grey; */
+   position: relative;
+  z-index: 5;
+  
+}
+
+/* TOP SHADE */
+.ts-columns::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background: linear-gradient(to bottom, #F6FAFF, rgba(255, 255, 255, 0));
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* BOTTOM SHADE */
+.ts-columns::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background: linear-gradient(to top, #F6FAFF, rgba(255, 255, 255, 0));
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* INDIVIDUAL COLUMN */
+.ts-column {
+  overflow: hidden;          /* hide moving content */
+  height: 590px;             /* controls visible height of column */
+  /* background-color: transparent; */
+}
+
+/* Inner content that actually moves */
+.ts-column-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background-color: transparent;
+  will-change: transform;
+  animation-duration: 25s;   /* base duration, overridden below */
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+/* speed/direction control */
+.ts-move-up {
+  animation-name: ts-scroll-up;
+  animation-duration: 26s;
+}
+
+.ts-move-down {
+  animation-name: ts-scroll-down;
+  animation-duration: 28s;
+}
+
+/* KEYFRAMES – continuous loop using duplicated content */
+@keyframes ts-scroll-up {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    /* move up by half of its own height;
+       since we duplicated cards, this creates a seamless loop */
+    transform: translateY(-50%);
+  }
+}
+
+@keyframes ts-scroll-down {
+  0% {
+    transform: translateY(-50%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* CARD STYLES */
+.ts-card {
+  min-height: 200px;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 22px 20px;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.06);
+  text-align: left;
+  /* height: 50vh; */
+  /* border: 2px solid green; */
+}
+
+.ts-stars {
+  margin-bottom: 8px;
+}
+
+.ts-stars span {
+  color: #facc15;
+  font-size: 18px;
+}
+
+.ts-quote {
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 14px;
+  color: grey;
+ font-weight: 500;
+}
+
+.ts-user {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  align-items: center;
+
+  gap: 10px;
+  /* height: 40%; */
+  /* width: 20%; */
+}
+
+.ts-avatar {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: #3b82f6;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+}
+.ts-user-text{
+  
+}
+.ts-user-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.ts-user-role {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* RESPONSIVE BREAKPOINTS */
+@media (min-width:600px) and (max-width: 1020px) {
+.ts-column{
+  /* border: 2px solid green; */
+
+}
+.ts-card {
+  min-height: 250px;  /*AR-> not good for dynamic */
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 20px 15px;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.06);
+  text-align: left;
+  /* height: 50vh; */
+  /* border: 2px solid green; */
+}
+.ts-column04, .ts-column05{
+  display: none;
+}
+.ts-columns {
+  width: 100%;
+  max-width: 1200px;
+  display: grid;
+  padding: 0 2%;
+  grid-template-columns: repeat(3, 1fr);
+  /* gap: 42px; */
+  background: linear-gradient(180deg, var(--primary-lite-blue) 0%, #D8E7FF 14%, #aec8f5 60%, #D8E7FF 91%, var(--primary-lite-blue) 100%);
+  /* border: 2px solid grey; */
+   position: relative;
+  z-index: 5;
+  justify-content: space-evenly;
+}
+
+
+}
+@media (max-width:600px){
+.ts-column03,.ts-column04, .ts-column05{
+  display: none;
+}
+.ts-columns {
+  width: 100%;
+  padding: 0 2%;
+  /* max-width: 1000px; */
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  /* gap: 42px; */
+  background: linear-gradient(180deg, var(--primary-lite-blue) 0%, #D8E7FF 14%, #aec8f5 60%, #D8E7FF 91%, var(--primary-lite-blue) 100%);
+  /* border: 2px solid grey; */
+  position: relative;
+  z-index: 5;
+  justify-content: space-evenly;
+}
+.ts-card {
+  min-height: 200px;  /*AR-> not good for dynamic */
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 10px 5px;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.06);
+  text-align: left;
+  /* height: 50vh; */
+  /* border: 2px solid green; */
+}
+.ts-quote{
+  font-size: 0.7rem;
+}
+.ts-user-role{
+  font-size: 0.7rem;
+}
+.ts-user {
+  display: grid;
+  grid-template-columns: 0.5fr 4fr;
+  align-items: center;
+
+  gap: 5px;
+  /* height: 40%; */
+  /* width: 20%; */
+}
+.ts-header>h2 {
+ font-weight: 500;
+  font-size: 1.5rem;
+  margin-bottom: 6px;
+}
+}

@@ -1,0 +1,27 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Libre Baskerville", serif;
+}
+:root {
+  /* Main Colors */
+  --color-bg: #f6faff;
+  --color-main: #73a5ef;
+  /* --color-main:#01929f; */
+  /* Main Fonts */
+  --font-heading: "Merriweather", serif;
+  --font-base: "Libre Baskerville", serif;
+}
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: var(--font-heading);
+}
+/* localStorage.removeItem("profileCompleted"); to clear the browser cachy */
+
+/* localStorage.removeItem("emp-team-popup"); */
+
+/* localStorage.removeItem("emp-tour"); */

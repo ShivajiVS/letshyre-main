@@ -1,0 +1,303 @@
+.hire-card-section {
+  padding: 5% 0;
+  background-color: var(--primary-lite-blue);
+  /* border: 2px solid green; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor:
+    url("../assets/Bell-Icon.png") 16 16,
+    auto;
+}
+.hire-card-main {
+  /* padding: 2% 2%; */
+  position: relative;
+  width: 80%;
+  height: auto;
+  display: flex;
+  border-radius: 22px;
+  background-color: var(--secondary-sky-blue);
+}
+.hire-card-content {
+  padding: 7% 2%;
+  padding-left: 3%;
+  /* border: 2px solid green; */
+  width: 60%;
+  z-index: 6;
+}
+.hire-card-content > h2 {
+  color: white;
+  font-size: 2rem;
+  font-weight: 500;
+  font-family: var(--font-primary02);
+}
+.hire-card-content > p {
+  color: white;
+}
+.buttons-section02 {
+  margin-top: 5%;
+}
+.job-button02 {
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: 22px;
+  padding: 16px 10px;
+  width: 31%;
+  border: none;
+  background-color: rgb(38, 37, 37);
+  color: white;
+  box-shadow:
+    /* Outer shadow */
+    2px 2px 15px rgb(49, 48, 48),
+    /* Inner shadow */ inset 0 0 5px rgb(164, 164, 164);
+}
+.job-button02:hover {
+  box-shadow: 2px 2px 15px black;
+}
+.hiring-button02 {
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-left: 2%;
+  border-radius: 22px;
+  padding: 16px 10px;
+  width: 31%;
+  border: none;
+  background: linear-gradient(45deg, rgb(105, 167, 244), rgb(190, 235, 253));
+  color: rgb(52, 51, 51);
+  box-shadow:
+    2px 2px 14px rgb(89, 95, 158),
+    inset 0 0 6px white;
+}
+.hiring-button02:hover {
+  box-shadow: 2px 2px 20px rgb(89, 111, 158);
+}
+.hire-card-img-part {
+  /* border: 2px solid green; */
+  width: 40%;
+  z-index: 6;
+}
+.hire-img {
+  width: 100%;
+  scale: 1.2;
+  /* height: auto; */
+}
+.hire-card-inner01 {
+  position: absolute;
+  right: 0;
+  width: 93%;
+  /* height: 110%; */
+  /* border: 2px solid green; */
+  height: 100%;
+  border-radius: 30% 8% 8% 100% / 100% 8% 8% 0%;
+  z-index: 2;
+  background: linear-gradient(120deg, #72a1f1 13%, #8fbdee 25%, #cdfcf3 40%);
+}
+.hire-card-inner02 {
+  position: absolute;
+  right: 0;
+  width: 75%;
+  /* border: 2px solid green; */
+  height: 100%;
+  border-radius: 42% 5% 8% 100% / 100% 5% 8% 0%;
+  z-index: 2;
+  background: linear-gradient(110deg, #6296ef 13%, #8fbdee 26%, #cdfcf3 50%);
+}
+.hire-card-inner03 {
+  position: absolute;
+  right: 0;
+  width: 55%;
+  /* border: 2px solid green; */
+  height: 100%;
+  border-radius: 50% 5% 8% 100% / 100% 5% 8% 0%;
+  z-index: 2;
+  background: linear-gradient(120deg, #6296ef 15%, #8fbdee 26%, #cdfcf3 70%);
+}
+.hire-card-inner04 {
+  position: absolute;
+  right: 0;
+  width: 38%;
+  /* border: 2px solid green; */
+  height: 100%;
+  border-radius: 60% 5% 8% 100% / 100% 5% 8% 0%;
+  z-index: 2;
+  background: linear-gradient(120deg, #6296ef 13%, #8fbdee 26%, #6296ef 40%);
+}
+/* ---------- Responsive: tablet / small laptops (<= 992px) ---------- */
+@media (max-width: 992px) {
+  .hire-card-main {
+    width: 90%;
+    flex-direction: row;
+    gap: 1rem;
+    border-radius: 20px;
+  }
+
+  .hire-card-content {
+    width: 58%;
+    padding: 6% 3%;
+  }
+
+  .hire-card-img-part {
+    width: 42%;
+  }
+
+  .hire-img {
+    transform: none; /* remove scale for better fit on smaller screens */
+    width: 100%;
+    height: auto;
+  }
+
+  /* decorative layers adjust mildly so they still cover the right side */
+  .hire-card-inner01 {
+    width: 88%;
+  }
+  .hire-card-inner02 {
+    width: 70%;
+  }
+  .hire-card-inner03 {
+    width: 52%;
+  }
+  .hire-card-inner04 {
+    width: 36%;
+  }
+}
+
+/* ---------- Responsive: tablet / large phones (<= 768px) ---------- */
+@media (max-width: 768px) {
+  .hire-card-section {
+    padding: 6% 0;
+  }
+
+  .hire-card-main {
+    /* flex-direction: column; */
+    align-items: center;
+    gap: 1rem;
+    width: 92%;
+    /* padding-bottom: 2rem; */
+    border-radius: 22px;
+  }
+
+  .hire-card-content {
+    width: 100%;
+    padding: 6% 5%;
+    text-align: center;
+    z-index: 6;
+  }
+
+  .hire-card-content > h2 {
+    font-size: 1.6rem;
+  }
+
+  .hire-card-content > p {
+    font-size: 0.95rem;
+  }
+
+  .hire-card-img-part {
+    width: 85%;
+    display: flex;
+    justify-content: center;
+    z-index: 6;
+    margin-top: -1rem; /* overlap a bit for visual continuity */
+  }
+
+  .hire-img {
+    width: 85%;
+    max-width: 420px;
+    transform: none;
+  }
+
+  .buttons-section02 {
+    display: flex;
+    gap: 0.6rem;
+    justify-content: center;
+    margin-top: 1rem;
+  }
+
+  .job-button02,
+  .hiring-button02 {
+    width: 45%;
+    padding: 10px 12px;
+    font-size: 0.85rem;
+  }
+
+  /* decorative layers: reduce width so they don't overflow weirdly */
+  .hire-card-inner01 {
+    width: 95%;
+    right: 0%;
+    border-radius: 28% 8% 8% 100% / 100% 8% 8% 0%;
+  }
+  .hire-card-inner02 {
+    width: 78%;
+    right: 0%;
+  }
+  .hire-card-inner03 {
+    width: 58%;
+    right: 0%;
+  }
+  .hire-card-inner04 {
+    width: 40%;
+    right: 0%;
+  }
+}
+
+/* ---------- Responsive: mobile / small phones (<= 480px) ---------- */
+@media (max-width: 520px) {
+  .hire-card-section {
+    padding: 6% 0;
+  }
+
+  .hire-card-main {
+    width: 96%;
+    border-radius: 18px;
+    /* padding-bottom: 1.5rem; */
+    flex-direction: column;
+    flex-direction: column-reverse;
+    padding-top: 5%;
+    background: linear-gradient(180deg, #6296ef 0%, #b1c8ef 30%, #6296ef 80%);
+    box-shadow:
+      2px 2px 14px rgb(35, 36, 45),
+      inset 0 0 10px rgb(255, 255, 255);
+  }
+
+  .hire-card-content {
+    padding: 5% 4%;
+  }
+
+  .hire-card-content > h2 {
+    font-size: 1.4rem;
+    line-height: 1.1;
+  }
+
+  .hire-card-content > p {
+    font-size: 0.92rem;
+  }
+
+  .hire-card-img-part {
+    width: 95%;
+    margin-top: -0.5rem;
+  }
+  .hire-img {
+    width: 90%;
+    max-width: 320px;
+    transform: none;
+    scale: 1;
+  }
+
+  .buttons-section02 {
+    flex-direction: column;
+    gap: 0.6rem;
+    align-items: center;
+  }
+
+  .job-button02,
+  .hiring-button02 {
+    width: 92%;
+    padding: 11px 12px;
+    font-size: 0.9rem;
+  }
+  .hire-card-inner01,
+  .hire-card-inner02,
+  .hire-card-inner03,
+  .hire-card-inner04 {
+    display: none;
+  }
+}

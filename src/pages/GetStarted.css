@@ -1,0 +1,190 @@
+.lh-direction-page {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3%;
+  background-color: var(--color-bg);
+  overflow: hidden;
+}
+
+/* BOTH CARDS */
+.lh-direction-card,
+.lh-Candidat-card {
+  width: 35%;
+  height: 90%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 30px;
+  border: 2px solid var(--color-main);
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+/* CARD STYLES */
+.lh-direction-card {
+  background: linear-gradient(180deg, var(--color-main) 5%, white 110%);
+  animation: fadIn 1s ease-out forwards;
+}
+
+.lh-Candidat-card {
+  background: linear-gradient(180deg, white 50%, var(--color-main) 110%);
+  animation: fadeout 1s ease-out forwards;
+}
+
+/* HOVER EFFECT */
+.lh-direction-card:hover,
+.lh-Candidat-card:hover {
+  transform: scale(1.009);
+  box-shadow: 7px 7px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* BUTTONS BASE STYLE */
+.get-btn {
+  width: 75%;
+  margin-top: 5%;
+  text-decoration: none;
+  padding: 12px 20px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 16px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition:
+    background 0.3s ease,
+    transform 0.2s ease;
+  border: none;
+  cursor: pointer;
+}
+
+/* SPECIFIC BUTTON COLORS */
+.button01 {
+  background-color: #0f172a; /* Dark background */
+  color: #ffffff;
+}
+
+.button01:hover {
+  background-color: #1e293b;
+}
+
+.button02 {
+  background-color: #e0eaff; /* Light blue background */
+  color: #0f172a;
+}
+
+.button02:hover {
+  background-color: #cbdcfd;
+}
+
+/* ANIMATIONS */
+@keyframes fadIn {
+  from {
+    opacity: 0;
+    transform: translateY(-200px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeout {
+  from {
+    opacity: 0;
+    transform: translateY(200px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.lh-text-part {
+  width: 80%;
+  height: 35%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.lh-text-part > h1 {
+  font-weight: 600;
+  font-size: 30px;
+  font-family: var(--font-primary);
+  margin-bottom: 10px;
+}
+
+.lh-img-part {
+  width: 90%;
+  height: 65%;
+}
+
+.lh-img-part > img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Changed to contain to avoid cropping illustrations */
+}
+
+/* ============================= */
+/* RESPONSIVENESS */
+/* ============================= */
+
+@media (max-width: 1024px) {
+  .lh-direction-card,
+  .lh-Candidat-card {
+    width: 42%;
+    height: 85%;
+  }
+  .lh-text-part > h1 {
+    font-size: 26px;
+  }
+  .get-btn {
+    width: 80%;
+  }
+}
+
+@media (max-width: 768px) {
+  .lh-direction-page {
+    flex-direction: column;
+    height: auto;
+    padding: 40px 0;
+    gap: 30px;
+    overflow-y: auto;
+  }
+  .lh-direction-card,
+  .lh-Candidat-card {
+    width: 85%;
+    height: auto;
+    padding: 30px 0;
+  }
+  .lh-img-part {
+    height: 300px;
+  }
+  .get-btn {
+    width: 70%;
+    font-size: 15px;
+  }
+  .button02 {
+    margin-bottom: 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .lh-text-part > h1 {
+    font-size: 20px;
+  }
+  .lh-img-part {
+    height: 220px;
+  }
+  .get-btn {
+    width: 85%;
+    font-size: 14px;
+  }
+}

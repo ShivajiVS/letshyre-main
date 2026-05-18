@@ -1,0 +1,167 @@
+.vs-heading-section01{
+  background-color: var(--primary-lite-blue);
+}
+.vs-heading-section{
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 5%;
+    background-color: var(--primary-lite-blue);
+    animation: appearHeading linear;
+    animation-timeline: view();
+    animation-range: entry 0% cover 40%;
+}
+.vs-heading-section-inner{
+    width: 45%;
+    margin-top: 2%;
+}
+.vs-heading-section-inner>p{
+    color: grey;
+    font-weight: 500;
+}
+.vs-heading-section>h2{
+  font-family: var(--font-primary02);
+  font-weight: 500;
+  font-size: 2.7rem;
+}
+
+
+.video-section-main {
+  background-color: #F6FAFF;
+  padding: 5% 0;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  position: relative;
+ 
+}
+
+/* Outer container for each line */
+.video-BG-Text_box {
+  overflow: hidden;         /* hide overflowing text */
+  width: 100%;
+}
+
+/* Track that actually moves */
+.marquee-track {
+  display: inline-flex;
+  white-space: nowrap;
+}
+
+/* Big text */
+.Large-text {
+    color: rgb(206, 222, 244);
+  font-size: 10rem;
+  font-weight: 700;
+  padding-right: 3rem;      /* space between repeated text */
+}
+
+/* Line 1: Left → Right */
+.marquee-left .marquee-track {
+  animation: marquee-ltr 25s linear infinite;
+}
+
+/* Line 2: Right → Left */
+.marquee-right .marquee-track {
+  animation: marquee-rtl 25s linear infinite;
+}
+
+/* Left to Right movement */
+@keyframes marquee-ltr {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
+
+/* Right to Left movement */
+@keyframes marquee-rtl {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+.Video-Part{
+    position: absolute;
+    width: 80%;
+    height: auto;
+    /* border: 2px solid green; */
+    top: 12%;
+    left: 10%;
+    z-index: 1;
+}
+.Video-Part>img{
+    width: 100%;
+}
+
+
+
+
+/* Optional: make it a bit smaller on small screens */
+@media (max-width: 768px) {
+  .Large-text {
+    font-size: 4rem;
+  }
+}
+@media (max-width:480px) {
+  .vs-heading-section-inner>p{
+    color: grey;
+    font-weight: 500;
+    font-size: 0.8rem;
+}
+.vs-heading-section>h2{
+   
+   font-weight: 500;
+  font-size: 2rem;
+}
+.vs-heading-section-inner{
+    width: 85%;
+    margin-top: 2%;
+}
+
+.Large-text {
+    color: rgb(206, 222, 244);
+  font-size: 2.7rem;
+  font-weight: 700;
+  padding-right: 1rem;      /* space between repeated text */
+}
+.Video-Part{
+  margin-top: 1%;
+}
+}
+@media (max-width:720px) {
+   .vs-heading-section-inner>p{
+    color: grey;
+    font-weight: 500;
+    font-size: 0.8rem;
+}
+.vs-heading-section>h2{
+   
+   font-weight: 500;
+  font-size: 2rem;
+}
+.vs-heading-section-inner{
+    width: 85%;
+    margin-top: 2%;
+}
+}
+@media (min-width:720px) and (max-width:1000px) {
+  .vs-heading-section-inner{
+    width: 85%;
+    margin-top: 2%;
+}
+
+.Large-text {
+    color: rgb(206, 222, 244);
+  font-size: 7rem;
+  font-weight: 700;
+  padding-right: 1rem;      /* space between repeated text */
+}
+}

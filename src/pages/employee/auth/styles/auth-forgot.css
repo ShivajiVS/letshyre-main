@@ -1,0 +1,104 @@
+/* ===============================================
+   AUTH FORGOT PASSWORD STYLES
+   For: ForgotFlow and all forgot sub-steps
+         (ForgotEmail, ForgotOtp, ResetPassword, ForgotSuccess)
+   
+   USAGE: import "./auth-forgot.css" in ForgotFlow
+   (auto-includes auth-shared.css)
+=============================================== */
+@import "./auth-shared.css";
+
+/* ================= FORGOT BACKGROUND BALL ================= */
+.forgot-ball {
+  position: absolute;
+  top: -22%;
+  right: -11%;
+  width: 650px;
+  height: 650px;
+  border-radius: 50%;
+  z-index: 0;
+  background: linear-gradient(
+    180deg,
+    #73a5ef 16%,
+    #79a9ef 38%,
+    #a3d3f1 80%,
+    #cdfcf3 100%
+  );
+  box-shadow: 0 0 50px var(--color-main);
+  transition: transform 1.5s ease, opacity 1.2s ease;
+}
+
+/* ================= FORGOT EMAIL ENTRY ANIMATION ================= */
+.forgot-email-box {
+  animation: moveright 1s ease forwards;
+}
+
+@keyframes moveright {
+  from { scale: 0.6; opacity: 0; }
+  to { scale: 1; opacity: 1; }
+}
+
+/* ================= FORGOT-SPECIFIC AUTH OVERRIDES ================= */
+/* These override the shared auth-card/form/image for forgot layout */
+
+/* ================= FORGOT SLIDE ANIMATIONS ================= */
+.form-slide-out {
+  transform: translateX(-120%);
+  opacity: 0;
+}
+
+.form-slide-in {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.image-slide-out {
+  transform: translateX(120%);
+  opacity: 0;
+}
+
+.image-slide-in {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.image-slide-out-left {
+  transform: translateX(-120%);
+  opacity: 0;
+}
+
+.form-slide-out-right {
+  transform: translateX(120%);
+  opacity: 0;
+}
+
+/* ================= FORGOT SUCCESS ================= */
+.success-box {
+  align-items: center;
+  justify-content: center;
+}
+
+.success-para {
+  color: gray;
+  margin-bottom: 10px;
+}
+
+.checkmark {
+  color: white;
+  font-size: 40px;
+  font-weight: bold;
+}
+
+@keyframes pop {
+  0% { transform: scale(0.4); opacity: 0; }
+  70% { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* ================= RESPONSIVE — FORGOT ================= */
+
+@media (max-width: 767px) {
+  .form-slide-out { transform: translateY(-120%); }
+  .image-slide-out { transform: translateY(120%); }
+  .form-slide-in, .image-slide-in { transform: translateY(0); }
+}

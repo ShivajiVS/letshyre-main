@@ -1,0 +1,2472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candidate Flow - Backend Data Requirements</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 40px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 4px solid #FF6B6B;
+            padding-bottom: 20px;
+        }
+        
+        h1 {
+            color: #FF6B6B;
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 18px;
+            font-weight: 500;
+        }
+        
+        .date {
+            color: #999;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        
+        h2 {
+            color: #FF6B6B;
+            font-size: 28px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid #FFE5E5;
+        }
+        
+        h3 {
+            color: #E74C3C;
+            font-size: 20px;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            background-color: #FFF5F5;
+            padding: 10px 15px;
+            border-left: 4px solid #FF6B6B;
+            border-radius: 3px;
+        }
+        
+        h4 {
+            color: #C0392B;
+            font-size: 16px;
+            margin-top: 18px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        
+        p {
+            margin-bottom: 12px;
+            text-align: justify;
+            line-height: 1.7;
+        }
+        
+        ul, ol {
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+        
+        li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .highlight {
+            background-color: #FFE5E5;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-weight: 600;
+            color: #C0392B;
+        }
+        
+        .screen-card {
+            background: linear-gradient(135deg, #FFF5F5 0%, #FFEFEF 100%);
+            border: 2px solid #FF6B6B;
+            border-radius: 8px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+        
+        .screen-card h3 {
+            background-color: transparent;
+            border: none;
+            padding: 0;
+            color: #FF6B6B;
+            margin-top: 0;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: white;
+        }
+        
+        .data-table thead {
+            background: linear-gradient(135deg, #FF6B6B 0%, #E74C3C 100%);
+            color: white;
+        }
+        
+        .data-table th, .data-table td {
+            border: 1px solid #FFB3B3;
+            padding: 14px;
+            text-align: left;
+        }
+        
+        .data-table th {
+            font-weight: bold;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+        }
+        
+        .data-table tr:nth-child(even) {
+            background-color: #FFF9F9;
+        }
+        
+        .data-table tr:hover {
+            background-color: #FFE5E5;
+        }
+        
+        .field-type {
+            background-color: #FFE5E5;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-family: monospace;
+            font-size: 12px;
+            color: #C0392B;
+            font-weight: bold;
+        }
+        
+        .required {
+            color: #E74C3C;
+            font-weight: bold;
+        }
+        
+        .optional {
+            color: #F39C12;
+            font-weight: bold;
+        }
+        
+        .section-box {
+            background: linear-gradient(135deg, #FFF5F5 0%, #FFEFEF 100%);
+            border: 2px solid #FFB3B3;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 6px;
+        }
+        
+        .endpoint-box {
+            background-color: #F8F9FA;
+            border-left: 4px solid #FF6B6B;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            overflow-x: auto;
+        }
+        
+        .endpoint-label {
+            color: #FF6B6B;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .api-method {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 3px;
+            font-weight: bold;
+            margin-right: 10px;
+            font-size: 12px;
+        }
+        
+        .post {
+            background-color: #D4EDDA;
+            color: #155724;
+        }
+        
+        .get {
+            background-color: #D1ECF1;
+            color: #0C5460;
+        }
+        
+        .put {
+            background-color: #FFF3CD;
+            color: #856404;
+        }
+        
+        .response-example {
+            background-color: #F8F9FA;
+            border: 1px solid #DEE2E6;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        .response-title {
+            color: #FF6B6B;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .flow-step {
+            background: linear-gradient(135deg, #FFE5E5 0%, #FFD9D9 100%);
+            border-left: 5px solid #FF6B6B;
+            padding: 16px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        
+        .flow-step strong {
+            color: #C0392B;
+        }
+        
+        .step-number {
+            display: inline-block;
+            background-color: #FF6B6B;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 28px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .page-break {
+            page-break-after: always;
+            margin: 40px 0;
+            border-bottom: 3px dashed #FFB3B3;
+            padding-bottom: 20px;
+        }
+        
+        .summary-box {
+            background: linear-gradient(135deg, #FFF5F5 0%, #FFEFEF 100%);
+            border: 2px solid #FF6B6B;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 6px;
+        }
+        
+        .summary-box h4 {
+            color: #FF6B6B;
+            margin-top: 0;
+        }
+        
+        .toc {
+            background: linear-gradient(135deg, #FFF5F5 0%, #FFEFEF 100%);
+            padding: 20px;
+            border-radius: 6px;
+            margin: 25px 0;
+            border-left: 5px solid #FF6B6B;
+        }
+        
+        .toc ul {
+            list-style: none;
+            margin-left: 0;
+        }
+        
+        .toc li {
+            padding: 8px 0;
+            border-bottom: 1px solid #FFE5E5;
+        }
+        
+        .toc li:last-child {
+            border-bottom: none;
+        }
+        
+        .toc a {
+            color: #FF6B6B;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .toc a:hover {
+            text-decoration: underline;
+        }
+        
+        .warning-box {
+            background-color: #FFF3CD;
+            border-left: 4px solid #FFC107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            color: #856404;
+        }
+        
+        .info-box {
+            background-color: #D1ECF1;
+            border-left: 4px solid #17A2B8;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            color: #0C5460;
+        }
+        
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 3px solid #FFB3B3;
+            text-align: center;
+            color: #999;
+            font-size: 12px;
+        }
+        
+        table.flow-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        table.flow-table th {
+            background-color: #FF6B6B;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #FFB3B3;
+        }
+        
+        table.flow-table td {
+            padding: 12px;
+            border: 1px solid #FFE5E5;
+        }
+        
+        table.flow-table tr:nth-child(even) {
+            background-color: #FFF9F9;
+        }
+        
+        .data-flow-box {
+            background-color: #F8F9FA;
+            border: 2px dashed #FF6B6B;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 6px;
+            font-family: monospace;
+            line-height: 1.8;
+        }
+        
+        @media print {
+            body {
+                background-color: white;
+            }
+            .container {
+                box-shadow: none;
+                max-width: 100%;
+                padding: 30px;
+            }
+            .page-break {
+                page-break-after: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎯 CANDIDATE FLOW</h1>
+            <p class="subtitle">Backend Data Requirements & Dynamic Screen Specifications</p>
+            <p class="date">Report Generated: February 13, 2026</p>
+            <p class="date">Project: Letshyre Recruitment Platform</p>
+        </header>
+
+        <div class="toc">
+            <h3 style="margin-top: 0; background: none; border: none; padding: 0;">📚 Table of Contents</h3>
+            <ul>
+                <li>1. Candidate Flow Overview</li>
+                <li>2. Screen-by-Screen Data Requirements</li>
+                <li>3. Landing Page Data</li>
+                <li>4. Authentication Entry Point Data</li>
+                <li>5. Candidate Login Screen Data</li>
+                <li>6. Registration Flow Data</li>
+                <li>7. Forgot Password Flow Data</li>
+                <li>8. Candidate Dashboard Data</li>
+                <li>9. Profile Completion Flow Data</li>
+                <li>10. Jobs Section Data</li>
+                <li>11. Applications Section Data</li>
+                <li>12. Scorecard Section Data</li>
+                <li>13. API Endpoint Summary</li>
+                <li>14. Data Consistency Guidelines</li>
+            </ul>
+        </div>
+
+        <div class="page-break"></div>
+
+        <h2>1. Candidate Flow Overview</h2>
+        
+        <p>The candidate flow represents the complete user journey from first landing on the platform to actively using the job matching dashboard. This document outlines every screen in the flow and specifies exactly what data must be provided by the backend to make each screen dynamic and functional.</p>
+
+        <div class="info-box">
+            <strong>📌 Important Note:</strong> This flow assumes the backend is fully built and provides REST APIs that deliver the specified data in JSON format. All screens should be designed to handle data loading states, error states, and empty states gracefully.
+        </div>
+
+        <h3>Candidate Flow Stages:</h3>
+        <ol>
+            <li><strong>Landing Page</strong> - Platform introduction & feature showcase</li>
+            <li><strong>Authentication Entry</strong> - Choose between login, register, or employer</li>
+            <li><strong>Login</strong> - Credential verification</li>
+            <li><strong>Forgot Password</strong> - Password recovery workflow</li>
+            <li><strong>Registration</strong> - Multi-step account creation</li>
+            <li><strong>Profile Completion</strong> - Setup profile after login</li>
+            <li><strong>Dashboard</strong> - Main job browsing interface</li>
+        </ol>
+
+        <div class="page-break"></div>
+
+        <h2>2. Screen-by-Screen Data Requirements</h2>
+
+        <div class="info-box">
+            <strong>🔑 Key Convention:</strong> 
+            <span class="required">REQUIRED (Red)</span> fields must be present in every response. 
+            <span class="optional">OPTIONAL</span> fields may be conditionally included.
+        </div>
+
+        <div class="page-break"></div>
+
+        <h2>3. Landing Page Data</h2>
+
+        <div class="screen-card">
+            <h3>🏠 Screen: Landing.jsx</h3>
+            <p><strong>Purpose:</strong> Introduce the platform, showcase features and benefits, encourage sign up</p>
+
+            <h4>Data Requirements:</h4>
+            <p>The landing page is primarily static content with some dynamic hero sections and testimonials. The required data from backend:</p>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Data Element</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                        <th>Description</th>
+                        <th>API Endpoint</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Hero Banner Images</strong></td>
+                        <td><span class="field-type">Array[String]</span></td>
+                        <td><span class="optional">OPTIONAL</span></td>
+                        <td>URLs of rotating banner images (3-5 slides)</td>
+                        <td>GET /cms/v1/hero-banners/</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Feature Cards</strong></td>
+                        <td><span class="field-type">Array[Object]</span></td>
+                        <td><span class="optional">OPTIONAL</span></td>
+                        <td>Platform features with icons, titles, descriptions</td>
+                        <td>GET /cms/v1/features/</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Testimonials</strong></td>
+                        <td><span class="field-type">Array[Object]</span></td>
+                        <td><span class="optional">OPTIONAL</span></td>
+                        <td>User success stories with names, photos, quotes</td>
+                        <td>GET /cms/v1/testimonials/</td>
+                    </tr>
+                    <tr>
+                        <td><strong>FAQ Items</strong></td>
+                        <td><span class="field-type">Array[Object]</span></td>
+                        <td><span class="optional">OPTIONAL</span></td>
+                        <td>Frequently asked questions and answers</td>
+                        <td>GET /cms/v1/faqs/</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Video URL</strong></td>
+                        <td><span class="field-type">String</span></td>
+                        <td><span class="optional">OPTIONAL</span></td>
+                        <td>Embedded video link (YouTube/Vimeo)</td>
+                        <td>GET /cms/v1/video-content/</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>Response Structure Example:</h4>
+            <div class="response-example">
+<span class="response-title">GET /cms/v1/hero-banners/</span>
+{
+  "status": "success",
+  "data": [
+    {
+      "id": 1,
+      "image_url": "https://cdn.letshyre.com/banner1.jpg",
+      "title": "Find Your Dream Job Today",
+      "description": "Explore thousands of opportunities",
+      "cta_button": "Get Started",
+      "cta_link": "/get-started"
+    },
+    {
+      "id": 2,
+      "image_url": "https://cdn.letshyre.com/banner2.jpg",
+      "title": "Build Your Career",
+      "description": "Connect with top employers",
+      "cta_button": "Sign Up",
+      "cta_link": "/register/candidate"
+    }
+  ]
+}
+            </div>
+
+            <h4>Screen Behavior:</h4>
+            <div class="flow-step">
+                <strong>✓ Loading State:</strong> Show skeleton loaders for hero, feature cards, and testimonials
+            </div>
+            <div class="flow-step">
+                <strong>✓ Error State:</strong> Display generic static content if API fails (fallback UI)
+            </div>
+            <div class="flow-step">
+                <strong>✓ Success State:</strong> Render fetched data with auto-rotating carousel for hero
+            </div>
+        </div>
+
+        <div class="page-break"></div>
+
+        <h2>4. Authentication Entry Point Data</h2>
+
+        <div class="screen-card">
+            <h3>🚀 Screen: Direction.jsx</h3>
+            <p><strong>Purpose:</strong> Let user choose between Candidate Login, Candidate Register, or Employer Login</p>
+
+            <h4>Data Requirements:</h4>
+            <p>This screen requires minimal backend data - mostly static UI configuration:</p>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Data Element</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Feature Highlights</strong></td>
+                        <td><span class="field-type">Array[Object]</span></td>
+                        <td><span class="optional">OPTIONAL</span></td>
+                        <td>Why join as candidate (3-4 bullet points)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Stats/Metrics</strong></td>
+                        <td><span class="field-type">Object</span></td>
+                        <td><span class="optional">OPTIONAL</span></td>
+                        <td>Total jobs, active users, successful placements</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>Response Structure Example:</h4>
+            <div class="response-example">
+<span class="response-title">GET /cms/v1/platform-stats/</span>
+{
+  "status": "success",
+  "data": {
+    "total_jobs": 5432,
+    "active_users": 12450,
+    "successful_placements": 8923,
+    "average_salary_increase": "25%"
+  }
+}
+            </div>
+
+            <h4>Screen Behavior:</h4>
+            <div class="flow-step">
+                <strong>✓ No API Call Required:</strong> Static navigation buttons to login/register routes
+            </div>
+            <div class="flow-step">
+                <strong>✓ Optional Stats Display:</strong> If fetched, show platform metrics to build credibility
+            </div>
+        </div>
+
+        <div class="page-break"></div>
+
+        <h2>5. Candidate Login Screen Data</h2>
+
+        <div class="screen-card">
+            <h3>🔐 Screen: CandidateLogin.jsx</h3>
+            <p><strong>Purpose:</strong> Authenticate candidate with email and password</p>
+
+            <h4>Pre-Login Data Requirements:</h4>
+            <p>Before user submits credentials:</p>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Data Element</th>
+                        <th>Type</th>
+                        <th>Purpose</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Password Requirements</strong></td>
+                        <td><span class="field-type">Object</span></td>
+                        <td>Min length, special chars, numbers needed</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Login Help Text</strong></td>
+                        <td><span class="field-type">String</span></td>
+                        <td>Troubleshooting message if needed</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>Login Request (Frontend → Backend):</h4>
+            <div class="endpoint-box">
+                <div class="endpoint-label">POST /user/v1/login/</div>
+                <span class="api-method post">POST</span>
+                <pre>{
+  "email": "candidate@example.com",
+  "password": "SecurePassword123!"
+}</pre>
+            </div>
+
+            <h4>Login Response (Backend → Frontend):</h4>
+            <div class="response-example">
+<span class="response-title">POST /user/v1/login/ - Success (200)</span>
+{
+  "status": "success",
+  "data": {
+    "access": "eyJhbGciOiJIUzI1NiIs...",
+    "refresh": "eyJhbGciOiJIUzI1NiIs...",
+    "user": {
+      "id": 101,
+      "email": "candidate@example.com",
+      "name": "John Doe",
+      "username": "johndoe",
+      "profile_picture_url": "https://cdn.letshyre.com/profiles/101.jpg",
+      "phone_number": "+1-555-123-4567",
+      "profile_completed": false,
+      "account_created_at": "2025-11-20T10:30:00Z",
+      "last_login_at": "2026-02-13T14:20:00Z"
+    }
+  }
+}
+            </div>
+
+            <h4>Error Response:</h4>
+            <div class="response-example">
+<span class="response-title">POST /user/v1/login/ - Error (401)</span>
+{
+  "status": "error",
+  "error": {
+    "code": "INVALID_CREDENTIALS",
+    "message": "Invalid email or password",
+    "detail": "Email or password is incorrect. Please try again."
+  }
+}
+            </div>
+
+            <h4>Frontend Data Handling After Login:</h4>
+            <div class="section-box">
+                <strong>Store in localStorage:</strong>
+                <ul>
+                    <li><code>accessToken</code> - JWT token for API calls</li>
+                    <li><code>refreshToken</code> - Token for refreshing access token</li>
+                    <li><code>user</code> - User object as JSON string</li>
+                </ul>
+
+                <strong>Check Profile Status:</strong>
+                <ul>
+                    <li>If <code>profile_completed === false</code> → Show ProfileCompletion flow</li>
+                    <li>If <code>profile_completed === true</code> → Redirect to dashboard directly</li>
+                </ul>
+            </div>
+
+            <h4>Error States to Handle:</h4>
+            <div class="warning-box">
+                <strong>⚠️ Possible Error Codes:</strong>
+                <ul>
+                    <li><code>INVALID_CREDENTIALS</code> - Wrong email/password</li>
+                    <li><code>ACCOUNT_INACTIVE</code> - Account disabled</li>
+                    <li><code>ACCOUNT_NOT_VERIFIED</code> - Email not verified</li>
+                    <li><code>TOO_MANY_ATTEMPTS</code> - Account temporarily locked</li>
+                    <li><code>SERVER_ERROR</code> - Network/server issue</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="page-break"></div>
+
+        <h2>6. Registration Flow Data</h2>
+
+        <div class="screen-card">
+            <h3>📝 Screen: RegisterFlow.jsx (Multi-Step)</h3>
+            <p><strong>Purpose:</strong> Guide candidate through account creation with email, mobile verification, and profile setup</p>
+
+            <h4>Step 1: Email Registration</h4>
+            <p><strong>Screen:</strong> RegisterEmail.jsx</p>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Data Element</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Username Validation</strong></td>
+                        <td><span class="field-type">Boolean</span></td>
+                        <td><span class="optional">OPTIONAL</span></td>
+                        <td>Check if username is available during typing</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Email Validation</strong></td>
+                        <td><span class="field-type">Boolean</span></td>
+                        <td><span class="optional">OPTIONAL</span></td>
+                        <td>Check if email already registered</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>Register Email Request:</h4>
+            <div class="endpoint-box">
+                <div class="endpoint-label">POST /commonapp/v1/send_otp/</div>
+                <span class="api-method post">POST</span>
+                <pre>{
+  "email": "newuser@example.com"
+}</pre>
+            </div>
+
+            <h4>Register Email Response:</h4>
+            <div class="response-example">
+<span class="response-title">POST /commonapp/v1/send_otp/ - Success (200)</span>
+{
+  "status": "success",
+  "data": {
+    "message": "OTP sent to email",
+    "email": "newuser@example.com",
+    "otp_session_key": "sess_abc123def456",
+    "otp_expires_in": 600,
+    "masked_email": "new****@example.com"
+  }
+}
+            </div>
+
+            <hr style="margin: 30px 0; border: 1px solid #FFE5E5;">
+
+            <h4>Step 2: Email OTP Verification</h4>
+            <p><strong>Screen:</strong> OtpVerify.jsx</p>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Input Data</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>OTP Code</strong></td>
+                        <td><span class="field-type">String</span></td>
+                        <td>6-digit code user receives in email</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Session Key</strong></td>
+                        <td><span class="field-type">String</span></td>
+                        <td>From previous email step response</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>Verify Email OTP Request:</h4>
+            <div class="endpoint-box">
+                <div class="endpoint-label">POST /commonapp/v1/verify_otp/</div>
+                <span class="api-method post">POST</span>
+                <pre>{
+  "email": "newuser@example.com",
+  "otp": "123456",
+  "otp_session_key": "sess_abc123def456"
+}</pre>
+            </div>
+
+            <h4>Verify Email OTP Response:</h4>
+            <div class="response-example">
+<span class="response-title">POST /commonapp/v1/verify_otp/ - Success (200)</span>
+{
+  "status": "success",
+  "data": {
+    "message": "Email verified successfully",
+    "email_verified": true,
+    "email": "newuser@example.com"
+  }
+}
+            </div>
+
+            <hr style="margin: 30px 0; border: 1px solid #FFE5E5;">
+
+            <h4>Step 3: Mobile Number & Mobile OTP</h4>
+            <p><strong>Screen:</strong> MobileVerify.jsx & MobileOtp.jsx</p>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Data Element</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Country Codes</strong></td>
+                        <td><span class="field-type">Array[Object]</span></td>
+                        <td>List of countries with phone codes for selector</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Phone Format Rules</strong></td>
+                        <td><span class="field-type">Object</span></td>
+                        <td>Validation pattern per country</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>Send Mobile OTP Request:</h4>
+            <div class="endpoint-box">
+                <div class="endpoint-label">POST /commonapp/v1/mobile_send_otp/</div>
+                <span class="api-method post">POST</span>
+                <pre>{
+  "phone_number": "+1-555-123-4567",
+  "country_code": "US"
+}</pre>
+            </div>
+
+            <h4>Send Mobile OTP Response:</h4>
+            <div class="response-example">
+<span class="response-title">POST /commonapp/v1/mobile_send_otp/ - Success (200)</span>
+{
+  "status": "success",
+  "data": {
+    "message": "OTP sent to mobile",
+    "phone_number": "+1-555-123-4567",
+    "otp_session_key": "sess_mobile_xyz789",
+    "otp_expires_in": 600,
+    "masked_phone": "+1-555-****-4567"
+  }
+}
+            </div>
+
+            <h4>Verify Mobile OTP Request:</h4>
+            <div class="endpoint-box">
+                <div class="endpoint-label">POST /commonapp/v1/mobile_verify_otp/</div>
+                <span class="api-method post">POST</span>
+                <pre>{
+  "phone_number": "+1-555-123-4567",
+  "otp": "654321",
+  "otp_session_key": "sess_mobile_xyz789"
+}</pre>
+            </div>
+
+            <h4>Verify Mobile OTP Response:</h4>
+            <div class="response-example">
+<span class="response-title">POST /commonapp/v1/mobile_verify_otp/ - Success (200)</span>
+{
+  "status": "success",
+  "data": {
+    "message": "Mobile verified successfully",
+    "phone_verified": true,
+    "phone_number": "+1-555-123-4567"
+  }
+}
+            </div>
+
+            <hr style="margin: 30px 0; border: 1px solid #FFE5E5;">
+
+            <h4>Step 4: Set Password</h4>
+            <p><strong>Screen:</strong> SetPassword.jsx</p>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Data Element</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Password Requirements</strong></td>
+                        <td><span class="field-type">Object</span></td>
+                        <td><span class="required">REQUIRED</span></td>
+                        <td>Min 8 chars, upper, lower, number, special char</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Strength Indicator</strong></td>
+                        <td><span class="field-type">String</span></td>
+                        <td><span class="optional">OPTIONAL</span></td>
+                        <td>Real-time password strength feedback</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <hr style="margin: 30px 0; border: 1px solid #FFE5E5;">
+
+            <h4>Step 5: Final Registration</h4>
+            <p><strong>Screen:</strong> RegisterSuccess.jsx</p>
+
+            <h4>Final Register Request (Consolidates All Data):</h4>
+            <div class="endpoint-box">
+                <div class="endpoint-label">POST /user/v1/user_register/</div>
+                <span class="api-method post">POST</span>
+                <pre>{
+  "name": "John Doe",
+  "username": "johndoe",
+  "email": "newuser@example.com",
+  "phone_number": "+1-555-123-4567",
+  "password": "SecurePassword123!",
+  "confirm_password": "SecurePassword123!"
+}</pre>
+            </div>
+
+            <h4>Final Registration Response:</h4>
+            <div class="response-example">
+<span class="response-title">POST /user/v1/user_register/ - Success (201)</span>
+{
+  "status": "success",
+  "data": {
+    "message": "Account created successfully",
+    "user": {
+      "id": 102,
+      "email": "newuser@example.com",
+      "username": "johndoe",
+      "name": "John Doe",
+      "phone_number": "+1-555-123-4567",
+      "profile_completed": false,
+      "created_at": "2026-02-13T15:30:00Z"
+    }
+  }
+}
+            </div>
+
+            <div class="info-box">
+                <strong>ℹ️ After Registration:</strong> Automatically log in the user with the registration credentials or redirect to login page
+            </div>
+        </div>
+
+        <div class="page-break"></div>
+
+        <h2>7. Forgot Password Flow Data</h2>
+
+        <div class="screen-card">
+            <h3>🔑 Screen: ForgotFlow.jsx (Multi-Step)</h3>
+            <p><strong>Purpose:</strong> Help candidate reset forgotten password through email verification</p>
+
+            <h4>Step 1: Enter Email</h4>
+            <p><strong>Screen:</strong> ForgotEmail.jsx</p>
+
+            <h4>Forgot Password Request:</h4>
+            <div class="endpoint-box">
+                <div class="endpoint-label">POST /user/v1/forgot_password/</div>
+                <span class="api-method post">POST</span>
+                <pre>{
+  "email": "candidate@example.com"
+}</pre>
+            </div>
+
+            <h4>Forgot Password Response:</h4>
+            <div class="response-example">
+<span class="response-title">POST /user/v1/forgot_password/ - Success (200)</span>
+{
+  "status": "success",
+  "data": {
+    "message": "Password reset link sent to email",
+    "email": "candidate@example.com",
+    "reset_token": "reset_token_abc123xyz",
+    "token_expires_in": 3600,
+    "masked_email": "cand****@example.com"
+  }
+}
+            </div>
+
+            <hr style="margin: 30px 0; border: 1px solid #FFE5E5;">
+
+            <h4>Step 2: Verify OTP</h4>
+            <p><strong>Screen:</strong> ForgotOtp.jsx</p>
+
+            <h4>Verify Reset OTP Request:</h4>
+            <div class="endpoint-box">
+                <div class="endpoint-label">POST /user/v1/verify_reset_otp/</div>
+                <span class="api-method post">POST</span>
+                <pre>{
+  "email": "candidate@example.com",
+  "otp": "123456"
+}</pre>
+            </div>
+
+            <h4>Verify Reset OTP Response:</h4>
+            <div class="response-example">
+<span class="response-title">POST /user/v1/verify_reset_otp/ - Success (200)</span>
+{
+  "status": "success",
+  "data": {
+    "message": "OTP verified",
+    "reset_token": "reset_token_abc123xyz_verified",
+    "next_step": "reset_password"
+  }
+}
+            </div>
+
+            <hr style="margin: 30px 0; border: 1px solid #FFE5E5;">
+
+            <h4>Step 3: Reset Password</h4>
+            <p><strong>Screen:</strong> ResetPassword.jsx</p>
+
+            <h4>Reset Password Request:</h4>
+            <div class="endpoint-box">
+                <div class="endpoint-label">PUT /user/v1/reset_password/</div>
+                <span class="api-method put">PUT</span>
+                <pre>{
+  "email": "candidate@example.com",
+  "reset_token": "reset_token_abc123xyz_verified",
+  "new_password": "NewSecurePassword456!",
+  "confirm_password": "NewSecurePassword456!"
+}</pre>
+            </div>
+
+            <h4>Reset Password Response:</h4>
+            <div class="response-example">
+<span class="response-title">PUT /user/v1/reset_password/ - Success (200)</span>
+{
+  "status": "success",
+  "data": {
+    "message": "Password reset successfully",
+    "email": "candidate@example.com"
+  }
+}
+            </div>
+
+            <hr style="margin: 30px 0; border: 1px solid #FFE5E5;">
+
+            <h4>Step 4: Success Confirmation</h4>
+            <p><strong>Screen:</strong> ForgotSuccess.jsx</p>
+
+            <div class="section-box">
+                <strong>✓ Show Success Message:</strong>
+                <ul>
+                    <li>Password has been reset successfully</li>
+                    <li>Redirect to login after 3 seconds (with button option to click earlier)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="page-break"></div>
+
+        <h2>8. Candidate Dashboard Data</h2>
+
+        <div class="screen-card">
+            <h3>📊 Screen: CandidateDashboard.jsx</h3>
+            <p><strong>Purpose:</strong> Main hub for job browsing, applications tracking, and profile management</p>
+
+            <h4>Initial Dashboard Load - Current User Data:</h4>
+
+            <h4>Get Current User Data Request:</h4>
+            <div class="endpoint-box">
+                <div class="endpoint-label">GET /user/v1/profile/</div>
+                <span class="api-method get">GET</span>
+                <span style="font-size: 11px;">Authorization: Bearer {accessToken}</span>
+            </div>
+
+            <h4>Get Current User Data Response:</h4>
+            <div class="response-example">
+<span class="response-title">GET /user/v1/profile/ - Success (200)</span>
+{
+  "status": "success",
+  "data": {
+    "user": {
+      "id": 101,
+      "name": "Prathyusha G",
+      "email": "prathyusha@example.com",
+      "username": "prathyusha_g",
+      "phone_number": "+91-555-123-4567",
+      "profile_picture_url": "https://cdn.letshyre.com/profiles/101.jpg",
+      "profile_completed": true,
+      "profile_completion_percentage": 85,
+      "created_at": "2025-11-20T10:30:00Z",
+      "updated_at": "2026-02-10T14:15:00Z"
+    }
+  }
+}
+            </div>
+
+            <h4>Dashboard State Management Data:</h4>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>State/Data</th>
+                        <th>Type</th>
+                        <th>Purpose</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>profileCompleted</strong></td>
+                        <td><span class="field-type">Boolean</span></td>
+                        <td>Determine if profile is 100% complete → unlock restricted tabs</td>
+                    </tr>
+                    <tr>
+                        <td><strong>activeTab</strong></td>
+                        <td><span class="field-type">String</span></td>
+                        <td>Track which tab user viewing (jobs, applications, scorecard)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>showProfileFlow</strong></td>
+                        <td><span class="field-type">Boolean</span></td>
+                        <td>Show profile completion overlay if profile not complete</td>
+                    </tr>
+                    <tr>
+                        <td><strong>userInfo</strong></td>
+                        <td><span class="field-type">Object</span></td>
+                        <td>Current user details for display in topbar</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>Dashboard Sidebar Sections:</h4>
+            <div class="section-box">
+                <strong>Section 1: Find Jobs</strong>
+                <ul>
+                    <li>Always unlocked</li>
+                    <li>No profile required</li>
+                </ul>
+
+                <strong>Section 2: My Applications</strong>
+                <ul>
+                    <li>Locked if <code>profileCompleted === false</code></li>
+                    <li>Shows: Applications count, status indicators</li>
+                </ul>
+
+                <strong>Section 3: Scorecard</strong>
+                <ul>
+                    <li>Locked if <code>profileCompleted === false</code></li>
+                    <li>Shows: Overall score, ratings from employers</li>
+                </ul>
+
+                <strong>Section 4: Logout</strong>
+                <ul>
+                    <li>Always available</li>
+                    <li>Clear tokens & redirect to login</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="page-break"></div>
+
+        <h2>9. Profile Completion Flow Data</h2>
+
+        <div class="screen-card">
+            <h3>👤 Screen: ProfileCompletion.jsx & ProfileStepper.jsx</h3>
+            <p><strong>Purpose:</strong> Complete candidate profile with identity, role, resume, and review steps</p>
+
+            <h4>Step 1: Identity Information</h4>
+            <p><strong>Screen:</strong> StepIdentity.jsx</p>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Field Name</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Full Name</strong></td>
+                        <td><span class="field-type">String</span></td>
+                        <td><span class="required">REQUIRED</span></td>
+                        <td>Candidate's full name (pre-filled from registration)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Email</strong></td>
+                        <td><span class="field-type">String</span></td>
+                        <td><span class="required">REQUIRED</span></td>
+                        <td>Email address (read-only, pre-filled)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Phone</strong></td>
+                        <td><span class="field-type">String</span></td>
+                        <td><span class="required">REQUIRED</span></td>
+                        <td>Phone number (pre-filled from registration)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Date of Birth</strong></td>
+                        <td><span class="field-type">Date</span></td>
+                        <td><span class="required">REQUIRED</span></td>
+                        <td>For age verification (format: YYYY-MM-DD)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Gender</strong></td>
+                        <td><span class="field-type">String</span></td>
+                        <td><span class="optional">OPTIONAL</span></td>
+                        <td>Male, Female, Other, Prefer Not to Say</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Address</strong></td>
+                        <td><span class="field-type">String</span></td>
+                        <td><span class="required">REQUIRED</span></td>
+                        <td>Current address</td>
+                    </tr>
+                    <tr>
+                        <td><strong>City</strong></td>
+                        <td><span class="field-type">String</span></td>
+                        <td><span class="required">REQUIRED</span></td>
+                        <td>City name</td>
+                    </tr>
+                    <tr>
+                        <td><strong>State</strong></td>
+                        <td><span class="field-type">String</span></td>
+                        <td><span class="required">REQUIRED</span></td>
+                        <td>State/Province</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Country</strong></td>
+                        <td><span class="field-type">String</span></td>
+                        <td><span class="required">REQUIRED</span></td>
+                        <td>Country (from dropdown)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Zip Code</strong></td>
+                        <td><span class="field-type">String</span></td>
+                        <td><span class="required">REQUIRED</span></td>
+                        <td>Postal/ZIP code</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>Save Identity Step Request:</h4>
+            <div class="endpoint-box">
+                <div class="endpoint-label">POST /profile/v1/identity/</div>
+                <span class="api-method post">POST</span>
+                <span style="font-size: 11px;">Authorization: Bearer {accessToken}</span>
+                <pre>{
+  "full_name": "Prathyusha G",
+  "date_of_birth": "1998-05-15",
+  "gender": "Female",
+  "phone_number": "+91-555-123-4567",
+  "address": "123, Main Street",
+  "city": "Bangalore",
+  "state": "Karnataka",
+  "country": "India",
+  "zip_code": "560001"
+}</pre>
+            </div>
+
+            <h4>Save Identity Response:</h4>
+            <div class="response-example">
+<span class="response-title">POST /profile/v1/identity/ - Success (201)</span>
+{
+  "status": "success",
+  "data": {
+    "identity_id": 2501,
+    "step_completed": true,
+    "completion_percentage": 25,
+    "message": "Identity saved. Ready for next step."
+  }
+}
+            </div>
+
+            <hr style="margin: 30px 0; border: 1px solid #FFE5E5;">
+
+            <h4>Step 2: Role & Skills</h4>
+            <p><strong>Screen:</strong> StepRole.jsx</p>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Field Name</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Desired Job Title</strong></td>
+                        <td><span class="field-type">String</span></td>
+                        <td><span class="required">REQUIRED</span></td>
+                        <td>e.g., "Python Developer", "UI Designer"</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Job Categories</strong></td>
+                        <td><span class="field-type">Array[String]</span></td>
+                        <td><span class="required">REQUIRED</span></td>
+                        <td>Get from backend: Tech, Design, Sales, etc.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Years of Experience</strong></td>
+                        <td><span class="field-type">Integer</span></td>
+                        <td><span class="required">REQUIRED</span></td>
+                        <td>0-50 years</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Current Role</strong></td>
+                        <td><span class="field-type">String</span></td>
+                        <td><span class="optional">OPTIONAL</span></td>
+                        <td>Current job title if employed</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Skills</strong></td>
+                        <td><span class="field-type">Array[String]</span></td>
+                        <td><span class="required">REQUIRED</span></td>
+                        <td>Min 3 skills from predefined list</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Salary Expectation</strong></td>
+                        <td><span class="field-type">Object</span></td>
+                        <td><span class="optional">OPTIONAL</span></td>
+                        <td>{min: 30000, max: 80000, currency: "USD"}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Work Type Preference</strong></td>
+                        <td><span class="field-type">Array[String]</span></td>
+                        <td><span class="optional">OPTIONAL</span></td>
+                        <td>Full-time, Part-time, Contract, Freelance</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Location Preference</strong></td>
+                        <td><span class="field-type">Array[String]</span></td>
+                        <td><span class="optional">OPTIONAL</span></td>
+                        <td>Remote, On-site, Hybrid, Willing to relocate</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>Get Job Categories/Skills List:</h4>
+            <div class="endpoint-box">
+                <div class="endpoint-label">GET /profile/v1/job-categories/ & GET /profile/v1/skills/</div>
+                <span class="api-method get">GET</span>
+            </div>
+
+            <h4>Job Categories Response:</h4>
+            <div class="response-example">
+<span class="response-title">GET /profile/v1/job-categories/ - Success (200)</span>
+{
+  "status": "success",
+  "data": {
+    "categories": [
+      {"id": 1, "name": "Technology", "icon": "💻"},
+      {"id": 2, "name": "Design", "icon": "🎨"},
+      {"id": 3, "name": "Sales", "icon": "📊"},
+      {"id": 4, "name": "Marketing", "icon": "📢"},
+      {"id": 5, "name": "Management", "icon": "👔"}
+    ]
+  }
+}
+            </div>
+
+            <h4>Skills List Response:</h4>
+            <div class="response-example">
+<span class="response-title">GET /profile/v1/skills/ - Success (200)</span>
+{
+  "status": "success",
+  "data": {
+    "skills": [
+      {"id": 1, "name": "Python", "category": "programming"},
+      {"id": 2, "name": "JavaScript", "category": "programming"},
+      {"id": 3, "name": "React", "category": "frontend"},
+      {"id": 4, "name": "Node.js", "category": "backend"},
+      {"id": 5, "name": "UI Design", "category": "design"},
+      {"id": 6, "name": "Project Management", "category": "management"}
+    ]
+  }
+}
+            </div>
+
+            <h4>Save Role Step Request:</h4>
+            <div class="endpoint-box">
+                <div class="endpoint-label">POST /profile/v1/role/</div>
+                <span class="api-method post">POST</span>
+                <span style="font-size: 11px;">Authorization: Bearer {accessToken}</span>
+                <pre>{
+  "desired_job_title": "Senior Python Developer",
+  "job_category": "Technology",
+  "years_of_experience": 5,
+  "current_role": "Python Developer",
+  "skills": [1, 2, 4],
+  "salary_expectation": {
+    "min": 60000,
+    "max": 100000,
+    "currency": "USD"
+  },
+  "work_type_preference": ["Full-time", "Remote"],
+  "location_preference": ["Remote", "Hybrid"]
+}</pre>
+            </div>
+
+            <h4>Save Role Response:</h4>
+            <div class="response-example">
+<span class="response-title">POST /profile/v1/role/ - Success (201)</span>
+{
+  "status": "success",
+  "data": {
+    "role_id": 3301,
+    "step_completed": true,
+    "completion_percentage": 50,
+    "message": "Role and skills saved. Ready for next step."
+  }
+}
+            </div>
+
+            <hr style="margin: 30px 0; border: 1px solid #FFE5E5;">
+
+            <h4>Step 3: Resume Upload</h4>
+            <p><strong>Screen:</strong> StepResume.jsx</p>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Field Name</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Resume File</strong></td>
+                        <td><span class="field-type">File (PDF, DOC)</span></td>
+                        <td><span class="required">REQUIRED</span></td>
+                        <td>Max size: 5MB. Formats: PDF, DOCX, DOC</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Resume Title</strong></td>
+                        <td><span class="field-type">String</span></td>
+                        <td><span class="optional">OPTIONAL</span></td>
+                        <td>Name to give the resume (auto-filled or custom)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Primary Resume</strong></td>
+                        <td><span class="field-type">Boolean</span></td>
+                        <td><span class="optional">OPTIONAL</span></td>
+                        <td>Set this as default resume for applications</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>Upload Resume Request (Multipart Form Data):</h4>
+            <div class="endpoint-box">
+                <div class="endpoint-label">POST /profile/v1/resume/upload/</div>
+                <span class="api-method post">POST</span>
+                <span style="font-size: 11px;">Authorization: Bearer {accessToken}, Content-Type: multipart/form-data</span>
+                <pre>FormData {
+  resume_file: File(data),
+  resume_title: "Python_Developer_CV_2026",
+  is_primary: true
+}</pre>
+            </div>
+
+            <h4>Upload Resume Response:</h4>
+            <div class="response-example">
+<span class="response-title">POST /profile/v1/resume/upload/ - Success (201)</span>
+{
+  "status": "success",
+  "data": {
+    "resume_id": 4501,
+    "resume_url": "https://cdn.letshyre.com/resumes/101/resume_2026_02_13.pdf",
+    "file_name": "Python_Developer_CV_2026.pdf",
+    "file_size": 2048576,
+    "upload_date": "2026-02-13T16:45:00Z",
+    "step_completed": true,
+    "completion_percentage": 75,
+    "message": "Resume uploaded successfully. Ready for final review."
+  }
+}
+            </div>
+
+            <hr style="margin: 30px 0; border: 1px solid #FFE5E5;">
+
+            <h4>Step 4: Review & Confirm</h4>
+            <p><strong>Screen:</strong> StepReview.jsx</p>
+
+            <h4>Get Full Profile for Review</h4>
+            <div class="endpoint-box">
+                <div class="endpoint-label">GET /profile/v1/review/</div>
+                <span class="api-method get">GET</span>
+                <span style="font-size: 11px;">Authorization: Bearer {accessToken}</span>
+            </div>
+
+            <h4>Review Data Response:</h4>
+            <div class="response-example">
+<span class="response-title">GET /profile/v1/review/ - Success (200)</span>
+{
+  "status": "success",
+  "data": {
+    "profile_summary": {
+      "identity": {
+        "full_name": "Prathyusha G",
+        "email": "prathyusha@example.com",
+        "phone": "+91-555-123-4567",
+        "address": "123, Main Street",
+        "city": "Bangalore",
+        "state": "Karnataka",
+        "country": "India",
+        "zip": "560001"
+      },
+      "role": {
+        "desired_job_title": "Senior Python Developer",
+        "job_category": "Technology",
+        "years_of_experience": 5,
+        "current_role": "Python Developer",
+        "skills": ["Python", "JavaScript", "Node.js"],
+        "salary_expectation": {"min": 60000, "max": 100000, "currency": "USD"},
+        "work_preference": ["Full-time", "Remote"],
+        "location_preference": ["Remote", "Hybrid"]
+      },
+      "resume": {
+        "resume_id": 4501,
+        "file_name": "Python_Developer_CV_2026.pdf",
+        "upload_date": "2026-02-13T16:45:00Z",
+        "resume_url": "https://cdn.letshyre.com/resumes/101/resume_2026_02_13.pdf"
+      }
+    }
+  }
+}
+            </div>
+
+            <h4>Complete Profile Request:</h4>
+            <div class="endpoint-box">
+                <div class="endpoint-label">POST /profile/v1/complete/</div>
+                <span class="api-method post">POST</span>
+                <span style="font-size: 11px;">Authorization: Bearer {accessToken}</span>
+                <pre>{
+  "confirm": true
+}</pre>
+            </div>
+
+            <h4>Complete Profile Response:</h4>
+            <div class="response-example">
+<span class="response-title">POST /profile/v1/complete/ - Success (200)</span>
+{
+  "status": "success",
+  "data": {
+    "message": "Profile completed successfully!",
+    "profile_completed": true,
+    "completion_percentage": 100,
+    "redirect_to": "/candidate"
+  }
+}
+            </div>
+
+            <h4>Frontend Actions After Profile Completion:</h4>
+            <div class="section-box">
+                <ol>
+                    <li>Set <code>localStorage.setItem("profileCompleted", "true")</code></li>
+                    <li>Update state: <code>setShowProfileFlow(false)</code></li>
+                    <li>Close profile overlay</li>
+                    <li>Redirect user to main dashboard</li>
+                    <li>Show success toast notification</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="page-break"></div>
+
+        <h2>10. Jobs Section Data</h2>
+
+        <div class="screen-card">
+            <h3>💼 Screen: JobsSection.jsx</h3>
+            <p><strong>Purpose:</strong> Display available job listings with search, filtering, and application functionality</p>
+
+            <h4>Initial Load - Get All Jobs:</h4>
+            <div class="endpoint-box">
+                <div class="endpoint-label">GET /jobs/v1/?page=1&limit=10</div>
+                <span class="api-method get">GET</span>
+                <span style="font-size: 11px;">Authorization: Bearer {accessToken}</span>
+            </div>
+
+            <h4>Get All Jobs Response:</h4>
+            <div class="response-example">
+<span class="response-title">GET /jobs/v1/ - Success (200)</span>
+{
+  "status": "success",
+  "data": {
+    "total_count": 245,
+    "page": 1,
+    "limit": 10,
+    "total_pages": 25,
+    "jobs": [
+      {
+        "id": 1001,
+        "title": "Python + Django Software Engineer",
+        "company_name": "Tech Startup Inc",
+        "company_logo_url": "https://cdn.letshyre.com/logos/tech_startup.png",
+        "location": "Bangalore, India",
+        "job_type": "Full-time",
+        "experience_level": "Mid-level",
+        "years_required": "3-5",
+        "salary": {
+          "min": 50000,
+          "max": 80000,
+          "currency": "USD",
+          "is_negotiable": true
+        },
+        "description": "We are looking for...",
+        "key_responsibilities": [
+          "Build scalable backend systems",
+          "Write clean and maintainable code",
+          "Collaborate with team"
+        ],
+        "required_skills": ["Python", "Django", "PostgreSQL"],
+        "nice_to_have_skills": ["Docker", "Redis"],
+        "posted_date": "2026-02-10T08:30:00Z",
+        "application_deadline": "2026-03-13T23:59:59Z",
+        "is_remote": true,
+        "remote_type": "Fully Remote",
+        "category": "Technology",
+        "has_applied": false,
+        "application_status": null,
+        "match_score": 87,
+        "reasons_match": ["Matches your skills", "Matches your experience level"]
+      },
+      {
+        "id": 1002,
+        "title": "React Frontend Developer",
+        "company_name": "Web Tech Solutions",
+        "company_logo_url": "https://cdn.letshyre.com/logos/web_tech.png",
+        "location": "Remote",
+        "job_type": "Full-time",
+        "experience_level": "Entry-level",
+        "years_required": "1-2",
+        "salary": {
+          "min": 30000,
+          "max": 50000,
+          "currency": "USD",
+          "is_negotiable": true
+        },
+        "description": "Join our growing team...",
+        "key_responsibilities": [
+          "Build responsive UIs",
+          "Optimize performance",
+          "Write tests"
+        ],
+        "required_skills": ["React", "JavaScript", "CSS"],
+        "nice_to_have_skills": ["TypeScript", "Testing"],
+        "posted_date": "2026-02-12T10:15:00Z",
+        "application_deadline": "2026-03-15T23:59:59Z",
+        "is_remote": true,
+        "remote_type": "Fully Remote",
+        "category": "Technology",
+        "has_applied": true,
+        "application_status": "pending",
+        "match_score": 92,
+        "reasons_match": ["Strong skill match", "Perfect experience level"]
+      }
+    ]
+  }
+}
+            </div>
+
+            <h4>Search Jobs Request:</h4>
+            <div class="endpoint-box">
+                <div class="endpoint-label">GET /jobs/v1/search/?query=Python&city=Bangalore</div>
+                <span class="api-method get">GET</span>
+            </div>
+
+            <h4>Filter Jobs Request:</h4>
+            <div class="endpoint-box">
+                <div class="endpoint-label">GET /jobs/v1/filter/?experience=mid-level&salary_min=50000&salary_max=100000&job_type=full-time</div>
+                <span class="api-method get">GET</span>
+            </div>
+
+            <h4>Get Job Details:</h4>
+            <div class="endpoint-box">
+                <div class="endpoint-label">GET /jobs/v1/{jobId}/</div>
+                <span class="api-method get">GET</span>
+            </div>
+
+            <h4>Apply for Job Request:</h4>
+            <div class="endpoint-box">
+                <div class="endpoint-label">POST /jobs/v1/{jobId}/apply/</div>
+                <span class="api-method post">POST</span>
+                <span style="font-size: 11px;">Authorization: Bearer {accessToken}</span>
+                <pre>{
+  "resume_id": 4501,
+  "cover_letter": "I am excited to apply for this role..."
+}</pre>
+            </div>
+
+            <h4>Apply for Job Response:</h4>
+            <div class="response-example">
+<span class="response-title">POST /jobs/v1/{jobId}/apply/ - Success (201)</span>
+{
+  "status": "success",
+  "data": {
+    "application_id": 5501,
+    "job_id": 1001,
+    "job_title": "Python + Django Software Engineer",
+    "company_name": "Tech Startup Inc",
+    "applied_date": "2026-02-13T17:30:00Z",
+    "status": "pending",
+    "message": "Application submitted successfully!",
+    "next_steps": "You will receive updates about your application status."
+  }
+}
+            </div>
+
+            <h4>Frontend State for Jobs Section:</h4>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>State Variable</th>
+                        <th>Type</th>
+                        <th>Purpose</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>jobs</strong></td>
+                        <td><span class="field-type">Array[Object]</span></td>
+                        <td>List of all jobs fetched from backend</td>
+                    </tr>
+                    <tr>
+                        <td><strong>activeTab</strong></td>
+                        <td><span class="field-type">String</span></td>
+                        <td>"all" or "suggested" to filter view</td>
+                    </tr>
+                    <tr>
+                        <td><strong>searchQuery</strong></td>
+                        <td><span class="field-type">String</span></td>
+                        <td>User's search input</td>
+                    </tr>
+                    <tr>
+                        <td><strong>showFilters</strong></td>
+                        <td><span class="field-type">Boolean</span></td>
+                        <td>Toggle filter panel visibility</td>
+                    </tr>
+                    <tr>
+                        <td><strong>appliedFilters</strong></td>
+                        <td><span class="field-type">Object</span></td>
+                        <td>Selected filter values (experience, salary, etc.)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>isLoading</strong></td>
+                        <td><span class="field-type">Boolean</span></td>
+                        <td>API call loading state</td>
+                    </tr>
+                    <tr>
+                        <td><strong>currentPage</strong></td>
+                        <td><span class="field-type">Integer</span></td>
+                        <td>Pagination page number</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>Available Filters for Jobs:</h4>
+            <div class="section-box">
+                <ul>
+                    <li><strong>Experience Level:</strong> Entry-level, Mid-level, Senior, Executive</li>
+                    <li><strong>Salary Range:</strong> Min & Max with slider</li>
+                    <li><strong>Location:</strong> Cities/Countries with search</li>
+                    <li><strong>Job Type:</strong> Full-time, Part-time, Contract, Freelance</li>
+                    <li><strong>Remote Type:</strong> Fully Remote, Hybrid, On-site</li>
+                    <li><strong>Category:</strong> Technology, Design, Sales, Marketing, Management</li>
+                    <li><strong>Posted Date:</strong> Last 7 days, Last 30 days, Anytime</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="page-break"></div>
+
+        <h2>11. Applications Section Data</h2>
+
+        <div class="screen-card">
+            <h3>📄 Screen: ApplicationsSection.jsx</h3>
+            <p><strong>Purpose:</strong> Show all job applications submitted by candidate with status tracking</p>
+
+            <h4>Get Candidate Applications:</h4>
+            <div class="endpoint-box">
+                <div class="endpoint-label">GET /applications/v1/my-applications/?status=all&sort=-applied_date</div>
+                <span class="api-method get">GET</span>
+                <span style="font-size: 11px;">Authorization: Bearer {accessToken}</span>
+            </div>
+
+            <h4>Get Applications Response:</h4>
+            <div class="response-example">
+<span class="response-title">GET /applications/v1/my-applications/ - Success (200)</span>
+{
+  "status": "success",
+  "data": {
+    "total_applications": 8,
+    "applications": [
+      {
+        "application_id": 5501,
+        "job_id": 1001,
+        "job_title": "Python + Django Software Engineer",
+        "company_name": "Tech Startup Inc",
+        "company_logo_url": "https://cdn.letshyre.com/logos/tech_startup.png",
+        "location": "Bangalore, India",
+        "job_type": "Full-time",
+        "applied_date": "2026-02-13T17:30:00Z",
+        "status": "pending",
+        "status_updated_date": "2026-02-13T17:30:00Z",
+        "application_notes": "Your application is under review",
+        "salary": {"min": 50000, "max": 80000, "currency": "USD"},
+        "employer_response": null,
+        "employer_message": null
+      },
+      {
+        "application_id": 5500,
+        "job_id": 1002,
+        "job_title": "React Frontend Developer",
+        "company_name": "Web Tech Solutions",
+        "company_logo_url": "https://cdn.letshyre.com/logos/web_tech.png",
+        "location": "Remote",
+        "job_type": "Full-time",
+        "applied_date": "2026-02-12T14:15:00Z",
+        "status": "shortlisted",
+        "status_updated_date": "2026-02-13T09:00:00Z",
+        "application_notes": "Congratulations! You have been shortlisted.",
+        "salary": {"min": 30000, "max": 50000, "currency": "USD"},
+        "employer_response": "We would like to invite you for an interview",
+        "employer_message": "Please arrange a meeting for next week"
+      },
+      {
+        "application_id": 5499,
+        "job_id": 1003,
+        "job_title": "Node.js Backend Engineer",
+        "company_name": "Cloud Services Ltd",
+        "company_logo_url": "https://cdn.letshyre.com/logos/cloud_services.png",
+        "location": "Remote",
+        "job_type": "Full-time",
+        "applied_date": "2026-02-11T10:45:00Z",
+        "status": "rejected",
+        "status_updated_date": "2026-02-12T16:20:00Z",
+        "application_notes": "Thank you for your interest",
+        "salary": {"min": 60000, "max": 90000, "currency": "USD"},
+        "employer_response": "We are looking for someone with more experience",
+        "employer_message": "We encourage you to apply again in the future"
+      }
+    ]
+  }
+}
+            </div>
+
+            <h4>Application Status Types:</h4>
+            <div class="section-box">
+                <ul>
+                    <li><span class="highlight">pending</span> - Application submitted, awaiting employer review</li>
+                    <li><span class="highlight">shortlisted</span> - Candidate selected for interview round</li>
+                    <li><span class="highlight">interview_scheduled</span> - Interview date set</li>
+                    <li><span class="highlight">offer_extended</span> - Job offer received</li>
+                    <li><span class="highlight">accepted</span> - Candidate accepted offer</li>
+                    <li><span class="highlight">rejected</span> - Application rejected by employer</li>
+                    <li><span class="highlight">withdrawn</span> - Candidate withdrew application</li>
+                </ul>
+            </div>
+
+            <h4>Frontend State for Applications:</h4>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>State Variable</th>
+                        <th>Type</th>
+                        <th>Purpose</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>applications</strong></td>
+                        <td><span class="field-type">Array[Object]</span></td>
+                        <td>List of all applications</td>
+                    </tr>
+                    <tr>
+                        <td><strong>statusFilter</strong></td>
+                        <td><span class="field-type">String</span></td>
+                        <td>Filter by status (all, pending, shortlisted, etc.)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>sortBy</strong></td>
+                        <td><span class="field-type">String</span></td>
+                        <td>Sort by: newest, oldest, status</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>Withdraw Application Request:</h4>
+            <div class="endpoint-box">
+                <div class="endpoint-label">POST /applications/v1/{applicationId}/withdraw/</div>
+                <span class="api-method post">POST</span>
+                <span style="font-size: 11px;">Authorization: Bearer {accessToken}</span>
+                <pre>{
+  "reason": "Found another opportunity"
+}</pre>
+            </div>
+
+            <h4>Withdraw Application Response:</h4>
+            <div class="response-example">
+<span class="response-title">POST /applications/v1/{applicationId}/withdraw/ - Success (200)</span>
+{
+  "status": "success",
+  "data": {
+    "application_id": 5501,
+    "new_status": "withdrawn",
+    "message": "Application withdrawn successfully"
+  }
+}
+            </div>
+        </div>
+
+        <div class="page-break"></div>
+
+        <h2>12. Scorecard Section Data</h2>
+
+        <div class="screen-card">
+            <h3>⭐ Screen: ScorecardSection.jsx</h3>
+            <p><strong>Purpose:</strong> Display candidate's performance ratings and employer feedback</p>
+
+            <h4>Get Scorecard Data:</h4>
+            <div class="endpoint-box">
+                <div class="endpoint-label">GET /scorecard/v1/my-scorecard/</div>
+                <span class="api-method get">GET</span>
+                <span style="font-size: 11px;">Authorization: Bearer {accessToken}</span>
+            </div>
+
+            <h4>Get Scorecard Response:</h4>
+            <div class="response-example">
+<span class="response-title">GET /scorecard/v1/my-scorecard/ - Success (200)</span>
+{
+  "status": "success",
+  "data": {
+    "overall_score": 4.5,
+    "max_score": 5,
+    "total_ratings": 3,
+    "rating_breakdown": {
+      "technical_skills": 4.7,
+      "communication": 4.3,
+      "professionalism": 4.8,
+      "problem_solving": 4.4,
+      "teamwork": 4.6
+    },
+    "ratings": [
+      {
+        "rating_id": 6001,
+        "company_name": "Tech Startup Inc",
+        "job_title": "Python + Django Software Engineer",
+        "overall_rating": 4.5,
+        "comment": "Great technical skills and good communication",
+        "rating_date": "2026-02-10T12:30:00Z",
+        "reviewer_name": "John Manager",
+        "reviewer_title": "Hiring Manager"
+      },
+      {
+        "rating_id": 6002,
+        "company_name": "Web Tech Solutions",
+        "job_title": "React Frontend Developer",
+        "overall_rating": 4.6,
+        "comment": "Excellent problem solver and quick learner",
+        "rating_date": "2026-02-08T10:15:00Z",
+        "reviewer_name": "Sarah Lead",
+        "reviewer_title": "Team Lead"
+      },
+      {
+        "rating_id": 6003,
+        "company_name": "Cloud Services Ltd",
+        "job_title": "Node.js Backend Engineer",
+        "overall_rating": 4.4,
+        "comment": "Good technical knowledge but needs more experience",
+        "rating_date": "2026-02-05T14:45:00Z",
+        "reviewer_name": "Mike Director",
+        "reviewer_title": "Director"
+      }
+    ],
+    "profile_strength": "Strong"
+  }
+}
+            </div>
+
+            <h4>Frontend State for Scorecard:</h4>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>State Variable</th>
+                        <th>Type</th>
+                        <th>Purpose</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>overallScore</strong></td>
+                        <td><span class="field-type">Float</span></td>
+                        <td>Average rating (0-5)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ratings</strong></td>
+                        <td><span class="field-type">Array[Object]</span></td>
+                        <td>Individual ratings from employers</td>
+                    </tr>
+                    <tr>
+                        <td><strong>categoryScores</strong></td>
+                        <td><span class="field-type">Object</span></td>
+                        <td>Breakdown by skill categories</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>Display Tips:</h4>
+            <div class="section-box">
+                <ul>
+                    <li>Show overall score with 5-star visualization</li>
+                    <li>Display radar chart or bar chart for category breakdown</li>
+                    <li>List individual ratings with company info and comments</li>
+                    <li>Highlight strong areas and areas for improvement</li>
+                    <li>Show profile strength indicator (Excellent, Strong, Good, Fair)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="page-break"></div>
+
+        <h2>13. API Endpoint Summary</h2>
+
+        <div class="summary-box">
+            <h3>Complete API Reference</h3>
+
+            <table class="flow-table">
+                <thead>
+                    <tr>
+                        <th>Endpoint</th>
+                        <th>Method</th>
+                        <th>Auth Required</th>
+                        <th>Purpose</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>/cms/v1/hero-banners/</strong></td>
+                        <td><span class="api-method get">GET</span></td>
+                        <td>No</td>
+                        <td>Landing page hero images</td>
+                    </tr>
+                    <tr>
+                        <td><strong>/cms/v1/platform-stats/</strong></td>
+                        <td><span class="api-method get">GET</span></td>
+                        <td>No</td>
+                        <td>Platform metrics</td>
+                    </tr>
+                    <tr>
+                        <td><strong>/user/v1/login/</strong></td>
+                        <td><span class="api-method post">POST</span></td>
+                        <td>No</td>
+                        <td>Candidate login</td>
+                    </tr>
+                    <tr>
+                        <td><strong>/commonapp/v1/send_otp/</strong></td>
+                        <td><span class="api-method post">POST</span></td>
+                        <td>No</td>
+                        <td>Send email OTP for registration</td>
+                    </tr>
+                    <tr>
+                        <td><strong>/commonapp/v1/verify_otp/</strong></td>
+                        <td><span class="api-method post">POST</span></td>
+                        <td>No</td>
+                        <td>Verify email OTP</td>
+                    </tr>
+                    <tr>
+                        <td><strong>/commonapp/v1/mobile_send_otp/</strong></td>
+                        <td><span class="api-method post">POST</span></td>
+                        <td>No</td>
+                        <td>Send mobile OTP for registration</td>
+                    </tr>
+                    <tr>
+                        <td><strong>/commonapp/v1/mobile_verify_otp/</strong></td>
+                        <td><span class="api-method post">POST</span></td>
+                        <td>No</td>
+                        <td>Verify mobile OTP</td>
+                    </tr>
+                    <tr>
+                        <td><strong>/user/v1/user_register/</strong></td>
+                        <td><span class="api-method post">POST</span></td>
+                        <td>No</td>
+                        <td>Final account registration</td>
+                    </tr>
+                    <tr>
+                        <td><strong>/user/v1/forgot_password/</strong></td>
+                        <td><span class="api-method post">POST</span></td>
+                        <td>No</td>
+                        <td>Initiate password reset</td>
+                    </tr>
+                    <tr>
+                        <td><strong>/user/v1/verify_reset_otp/</strong></td>
+                        <td><span class="api-method post">POST</span></td>
+                        <td>No</td>
+                        <td>Verify password reset OTP</td>
+                    </tr>
+                    <tr>
+                        <td><strong>/user/v1/reset_password/</strong></td>
+                        <td><span class="api-method put">PUT</span></td>
+                        <td>No</td>
+                        <td>Update password</td>
+                    </tr>
+                    <tr>
+                        <td><strong>/user/v1/profile/</strong></td>
+                        <td><span class="api-method get">GET</span></td>
+                        <td>Yes</td>
+                        <td>Get current user profile</td>
+                    </tr>
+                    <tr>
+                        <td><strong>/user/v1/logout/</strong></td>
+                        <td><span class="api-method post">POST</span></td>
+                        <td>Yes</td>
+                        <td>Logout candidate</td>
+                    </tr>
+                    <tr>
+                        <td><strong>/profile/v1/job-categories/</strong></td>
+                        <td><span class="api-method get">GET</span></td>
+                        <td>No</td>
+                        <td>List job categories</td>
+                    </tr>
+                    <tr>
+                        <td><strong>/profile/v1/skills/</strong></td>
+                        <td><span class="api-method get">GET</span></td>
+                        <td>No</td>
+                        <td>List available skills</td>
+                    </tr>
+                    <tr>
+                        <td><strong>/profile/v1/identity/</strong></td>
+                        <td><span class="api-method post">POST</span></td>
+                        <td>Yes</td>
+                        <td>Save identity info</td>
+                    </tr>
+                    <tr>
+                        <td><strong>/profile/v1/role/</strong></td>
+                        <td><span class="api-method post">POST</span></td>
+                        <td>Yes</td>
+                        <td>Save role & skills</td>
+                    </tr>
+                    <tr>
+                        <td><strong>/profile/v1/resume/upload/</strong></td>
+                        <td><span class="api-method post">POST</span></td>
+                        <td>Yes</td>
+                        <td>Upload resume file</td>
+                    </tr>
+                    <tr>
+                        <td><strong>/profile/v1/review/</strong></td>
+                        <td><span class="api-method get">GET</span></td>
+                        <td>Yes</td>
+                        <td>Get profile for review</td>
+                    </tr>
+                    <tr>
+                        <td><strong>/profile/v1/complete/</strong></td>
+                        <td><span class="api-method post">POST</span></td>
+                        <td>Yes</td>
+                        <td>Mark profile as complete</td>
+                    </tr>
+                    <tr>
+                        <td><strong>/jobs/v1/</strong></td>
+                        <td><span class="api-method get">GET</span></td>
+                        <td>Yes</td>
+                        <td>Get all jobs with pagination</td>
+                    </tr>
+                    <tr>
+                        <td><strong>/jobs/v1/search/</strong></td>
+                        <td><span class="api-method get">GET</span></td>
+                        <td>Yes</td>
+                        <td>Search jobs</td>
+                    </tr>
+                    <tr>
+                        <td><strong>/jobs/v1/filter/</strong></td>
+                        <td><span class="api-method get">GET</span></td>
+                        <td>Yes</td>
+                        <td>Filter jobs by criteria</td>
+                    </tr>
+                    <tr>
+                        <td><strong>/jobs/v1/{jobId}/</strong></td>
+                        <td><span class="api-method get">GET</span></td>
+                        <td>Yes</td>
+                        <td>Get single job details</td>
+                    </tr>
+                    <tr>
+                        <td><strong>/jobs/v1/{jobId}/apply/</strong></td>
+                        <td><span class="api-method post">POST</span></td>
+                        <td>Yes</td>
+                        <td>Apply for job</td>
+                    </tr>
+                    <tr>
+                        <td><strong>/applications/v1/my-applications/</strong></td>
+                        <td><span class="api-method get">GET</span></td>
+                        <td>Yes</td>
+                        <td>Get candidate's applications</td>
+                    </tr>
+                    <tr>
+                        <td><strong>/applications/v1/{applicationId}/withdraw/</strong></td>
+                        <td><span class="api-method post">POST</span></td>
+                        <td>Yes</td>
+                        <td>Withdraw application</td>
+                    </tr>
+                    <tr>
+                        <td><strong>/scorecard/v1/my-scorecard/</strong></td>
+                        <td><span class="api-method get">GET</span></td>
+                        <td>Yes</td>
+                        <td>Get candidate's scorecard</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="page-break"></div>
+
+        <h2>14. Data Consistency Guidelines</h2>
+
+        <div class="section-box">
+            <h3>🔄 Frontend-Backend Data Synchronization</h3>
+
+            <h4>Error Handling Standards:</h4>
+            <div class="warning-box">
+                <strong>⚠️ All Error Responses Should Follow This Format:</strong>
+                <div class="response-example">
+{
+  "status": "error",
+  "error": {
+    "code": "ERROR_CODE",
+    "message": "User-friendly error message",
+    "detail": "Technical details if applicable",
+    "field": "field_name" (if field-specific)
+  }
+}
+                </div>
+            </div>
+
+            <h4>Common Error Codes:</h4>
+            <table class="flow-table">
+                <thead>
+                    <tr>
+                        <th>Error Code</th>
+                        <th>HTTP Status</th>
+                        <th>Meaning</th>
+                        <th>Frontend Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>INVALID_CREDENTIALS</td>
+                        <td>401</td>
+                        <td>Email or password incorrect</td>
+                        <td>Show error message, keep form</td>
+                    </tr>
+                    <tr>
+                        <td>EMAIL_ALREADY_EXISTS</td>
+                        <td>409</td>
+                        <td>Email already registered</td>
+                        <td>Suggest login or forgot password</td>
+                    </tr>
+                    <tr>
+                        <td>INVALID_OTP</td>
+                        <td>400</td>
+                        <td>OTP code incorrect</td>
+                        <td>Show error, allow retry</td>
+                    </tr>
+                    <tr>
+                        <td>OTP_EXPIRED</td>
+                        <td>400</td>
+                        <td>OTP code expired</td>
+                        <td>Offer to resend OTP</td>
+                    </tr>
+                    <tr>
+                        <td>UNAUTHORIZED</td>
+                        <td>401</td>
+                        <td>No valid token</td>
+                        <td>Redirect to login</td>
+                    </tr>
+                    <tr>
+                        <td>PROFILE_NOT_COMPLETE</td>
+                        <td>403</td>
+                        <td>Profile completion required</td>
+                        <td>Show profile stepper overlay</td>
+                    </tr>
+                    <tr>
+                        <td>SERVER_ERROR</td>
+                        <td>500</td>
+                        <td>Backend server error</td>
+                        <td>Show generic error, retry button</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>Loading State Guidelines:</h4>
+            <div class="info-box">
+                <strong>✓ Show skeleton/spinner during:</strong>
+                <ul>
+                    <li>Fetching job listings</li>
+                    <li>Searching/filtering jobs</li>
+                    <li>Loading applications list</li>
+                    <li>Loading scorecard data</li>
+                    <li>API calls on profile completion steps</li>
+                </ul>
+            </div>
+
+            <h4>Empty State Guidelines:</h4>
+            <div class="info-box">
+                <strong>✓ Show empty state message when:</strong>
+                <ul>
+                    <li>No jobs found after search/filter</li>
+                    <li>No applications submitted yet</li>
+                    <li>No ratings/scorecard available</li>
+                    <li>Search returns zero results</li>
+                </ul>
+                <strong>Message format:</strong> "No {items} found. {Action or suggestion to find items}"
+            </div>
+
+            <h4>Token Expiration & Refresh Flow:</h4>
+            <div class="data-flow-box">
+1. Frontend makes API request with access token
+2. Backend validates token
+   ├─> If valid: Process request normally
+   └─> If expired (401): Return 401 with error
+3. Frontend intercepts 401 response
+4. Frontend calls POST /user/v1/login_refresh/ with refresh token
+5. Backend validates refresh token
+   ├─> If valid: Return new access token
+   │   └─> Frontend retries original request with new token
+   └─> If expired/invalid: Return 401
+6. Frontend handles refresh failure
+   ├─> Clear tokens from localStorage
+   ├─> Redirect to /login/candidate
+   └─> Show "Session expired" message
+            </div>
+
+            <h4>Data Caching & Update Patterns:</h4>
+            <div class="section-box">
+                <strong>Cache Strategy:</strong>
+                <ul>
+                    <li>User profile: Cache for 5 minutes or until logout</li>
+                    <li>Jobs list: Cache for 2 minutes, refresh on tab focus</li>
+                    <li>Applications: Cache for 2 minutes, refresh on status change</li>
+                    <li>Scorecard: Cache for 5 minutes, no real-time updates needed</li>
+                </ul>
+
+                <strong>Invalidation Triggers:</strong>
+                <ul>
+                    <li>User completes profile → Invalidate dashboard state</li>
+                    <li>User applies to job → Invalidate jobs list + applications list</li>
+                    <li>User updates profile → Invalidate profile cache</li>
+                </ul>
+            </div>
+
+            <h4>Real-Time Updates (WebSocket Considerations):</h4>
+            <div class="info-box">
+                <strong>For Future Implementation:</strong>
+                <ul>
+                    <li>Application status changes (pending → shortlisted)</li>
+                    <li>New ratings received (employer feedback)</li>
+                    <li>Messages from employers (if messaging feature added)</li>
+                    <li>Job matches (if recommendation engine added)</li>
+                </ul>
+            </div>
+
+            <h4>Data Validation Rules (Frontend):</h4>
+            <div class="section-box">
+                <strong>Before Submitting to Backend:</strong>
+                <ul>
+                    <li>Email: Valid format (RFC 5322)</li>
+                    <li>Password: Min 8 chars, at least 1 uppercase, 1 lowercase, 1 number, 1 special char</li>
+                    <li>Phone: Valid international format</li>
+                    <li>Age: Calculated from DOB must be >= 18</li>
+                    <li>Resume: File size <= 5MB, format: PDF/DOCX/DOC only</li>
+                    <li>Salary: Min <= Max, both > 0</li>
+                </ul>
+            </div>
+
+            <h4>Pagination Standards:</h4>
+            <div class="info-box">
+                <strong>Default Pagination Values:</strong>
+                <ul>
+                    <li>Page: 1 (first page)</li>
+                    <li>Limit: 10 items per page (configurable)</li>
+                    <li>Response includes: total_count, page, limit, total_pages</li>
+                    <li>Fetch next page: Increment page parameter</li>
+                </ul>
+            </div>
+
+            <h4>Sorting & Filtering Standards:</h4>
+            <div class="info-box">
+                <strong>Query Parameter Format:</strong>
+                <ul>
+                    <li>Sort Ascending: <code>sort=field_name</code></li>
+                    <li>Sort Descending: <code>sort=-field_name</code></li>
+                    <li>Filter: <code>filter_name=value</code></li>
+                    <li>Multiple Filters: <code>?status=pending&category=tech&sort=-date</code></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="page-break"></div>
+
+        <div class="foot-section">
+            <h2>Summary</h2>
+            <div class="section-box">
+                <p>This comprehensive document provides all the data requirements needed to build dynamic candidate screens in the Letshyre platform. Each screen lists:</p>
+                <ol>
+                    <li>✓ Backend data needed</li>
+                    <li>✓ API endpoints to call</li>
+                    <li>✓ Request/response formats</li>
+                    <li>✓ Frontend state management</li>
+                    <li>✓ Error handling approach</li>
+                    <li>✓ Loading & empty states</li>
+                </ol>
+
+                <p style="margin-top: 20px;"><strong>Total API Endpoints: 30+</strong></p>
+                <p><strong>Coverage: Complete candidate journey from landing to dashboard</strong></p>
+            </div>
+
+            <div class="info-box">
+                <strong>📝 Next Steps for Development:</strong>
+                <ol>
+                    <li>Backend team implements all listed API endpoints</li>
+                    <li>Frontend team creates services for each endpoint (already partially done)</li>
+                    <li>Build components with loading, error, and empty states</li>
+                    <li>Implement error handling and toast notifications</li>
+                    <li>Test with real data from backend APIs</li>
+                    <li>Deploy and monitor performance</li>
+                </ol>
+            </div>
+
+            <div class="footer">
+                <p style="margin-bottom: 20px;">📋 Candidate Flow - Backend Data Requirements Document</p>
+                <p style="margin-bottom: 10px;">For: Letshyre Recruitment Platform</p>
+                <p style="margin-bottom: 10px;">Version: 1.0</p>
+                <p style="margin-bottom: 30px;">Generated: February 13, 2026</p>
+                <p style="font-size: 11px; color: #666;">This document should be used as a reference guide for both backend and frontend development teams to ensure seamless API integration and consistent data handling across all candidate-facing screens.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        console.log("To save as PDF: Press Ctrl+P (or Cmd+P on Mac), then select 'Save as PDF'");
+    </script>
+</body>
+</html>

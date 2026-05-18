@@ -1,0 +1,195 @@
+/* ===============================================
+   AUTH REGISTER STYLES
+   For: RegisterFlow, EmployerRegisterFlow
+         and all register sub-steps
+   
+   USAGE: import "./auth-register.css" in RegisterFlow/EmployerRegisterFlow
+   (auto-includes auth-shared.css)
+=============================================== */
+@import "./auth-shared.css";
+
+/* ================= REGISTER WRAPPER ================= */
+.auth-content {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background-color: var(--color-bg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* ================= REGISTER BACKGROUND BALL ================= */
+.cl-ball022 {
+  position: absolute;
+  top: -35%;
+  left: -10%;
+  width: 750px;
+  height: 750px;
+  border-radius: 50%;
+  z-index: 0;
+  animation: rotateBall2 1s ease forwards;
+  background: linear-gradient(
+    180deg,
+    var(--color-main) 16%,
+    var(--color-main) 38%,
+    #a3d3f1 80%,
+    #cdfcf3 100%
+  );
+  box-shadow: 0 0 50px var(--color-main);
+}
+
+@keyframes rotateBall2 {
+  from { transform: translateX(-200px) rotate(200deg); }
+  to { transform: translateX(0px) rotate(360deg); }
+}
+
+/* ================= REGISTER FORM ALIGNMENT ================= */
+.register-form-align {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+/* ================= PHONE INPUT OVERRIDE ================= */
+.lh-phone-input {
+  width: 100%;
+}
+
+.lh-phone-input .PhoneInput {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.9);
+  padding-bottom: 6px;
+}
+
+.lh-phone-input .PhoneInputCountry {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-right: 6px;
+}
+
+.lh-phone-input .PhoneInputCountryIcon {
+  width: 22px;
+  height: 22px;
+  overflow: hidden;
+}
+
+.lh-phone-input .PhoneInputCountrySelectArrow {
+  color: white;
+  opacity: 0.8;
+}
+
+.lh-phone-input .PhoneInputInput {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid white;
+  outline: none;
+  color: white;
+  font-size: 18px;
+  padding: 4px 0;
+  margin-bottom: 8px;
+  width: 100%;
+}
+
+.lh-phone-input .PhoneInputInput::placeholder {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* ================= PHONE DROPDOWN ================= */
+.PhoneInputCountrySelect {
+  background: white;
+  color: black;
+  border-radius: 8px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+  max-height: 260px;
+  overflow-y: auto;
+  z-index: 100;
+}
+
+.PhoneInputCountryOption {
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.PhoneInputCountryOption:hover {
+  background: #f2f6ff;
+}
+
+.PhoneInputCountryOptionLabel {
+  font-size: 14px;
+}
+
+.PhoneInputCountryOptionDialCode {
+  margin-left: auto;
+  font-weight: 500;
+  color: transparent;
+}
+
+/* ================= OTP SINGLE INPUT VARIANT ================= */
+.otp-input-wrapper {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin: 10px 0 20px;
+}
+
+.otp-input {
+  width: 120px;
+  text-align: center;
+  font-size: 24px;
+  letter-spacing: 12px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.9);
+  color: white;
+  outline: none;
+}
+
+.otp-input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.mobileNo-color {
+  color: black;
+}
+
+/* ================= RESPONSIVE — REGISTER ================= */
+
+@media (min-width: 767px) and (max-width: 923px) {
+  .cl-ball022 {
+    top: -22%;
+    left: -10%;
+    width: 550px;
+    height: 550px;
+  }
+  .register-box { width: 95%; }
+}
+
+@media (max-width: 767px) {
+  .cl-ball022 { display: none; }
+
+  .register-box {
+    padding: 5% 10% 5% 10%;
+    border-radius: 20px;
+    background: linear-gradient(
+      180deg,
+      #73a5ef 16%,
+      #79a9ef 38%,
+      #a3d3f1 80%,
+      #cdfcf3 100%
+    );
+    box-shadow: 0 0 30px rgb(12, 62, 107);
+    border: none;
+  }
+
+  .lh-phone-input .PhoneInputInput { font-size: 16px; }
+  .PhoneInputCountrySelect { max-height: 300px; }
+}

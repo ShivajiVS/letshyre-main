@@ -1,0 +1,401 @@
+/* ================= PAGE ================= */
+.candidate-page-main {
+  width: 100%;
+  padding: 5%;
+  background-color: var(--primary-lite-blue);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+/* ================= TOAST ================= */
+.toast {
+  position: fixed;
+  top: 25px;
+  right: 25px;
+  padding: 14px 20px;
+  border-radius: 10px;
+  color: white;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 9999;
+  min-width: 260px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  animation: toastSlide 0.4s ease;
+}
+
+.toast i {
+  font-size: 18px;
+}
+
+/* ERROR STYLE */
+.toast-error {
+  background: linear-gradient(135deg, #ff4b5c, #ff7a7a);
+}
+
+/* SUCCESS STYLE */
+.toast-success {
+  background: linear-gradient(135deg, #2ecc71, #27ae60);
+}
+
+/* ANIMATION */
+@keyframes toastSlide {
+  from {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* ================= MAIN CARD ================= */
+.candidate-page {
+  position: relative;
+  width: 85%;
+  height: 85vh;
+  display: flex;
+  gap: 14%;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  border-radius: 20px;
+  box-shadow: 0 0 15px var(--secondary-sky-blue);
+}
+
+/* ================= IMAGE ================= */
+.candidate-img-part {
+  width: 40%;
+  z-index: 1;
+  transition:
+    transform 0.9s ease,
+    opacity 0.9s ease;
+}
+
+.candidate-mainImg {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+}
+
+/* ================= FORM ================= */
+.form-part {
+  width: 33%;
+  padding: 2% 3% 1% 3%;
+  border-radius: 10px;
+  border: 1px solid white;
+  z-index: 2;
+  transition:
+    transform 0.9s ease,
+    opacity 0.9s ease;
+  box-shadow: inset 0 0 80px #c5d6f3;
+}
+
+.cl-title {
+  font-size: 22px;
+  margin-bottom: 5px;
+  text-align: center;
+  color: white;
+}
+
+.cl-sub-para {
+  color: white;
+  text-align: center;
+  margin-top: -5%;
+  /* margin-bottom: 4%; */
+}
+
+.cl-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* ================= INPUT ================= */
+.cl-input-group {
+  position: relative;
+}
+
+.cl-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.9);
+  padding: 6px 26px 6px 0;
+  font-size: 18px;
+  color: black;
+  outline: none;
+}
+
+.cl-input::placeholder {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.cl-icon {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
+  color: #fff;
+}
+
+.cl-forget-link {
+  font-size: 0.8rem;
+  color: white;
+  text-align: right;
+  text-decoration: none;
+}
+
+.cl-btn {
+  padding: 12px;
+  font-size: 16px;
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow:
+    0px 0px 2px rgb(49, 48, 48),
+    inset 0 0 10px rgb(164, 164, 164);
+}
+
+.form-subtext {
+  text-align: center;
+  color: white;
+  font-weight: 600;
+  margin-top: 10px;
+}
+.cl-Register02 {
+  text-align: center;
+  color: white;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+/* ================= BACKGROUND BALLS ================= */
+.cl-ball01,
+.cl-ball02 {
+  position: absolute;
+  width: 650px;
+  height: 650px;
+  border-radius: 50%;
+  z-index: 0;
+  background: linear-gradient(
+    180deg,
+    #73a5ef 16%,
+    #79a9ef 38%,
+    #a3d3f1 80%,
+    #cdfcf3 100%
+  );
+  box-shadow: 0 0 50px var(--secondary-sky-blue);
+  transition:
+    transform 1.5s ease,
+    opacity 1.2s ease;
+}
+.cl-ball01 {
+  top: -35%;
+  right: -10%;
+  animation: rotateBall3 1s ease forwards;
+}
+
+.cl-ball02 {
+  top: -35%;
+  left: -10%;
+  opacity: 0;
+  transform: translateX(-300px);
+}
+@keyframes rotateBall3 {
+  from {
+    transform: translateX(300px) rotate(100deg);
+  }
+  to {
+    transform: translateX(0px) rotate(0deg);
+  }
+}
+/* ================= DEFAULT ================= */
+.candidate-page .form-part,
+.candidate-page .candidate-img-part {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+/* ================= EXIT LOGIN ================= */
+.cl-animate-out .candidate-img-part {
+  transform: translateX(-120%);
+  opacity: 0;
+}
+
+.cl-animate-out .form-part {
+  transform: translateX(120%);
+  opacity: 0;
+}
+
+.cl-animate-out .cl-ball01 {
+  transform: translateX(550px) rotate(360deg);
+  opacity: 0;
+}
+
+/* ================= REGISTER ENTRY ================= */
+.cl-register-enter .cl-ball01 {
+  opacity: 0;
+}
+
+.cl-register-enter .cl-ball02 {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.cl-register-enter .form-part {
+  animation: registerFormIn 0.9s ease forwards;
+}
+
+.cl-register-enter .candidate-img-part {
+  animation: registerImageIn 0.9s ease forwards;
+}
+
+.cl-error {
+  color: #ffdddd;
+  font-size: 14px;
+  text-align: center;
+}
+
+@keyframes registerFormIn {
+  from {
+    transform: translateX(-120%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes registerImageIn {
+  from {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* ================================================= */
+/* ================= TABLET ======================== */
+/* ================================================= */
+@media (max-width: 1023px) {
+  .candidate-page {
+    width: 95%;
+    gap: 8%;
+  }
+
+  .candidate-img-part {
+    width: 45%;
+  }
+
+  .form-part {
+    width: 40%;
+    padding: 3%;
+  }
+}
+
+/* ================================================= */
+/* ================= MOBILE ========================= */
+/* ================================================= */
+@media (max-width: 767px) {
+  .candidate-page {
+    flex-direction: column;
+    height: auto;
+    gap: 30px;
+    padding: 40px 20px;
+  }
+  .form-part {
+    padding: 5% 10% 5% 10%;
+    border-radius: 20px;
+    background: linear-gradient(
+      180deg,
+      #73a5ef 16%,
+      #79a9ef 38%,
+      #a3d3f1 80%,
+      #cdfcf3 100%
+    );
+    box-shadow: 0 0 30px rgb(12, 62, 107);
+    border: none;
+  }
+  .candidate-img-part,
+  .form-part {
+    width: 100%;
+  }
+
+  .candidate-mainImg {
+    max-width: 320px;
+    margin: 0 auto;
+    display: block;
+  }
+  .cl-animate-out .candidate-page {
+    flex-direction: row-reverse;
+  }
+  /* Vertical animations */
+  .cl-animate-out .candidate-img-part {
+    transform: translateY(-120%);
+  }
+
+  .cl-animate-out .form-part {
+    transform: translateY(120%);
+  }
+
+  @keyframes registerFormIn {
+    from {
+      transform: translateY(120%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes registerImageIn {
+    from {
+      transform: translateY(-120%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  /* Smaller balls */
+  .cl-ball01,
+  .cl-ball02 {
+    display: none;
+  }
+}
+
+/* ================================================= */
+/* ================= SMALL MOBILE =================== */
+/* ================================================= */
+@media (max-width: 480px) {
+  .cl-title {
+    font-size: 20px;
+  }
+
+  .cl-input {
+    font-size: 16px;
+  }
+
+  .cl-btn {
+    font-size: 15px;
+  }
+
+  .cl-ball01,
+  .cl-ball02 {
+    width: 280px;
+    height: 280px;
+  }
+}
