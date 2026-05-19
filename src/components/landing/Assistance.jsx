@@ -130,9 +130,11 @@ export function Assistance() {
 
   return (
     <section className="as-main" id="how-it-works" aria-label="How it works">
-      {STEPS.map((step) => (
-        <StepBlock key={step.number} step={step} setRef={addToRefs} />
-      ))}
+      <div className="as-container">
+        {STEPS.map((step) => (
+          <StepBlock key={step.number} step={step} setRef={addToRefs} />
+        ))}
+      </div>
     </section>
   );
 }
