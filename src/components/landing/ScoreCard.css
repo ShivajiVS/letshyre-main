@@ -12,7 +12,7 @@
 .sc-main {
   position: relative;
   overflow: hidden;
-  padding: 5rem clamp(1.5rem, 6vw, 6rem);
+  padding: 3rem clamp(1rem, 6vw, 4rem);
   font-family: "Plus Jakarta Sans", sans-serif;
   background: linear-gradient(
     135deg,
@@ -21,7 +21,7 @@
     #b8cffe 60%,
     #cfdcff 100%
   );
-  margin-top: 6rem;
+  margin-top: 1rem;
 }
 
 /* ── decorative orbs ── */
@@ -494,7 +494,7 @@
 
 @media (max-width: 640px) {
   .sc-main {
-    padding: 3.5rem clamp(1rem, 5vw, 1.5rem);
+    padding: 2rem clamp(1rem, 5vw, 1.5rem);
     margin-top: 2rem;
   }
   .sc-grid {

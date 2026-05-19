@@ -242,7 +242,7 @@
 /* ---------- Responsive: mobile / small phones (<= 480px) ---------- */
 @media (max-width: 520px) {
   .hire-card-section {
-    padding: 6% 0;
+    padding: 0px 0;
   }
 
   .hire-card-main {

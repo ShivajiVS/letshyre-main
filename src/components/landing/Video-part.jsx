@@ -18,24 +18,28 @@ const Video_section = () => {
       </div>
 
       <div className="video-section-main">
+        {/* Background Marquee Texts */}
+        <div className="marquee-container">
+          {/* Line 1 – Left to Right */}
+          <div className="video-BG-Text_box marquee-left">
+            <div className="marquee-track">
+              <h1 className="Large-text">LETSHYRE LETSHYRE LETSHYRE </h1>
+              <h1 className="Large-text">LETSHYRE LETSHYRE LETSHYRE </h1>
+            </div>
+          </div>
+
+          {/* Line 2 – Right to Left */}
+          <div className="video-BG-Text_box marquee-right">
+            <div className="marquee-track">
+              <h1 className="Large-text">LETSHYRE LETSHYRE LETSHYRE </h1>
+              <h1 className="Large-text">LETSHYRE LETSHYRE LETSHYRE </h1>
+            </div>
+          </div>
+        </div>
+
+        {/* Foreground Video/Image */}
         <div className="Video-Part">
-          <img src={Demo_video} alt="" />
-        </div>
-
-        {/* Line 1 – Left to Right */}
-        <div className="video-BG-Text_box marquee-left">
-          <div className="marquee-track">
-            <h1 className="Large-text">LETSHYRE LETSHYRE LETSHYRE </h1>
-            <h1 className="Large-text">LETSHYRE LETSHYRE LETSHYRE </h1>
-          </div>
-        </div>
-
-        {/* Line 2 – Right to Left */}
-        <div className="video-BG-Text_box marquee-right">
-          <div className="marquee-track">
-            <h1 className="Large-text">LETSHYRE LETSHYRE LETSHYRE </h1>
-            <h1 className="Large-text">LETSHYRE LETSHYRE LETSHYRE </h1>
-          </div>
+          <img src={Demo_video} alt="AI Interview Demo" />
         </div>
       </div>
     </>

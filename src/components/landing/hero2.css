@@ -3,7 +3,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: 4rem 1rem 0rem; /* Balanced mobile padding */
+  padding: 4rem 1rem 0rem;
   background-color: #ffffff;
   overflow: hidden;
   font-family: "DM Sans", "Inter", sans-serif;
@@ -401,11 +401,10 @@
 
 /* ================== TAGLINE ================== */
 .tagline-wrapper {
-  /* background-color: red; */
   width: 100%;
   text-align: center;
   padding-top: 2rem;
-  z-index: 10;
+  /* z-index: 10; */
 }
 
 @media (min-width: 768px) {
