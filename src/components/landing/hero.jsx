@@ -86,11 +86,9 @@ const Hero = () => {
 
       <div className="tagline-wrapper">
         <div className="tagline">
-          <div className="tag-right-lines">
-            <span className="tag-line01">Stop Screening</span>
-            <span className="tag-line02 scroll-start" ref={startRef}>
-              Start Shortlisting
-            </span>
+          <div className="tag-right-lines" ref={startRef}>
+            <span className="tag-line01">Stop Screening.</span>
+            <span className="tag-line02">Start Shortlisting.</span>
           </div>
         </div>
       </div>

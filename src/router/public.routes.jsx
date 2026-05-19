@@ -37,6 +37,13 @@ const publicRoutes = [
           return { Component: ForgotPassword };
         },
       },
+      {
+        path: "download",
+        async lazy() {
+          const { DownloadApp } = await import("@/pages/employee/DownloadApp");
+          return { Component: DownloadApp };
+        },
+      },
     ],
   },
 ];

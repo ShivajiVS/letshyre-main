@@ -10,12 +10,14 @@ import { ScoreCard } from "@/components/landing/ScoreCard";
 import { QuestionArea } from "@/components/landing/Question_Area";
 
 import Footer from "@/components/landing/Footer";
+import Hero2 from "@/components/landing/hero2";
 
 export function Landing() {
   return (
     <>
       <Navbar />
-      <Hero />
+      <Hero2 />
+      {/* <Hero /> */}
       <Assistance />
       <Candidate />
       <Video_section />

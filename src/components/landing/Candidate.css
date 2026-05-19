@@ -2,7 +2,7 @@
    HEADING SECTION
 ===================================== */
 
-.Candidate-Heading-Main01{
+.Candidate-Heading-Main01 {
   background-color: var(--primary-lite-blue);
 }
 
@@ -24,11 +24,11 @@
 }
 
 @keyframes appearHeading {
-  from{
+  from {
     opacity: 0;
     scale: 0.3;
   }
-  to{
+  to {
     opacity: 1;
     scale: 1;
   }
@@ -61,7 +61,7 @@
   width: 48%;
   height: 90vh;
   border-radius: 20px;
-  background-color: #DFE8F8;
+  background-color: #dfe8f8;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -71,7 +71,7 @@
   width: 94%;
   height: 90%;
   border-radius: 15px;
-  background: linear-gradient(180deg, #6296EF, white);
+  background: linear-gradient(180deg, #6296ef, white);
   display: flex;
   justify-content: center;
   align-items: flex-end;
@@ -103,7 +103,7 @@
 
   /* ⭐ CONTROL SMOOTHNESS HERE */
   transition:
-    transform 1.2s cubic-bezier(.22,.61,.36,1),
+    transform 1.2s cubic-bezier(0.22, 0.61, 0.36, 1),
     opacity 0.8s ease;
 }
 
@@ -141,7 +141,7 @@
   align-items: flex-start;
   padding: 2% 4%;
   border-radius: 13px;
-  background-color: #DFE8F8;
+  background-color: #dfe8f8;
   cursor: pointer;
 
   transition: all 0.4s ease;
@@ -152,7 +152,7 @@
   background: white;
   border-color: var(--secondary-sky-blue);
   transform: scale(1.02);
-  box-shadow: 0 8px 25px rgba(59,130,246,0.15);
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.15);
 }
 
 /* ICON */

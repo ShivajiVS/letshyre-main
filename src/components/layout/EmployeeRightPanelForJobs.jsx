@@ -29,7 +29,6 @@ export default function EmployeeRightPanelForJobs({ profile }) {
       return;
     }
 
-    // ✅ Build EXACT deep link you want
     let deepLink = `letshyre://interview?ac=${encodeURIComponent(accessToken)}`;
 
     if (refreshToken) {
@@ -38,12 +37,28 @@ export default function EmployeeRightPanelForJobs({ profile }) {
 
     console.log("Deep Link:", deepLink);
 
-    // ✅ Open Electron / App
-    window.location.href = deepLink;
+    const start = Date.now();
 
-    // ✅ Optional fallback
+    // Create hidden iframe
+    const iframe = document.createElement("iframe");
+
+    iframe.style.display = "none";
+    iframe.src = deepLink;
+
+    document.body.appendChild(iframe);
+
+    // Detect whether app opened
     setTimeout(() => {
-      window.open("https://letshyre.com/download", "_blank");
+      document.body.removeChild(iframe);
+
+      // If browser still focused after delay,
+      // assume app is not installed
+      const elapsed = Date.now() - start;
+
+      if (elapsed < 3500 && document.hasFocus()) {
+        // window.location.href = "https://letshyre.com/download";
+        window.location.href = "http://localhost:5173/download";
+      }
     }, 2000);
   };
 
