@@ -3,6 +3,23 @@
   width: 100%;
   text-align: center;
   /* z-index: 10; */
+  
+  /* Scroll Zoom Effect */
+  animation: taglineScrollZoom linear both;
+  animation-timeline: scroll();
+  animation-range: 0 100vh;
+}
+
+@keyframes taglineScrollZoom {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.08); /* Zoom in slightly more than the image for text impact */
+  }
+  100% {
+    transform: scale(0.9); /* Zoom out as we scroll away */
+  }
 }
 
 @media (min-width: 768px) {

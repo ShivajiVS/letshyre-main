@@ -359,19 +359,52 @@
   box-shadow:
     0 25px 50px -12px rgba(0, 0, 0, 0.15),
     0 0 0 1px rgba(0, 0, 0, 0.03);
-  transform: perspective(1000px) rotateY(-5deg) rotateX(2deg);
-  transition: transform 0.5s ease;
+  /* The original transform is now applied at 0% in the animation */
+  animation: heroZoom linear both;
+  animation-timeline: scroll();
+  /* Animation completes as the user scrolls down 100vh */
+  animation-range: 0 100vh;
+  transition: box-shadow 0.5s ease;
+}
+
+@keyframes heroZoom {
+  0% {
+    transform: perspective(1000px) rotateY(-5deg) rotateX(2deg) scale(1);
+  }
+  40% {
+    transform: perspective(1000px) rotateY(-2deg) rotateX(1deg) scale(1.05); /* Zoom In */
+  }
+  100% {
+    transform: perspective(1000px) rotateY(0deg) rotateX(0deg) scale(0.9); /* Zoom Out */
+  }
 }
 
 @media (min-width: 1024px) {
   .visual-wrapper:hover {
-    transform: perspective(1000px) rotateY(0deg) rotateX(0deg);
+    box-shadow: 0 35px 60px -15px rgba(0, 0, 0, 0.2);
+    /* We let the scroll animation handle the transform to avoid conflicts, 
+       but we can enhance the shadow on hover */
   }
 }
 
 @media (max-width: 768px) {
   .visual-wrapper {
-    transform: none; /* Disable 3D tilt on smaller screens to maximize width */
+    /* Disable 3D tilt on smaller screens to maximize width, but keep the zoom effect */
+    animation: heroZoomMobile linear both;
+    animation-timeline: scroll();
+    animation-range: 0 100vh;
+  }
+}
+
+@keyframes heroZoomMobile {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.05); /* Zoom In */
+  }
+  100% {
+    transform: scale(0.9); /* Zoom Out */
   }
 }
 
