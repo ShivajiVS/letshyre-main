@@ -1,34 +1,13 @@
-import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router";
 
 import heroImg from "@/assets/hero1.jpeg";
 import first_part_bg from "@/assets/FP_bg.png";
-// Removed "slop" floating assets for a cleaner, professional B2B look:
-// import bell_icon from "@/assets/Bell-Icon.png";
-// import robo01 from "@/assets/Robo01.png";
-// import group from "@/assets/group02.png";
+import Tagline from "./Tagline";
 
 import "./hero2.css";
 
 const Hero2 = () => {
   const navigate = useNavigate();
-  const startRef = useRef(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry], obs) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("animate");
-          obs.unobserve(entry.target); // run only once
-        }
-      },
-      { threshold: 0.2 },
-    );
-
-    if (startRef.current) observer.observe(startRef.current);
-
-    return () => observer.disconnect();
-  }, []);
 
   return (
     <section className="hero-container" id="home">
@@ -83,13 +62,7 @@ const Hero2 = () => {
           </div>
         </div>
       </div>
-
-      <div className="tagline-wrapper">
-        <h2 className="tagline-text" ref={startRef}>
-          <span className="tag-light">Stop Screening.</span>{" "}
-          <span className="tag-bold">Start Shortlisting.</span>
-        </h2>
-      </div>
+      <Tagline />
 
       {/* Re-using your background shape as a modern ambient gradient blur */}
       <img
