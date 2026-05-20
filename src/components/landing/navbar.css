@@ -92,8 +92,6 @@
   background-color: rgba(15, 23, 42, 0.04);
 }
 
-
-
 /* ================= Desktop CTA Button ================= */
 .ls-demo-btn {
   padding: 10px 24px;
@@ -198,7 +196,7 @@
     visibility 0s linear 0s;
 }
 
-/* ================= Mobile Menu (Left Side Drawer) ================= */
+/* ================= Mobile Menu (Full Screen Overlay) ================= */
 .ls-mobile-menu {
   position: fixed;
   top: 0;
@@ -211,16 +209,17 @@
 
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  padding: 80px 24px 40px; /* Top padding clears the burger icon */
+  align-items: center;
+  padding: 120px 24px 40px; /* Generous top padding for clean spacing */
 
-  background: rgba(255, 255, 255, 0.98);
-  border-right: 1px solid rgba(0, 0, 0, 0.05);
-  box-shadow: 20px 0 40px rgba(0, 0, 0, 0.08);
+  background: #ffffff; /* Solid white background */
+  /* Removed backdrop-filter for solid color */
+  border-right: none;
+  box-shadow: none;
 
   opacity: 0;
   visibility: hidden;
-  transform: translateX(-100%);
+  transform: translateY(-20px); /* Sleek fade-down animation */
   transition:
     transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
     opacity 0.4s ease;
@@ -229,77 +228,100 @@
 .ls-mobile-menu-open {
   opacity: 1;
   visibility: visible;
-  transform: translateX(0);
+  transform: translateY(0);
 }
 
 /* Mobile links */
 .ls-mobile-link {
-  padding: 16px 12px;
-  margin-bottom: 12px; /* Increased gap between links */
+  padding: 12px 0;
+  margin-bottom: 12px;
   width: 100%;
   display: block;
   box-sizing: border-box;
-  text-align: left;
+  text-align: center; /* Center aligned for premium look */
   text-decoration: none;
-  color: #475569;
-  font-family: var(--font-heading, "Inter", system-ui, sans-serif);
+  color: #64748b; /* Slate 500 */
+  /* Bulletproof modern font stack to prevent serif fallbacks */
+  font-family:
+    "Inter",
+    "DM Sans",
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
   font-weight: 500;
-  font-size: 1.1rem;
-  border-radius: 12px;
-  transition: all 0.2s ease;
+  font-size: 1.75rem; /* Huge, confident typography */
+  letter-spacing: -0.03em;
+  border-radius: 0;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .ls-mobile-link-active,
 .ls-mobile-link:hover {
-  color: #0f172a;
-  font-weight: 600;
-  background-color: rgba(15, 23, 42, 0.04);
-  padding-left: 20px; /* Slight indent effect on hover/active */
+  color: #0f172a; /* Slate 900 */
+  font-weight: 700;
+  background-color: transparent; /* Remove the gray pill */
+  padding-left: 0;
+  transform: scale(1.05); /* Slight pop effect */
 }
 
-/* Mobile CTA button (Forced Black & Full Width) */
+/* Mobile CTA button (Forced Black & Centered) */
 .ls-mobile-demo-btn {
   align-self: stretch !important;
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
   width: 100% !important;
-  max-width: 100% !important;
+  max-width: 320px !important; /* Constrain width so it looks like a sleek pill */
   box-sizing: border-box !important;
 
   margin-top: auto !important; /* Pushes the button to the bottom */
-  padding: 14px 24px !important;
+  margin-left: auto !important; /* Center horizontally */
+  margin-right: auto !important;
+  padding: 16px 24px !important;
 
   background: #0f172a !important;
   color: #ffffff !important;
   text-align: center !important;
   text-decoration: none !important;
-  font-family: var(--font-heading, "Inter", system-ui, sans-serif);
+  font-family:
+    "Inter",
+    "DM Sans",
+    system-ui,
+    -apple-system,
+    sans-serif;
   font-weight: 600;
-  font-size: 1.05rem;
+  font-size: 1.1rem;
   white-space: nowrap !important;
 
   border-radius: 99px !important; /* Modern pill */
   border: none !important;
-  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.15) !important;
+  box-shadow: 0 12px 32px -8px rgba(15, 23, 42, 0.3) !important; /* Gorgeous deep shadow */
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .ls-mobile-demo-btn:active {
-  transform: scale(0.97);
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.1) !important;
+  transform: scale(0.96);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15) !important;
 }
 
 .ls-mobile-footer {
-  margin-top: 24px; /* Footer follows closely below the bottom-aligned button */
+  margin-top: 32px; /* Fixed space below button */
   width: 100%;
   text-align: center;
   font-size: 0.85rem;
   font-weight: 500;
   color: #94a3b8;
-  font-family: var(--font-heading, "Inter", system-ui, sans-serif);
-  padding-top: 24px;
-  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  font-family:
+    "Inter",
+    "DM Sans",
+    system-ui,
+    -apple-system,
+    sans-serif;
+  padding-top: 0;
+  border-top: none;
 }
 
 /* ================= RESPONSIVE ================= */
