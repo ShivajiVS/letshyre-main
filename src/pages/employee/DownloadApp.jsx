@@ -1,9 +1,20 @@
 import React from "react";
+import { Helmet } from "react-helmet-async";
 import "./download-app.css";
 
 export function DownloadApp() {
   return (
     <div className="portal-root">
+      <Helmet>
+        <title>Download LetsHyre Desktop — Secure Interview Environment</title>
+        <meta
+          name="description"
+          content="Download the LetsHyre desktop application to start your secure AI interview session. Available for Windows, Mac, and Linux."
+        />
+        <meta name="robots" content="noindex, nofollow" />
+        <link rel="canonical" href="https://letshyre.com/download" />
+      </Helmet>
+
       <main className="portal-content">
         {/* LEFT PANE */}
         <section className="copy-section">

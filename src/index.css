@@ -20,8 +20,3 @@ h4,
 h5 {
   font-family: var(--font-heading);
 }
-/* localStorage.removeItem("profileCompleted"); to clear the browser cachy */
-
-/* localStorage.removeItem("emp-team-popup"); */
-
-/* localStorage.removeItem("emp-tour"); */

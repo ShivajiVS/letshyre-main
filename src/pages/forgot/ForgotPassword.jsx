@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { useLocation } from "react-router";
 
 import imgEmail from "@/assets/forgot1.png";
@@ -39,6 +40,16 @@ export function ForgotPassword({ onBackToLogin }) {
 
   return (
     <div className="candidate-page-main">
+      <Helmet>
+        <title>Reset Your Password | LetsHyre</title>
+        <meta
+          name="description"
+          content="Forgot your LetsHyre password? Reset it securely with email verification and get back to hiring or job searching."
+        />
+        <meta name="robots" content="noindex, nofollow" />
+        <link rel="canonical" href="https://letshyre.com/forgot-password" />
+      </Helmet>
+
       <div className="candidate-page">
         <div className="auth-card">
           {/* IMAGE */}

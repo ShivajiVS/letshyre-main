@@ -1,0 +1,11 @@
+# LetsHyre — robots.txt
+# https://letshyre.com/robots.txt
+
+User-agent: *
+Allow: /
+Disallow: /employee/
+Disallow: /employer/
+Disallow: /forgot-password
+
+# Sitemap
+Sitemap: https://letshyre.com/sitemap.xml
