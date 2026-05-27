@@ -2,7 +2,12 @@ import { useState, useEffect } from "react";
 import { Joyride } from "react-joyride";
 import { useNavigate, NavLink, Outlet, useLocation } from "react-router";
 
-import { useEmployerProfile, useEmployerCredits, useTeamMembers, useInviteTeamMember } from "@/hooks/employer/useDashboard";
+import {
+  useEmployerProfile,
+  useEmployerCredits,
+  useTeamMembers,
+  useInviteTeamMember,
+} from "@/hooks/employer/useDashboard";
 import { logoutMe } from "@/services/auth.service";
 
 import team01 from "@/assets/team01.png";
@@ -62,13 +67,15 @@ const TOUR_STEPS = [
   {
     target: "#tour-dashboard",
     title: "Your Hiring Hub",
-    content: "Get a bird's-eye view of your recruitment metrics.",
+    content:
+      "Get a bird's-eye view of your recruitment metrics and quick shortcuts.",
     disableBeacon: true,
   },
   {
     target: "#tour-postjob",
-    title: "Upload JD",
-    content: "Upload job descriptions to start hiring.",
+    title: "Hire in Minutes",
+    content:
+      "Upload a JD. Our AI will handle the data entry for you instantly.",
     disableBeacon: true,
   },
   {
@@ -77,7 +84,7 @@ const TOUR_STEPS = [
     content: "Manage all job postings here.",
     disableBeacon: true,
   },
-    {
+  {
     target: "#tour-candidates",
     title: "Candidates",
     content: "View all candidates here.",
@@ -85,31 +92,34 @@ const TOUR_STEPS = [
   },
   {
     target: "#tour-team",
-    title: "Your Team",
-    content: "Collaborate with your team.",
+    title: "Collaborative Hiring",
+    content: "Invite your team members to review candidates.",
     disableBeacon: true,
   },
   {
     target: "#tour-subscription",
-    title: "Subscriptions",
-    content: "Manage billing and plans.",
+    title: "Billing & Subscriptions",
+    content:
+      "cCoose a plan that fits your growth and manages your billing history in one secure place",
     disableBeacon: true,
   },
   {
     target: "#tour-credits",
-    title: "Credits",
-    content: "Track your available credits.",
+    title: "Balance Credits",
+    content:
+      "Choose a plan that fits your growth and manages your billing history in one secure place",
     disableBeacon: true,
   },
   {
     target: "#tour-add-member",
-    title: "Add Members",
-    content: "Invite team members easily.",
+    title: "Add Team Members",
+    content:
+      "Bring in more recruiters and managers to speed up your hiring decisions.",
     disableBeacon: true,
   },
   {
     target: "#tour-profile",
-    title: "Profile",
+    title: "Manage Your Profile",
     content: "Manage your account settings.",
     disableBeacon: true,
   },
@@ -144,7 +154,7 @@ const JOYRIDE_STYLES = {
     padding: "8px 16px",
     fontSize: "14px",
   },
-  buttonSkip: { color: "#333", fontSize: "13px" },
+  buttonSkip: { color: "#333", fontSize: "50px", background: "#0d6af6ff" },
 };
 
 const ls = {
@@ -299,7 +309,7 @@ export function EmployerDashboardLayout() {
       if (data.success) {
         setEmpInviteForm({ name: "", email: "", password: "" });
         setInviteSuccess("Member added successfully ✅");
-        
+
         setTimeout(() => {
           setEmpPopup(null);
           navigate("/employer/your-team");
@@ -471,9 +481,17 @@ export function EmployerDashboardLayout() {
           <div className="emp-topbar-box">
             <button className="emp-buttons emp-credits-btn" id="tour-credits">
               {creditsLoading ? (
-                 <span className="emp-topbar-sk" style={{width: 60, display: "inline-block", height: 16, borderRadius: 4}}></span>
+                <span
+                  className="emp-topbar-sk"
+                  style={{
+                    width: 60,
+                    display: "inline-block",
+                    height: 16,
+                    borderRadius: 4,
+                  }}
+                ></span>
               ) : (
-                 <>Credits : {credits}</>
+                <>Credits : {credits}</>
               )}
             </button>
             <button
@@ -481,10 +499,20 @@ export function EmployerDashboardLayout() {
               id="tour-add-member"
               onClick={() => navigate("/employer/your-team")}
             >
-               {teamLoading ? (
-                 <span className="emp-topbar-sk" style={{width: 60, display: "inline-block", height: 16, borderRadius: 4}}></span>
+              {teamLoading ? (
+                <span
+                  className="emp-topbar-sk"
+                  style={{
+                    width: 60,
+                    display: "inline-block",
+                    height: 16,
+                    borderRadius: 4,
+                  }}
+                ></span>
               ) : (
-                <>{teamCount + 1} {teamCount + 1 === 1 ? "Member" : "Members"}</>
+                <>
+                  {teamCount + 1} {teamCount + 1 === 1 ? "Member" : "Members"}
+                </>
               )}
             </button>
             <div className="emp-top-icons">
@@ -492,7 +520,15 @@ export function EmployerDashboardLayout() {
             </div>
             <div className="emp-user-name">
               {profileLoading ? (
-                <span className="emp-topbar-sk" style={{width: 80, display: "inline-block", height: 16, borderRadius: 4}}></span>
+                <span
+                  className="emp-topbar-sk"
+                  style={{
+                    width: 80,
+                    display: "inline-block",
+                    height: 16,
+                    borderRadius: 4,
+                  }}
+                ></span>
               ) : (
                 loggedUser?.name || loggedUser?.username || "User"
               )}
@@ -505,7 +541,16 @@ export function EmployerDashboardLayout() {
               onClick={() => navigate("/employer/profile")}
             >
               {profileData?.company_logo ? (
-                <img src={profileData.company_logo} alt="profile" style={{ width: "100%", height: "100%", borderRadius: "50%", objectFit: "cover" }} />
+                <img
+                  src={profileData.company_logo}
+                  alt="profile"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    borderRadius: "50%",
+                    objectFit: "cover",
+                  }}
+                />
               ) : (
                 <i className="bi bi-person" />
               )}
