@@ -1,7 +1,9 @@
-import api from "@/services/api";
 import { useState, useEffect } from "react";
 import { Joyride } from "react-joyride";
 import { useNavigate, NavLink, Outlet, useLocation } from "react-router";
+
+import { useEmployerProfile, useEmployerCredits, useTeamMembers, useInviteTeamMember } from "@/hooks/employer/useDashboard";
+import { logoutMe } from "@/services/auth.service";
 
 import team01 from "@/assets/team01.png";
 import check_mark from "@/assets/check-mark.png";
@@ -11,10 +13,7 @@ import logout from "@/assets/logout.png";
 import tour from "@/assets/Tour.png";
 import overlay_img from "@/assets/unlock-img02.png";
 
-import { logoutMe } from "@/services/auth.service";
-
 import "./EmployerDashboardLayout.css";
-
 import "@/components/dashboard/LockedOverlay";
 
 const MENU_ITEMS = [
@@ -39,7 +38,7 @@ const MENU_ITEMS = [
   {
     id: "tour-candidates",
     to: "/employer/candidate-list",
-    icon: "bi-people-fill", // can change icon if needed
+    icon: "bi-people-fill",
     label: "Candidate List",
   },
   {
@@ -59,7 +58,6 @@ const SUB_ITEMS = [
   },
 ];
 
-
 const TOUR_STEPS = [
   {
     target: "#tour-dashboard",
@@ -77,6 +75,12 @@ const TOUR_STEPS = [
     target: "#tour-jobs",
     title: "View Jobs",
     content: "Manage all job postings here.",
+    disableBeacon: true,
+  },
+    {
+    target: "#tour-candidates",
+    title: "Candidates",
+    content: "View all candidates here.",
     disableBeacon: true,
   },
   {
@@ -161,16 +165,21 @@ export function EmployerDashboardLayout() {
     email: "",
     password: "",
   });
-  
-  const [credits, setCredits] = useState(0);
-  const [profile, setProfile] = useState(null);
-  const [teamCount, setTeamCount] = useState(0);
-  const [inviteLoading, setInviteLoading] = useState(false);
+
   const [inviteError, setInviteError] = useState("");
   const [inviteSuccess, setInviteSuccess] = useState("");
 
   /* Tour auto-starts if first tour never done AND not mobile */
   const [runTour, setRunTour] = useState(false);
+
+  // ── React Query Hooks ──
+  const { data: profileData, isLoading: profileLoading } = useEmployerProfile();
+  const { data: creditsData, isLoading: creditsLoading } = useEmployerCredits();
+  const { data: teamData, isLoading: teamLoading } = useTeamMembers();
+  const inviteMutation = useInviteTeamMember();
+
+  const credits = creditsData?.available_credits || 0;
+  const teamCount = teamData?.count || 0;
 
   /* ─────────────────────────────────────────
      SINGLE SOURCE OF TRUTH for active menu.
@@ -205,6 +214,14 @@ export function EmployerDashboardLayout() {
     }
   }, []);
 
+  /* ── show popup conditionally based on team count ── */
+  useEffect(() => {
+    if (teamData && teamCount === 0 && !ls.get("emp-team-popup-shown")) {
+      ls.set("emp-team-popup-shown", "true");
+      setEmpPopup("invite");
+    }
+  }, [teamData, teamCount]);
+
   /* ── close subscription dropdown on outside click ── */
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -217,73 +234,27 @@ export function EmployerDashboardLayout() {
   }, []);
 
   useEffect(() => {
-    fetchDashboardData();
-    fetchTeamCount(); // ✅ ADD THIS
+    const user = localStorage.getItem("user");
+    if (user) {
+      setLoggedUser(JSON.parse(user));
+    }
   }, []);
-
-useEffect(() => {
-  const user = localStorage.getItem("user");
-
-  if (user) {
-    setLoggedUser(JSON.parse(user));
-  }
-}, []);
-
-  const fetchDashboardData = async () => {
-    try {
-      // Profile API
-      const profileRes = await api.get("/user/v1/employer_profile/");
-      const profileData = profileRes.data.data || profileRes.data;
-      setProfile(profileData);
-
-      // Credits API
-      const creditRes = await api.get("/payment/v1/employer_credits/");
-      const creditData = creditRes.data.data || creditRes.data;
-
-      setCredits(creditData.available_credits || 0);
-
-    } catch (err) {
-      console.error("Dashboard API Error:", err);
-    }
-  };
-
-  const fetchTeamCount = async () => {
-    try {
-      const res = await api.get("/user/v1/employer_team_members/");
-
-      const data = res.data.data || res.data;
-
-      const count = data.count || 0;
-
-      setTeamCount(count);
-
-      // ✅ SHOW POPUP ONLY IF NO TEAM MEMBERS
-      if (count === 0) {
-        setEmpPopup("invite");
-      }
-
-    } catch (err) {
-      console.error("Team Count API Error:", err);
-    }
-  };
 
   /* ── handlers ── */
   const handleLogout = async () => {
-  try {
-    setShowLogoutModal(false);
-
-    await logoutMe();
-
-    navigate("/employer/sign-in", { replace: true });
-  } catch (err) {
-    console.error("Logout error:", err);
-    localStorage.clear();
-    navigate("/employer/sign-in", { replace: true });
-  }
-};
+    try {
+      setShowLogoutModal(false);
+      await logoutMe();
+      navigate("/employer/sign-in", { replace: true });
+    } catch (err) {
+      console.error("Logout error:", err);
+      localStorage.clear();
+      navigate("/employer/sign-in", { replace: true });
+    }
+  };
 
   const empClosePopup = () => {
-    ls.set("emp-team-popup", "true");
+    ls.set("emp-team-popup-shown", "true");
     setEmpPopup(null);
   };
 
@@ -301,20 +272,21 @@ useEffect(() => {
   const handleSubscriptionClick = () => {
     setActiveMenu("subscription");
     setSubscriptionOpen((prev) => !prev);
-    // closeMobile();
   };
 
   const handleAddMember = async () => {
     setInviteError("");
 
-    if (!empInviteForm.name || !empInviteForm.email || !empInviteForm.password) {
+    if (
+      !empInviteForm.name ||
+      !empInviteForm.email ||
+      !empInviteForm.password
+    ) {
       setInviteError("All fields are required");
       return;
     }
 
     try {
-      setInviteLoading(true);
-
       const payload = {
         full_name: empInviteForm.name,
         email: empInviteForm.email,
@@ -322,46 +294,27 @@ useEffect(() => {
         title: "Recruiter",
       };
 
-      const res = await api.post("/user/v1/employer_team_members/", payload);
-
-      const data = res.data;
+      const data = await inviteMutation.mutateAsync(payload);
 
       if (data.success) {
-        // reset form
-        setEmpInviteForm({
-          name: "",
-          email: "",
-          password: "",
-        });
-
-        // refresh team count
-        fetchTeamCount();
-
+        setEmpInviteForm({ name: "", email: "", password: "" });
         setInviteSuccess("Member added successfully ✅");
-
+        
         setTimeout(() => {
           setEmpPopup(null);
           navigate("/employer/your-team");
         }, 3000);
-
       } else {
         const msg = data?.data
           ? Object.values(data.data).flat().join(", ")
           : data.message;
-
         setInviteError(msg);
       }
-
     } catch (err) {
       console.error("ADD MEMBER ERROR:", err);
-
       setInviteError(
-        err?.response?.data?.message ||
-        "Failed to add team member"
+        err?.response?.data?.message || "Failed to add team member",
       );
-
-    } finally {
-      setInviteLoading(false);
     }
   };
 
@@ -381,7 +334,6 @@ useEffect(() => {
     }
   };
 
-  /* ─────────────────── RENDER ─────────────────── */
   return (
     <div className="emp-dashboard">
       {/* ── TOUR ── */}
@@ -518,20 +470,32 @@ useEffect(() => {
         <div className="emp-topbar">
           <div className="emp-topbar-box">
             <button className="emp-buttons emp-credits-btn" id="tour-credits">
-              Credits : {credits}
+              {creditsLoading ? (
+                 <span className="emp-topbar-sk" style={{width: 60, display: "inline-block", height: 16, borderRadius: 4}}></span>
+              ) : (
+                 <>Credits : {credits}</>
+              )}
             </button>
             <button
               className="emp-buttons"
               id="tour-add-member"
               onClick={() => navigate("/employer/your-team")}
             >
-              {teamCount + 1} {(teamCount + 1) === 1 ? "Member" : "Members"}
+               {teamLoading ? (
+                 <span className="emp-topbar-sk" style={{width: 60, display: "inline-block", height: 16, borderRadius: 4}}></span>
+              ) : (
+                <>{teamCount + 1} {teamCount + 1 === 1 ? "Member" : "Members"}</>
+              )}
             </button>
             <div className="emp-top-icons">
               <i className="bi bi-bell" />
             </div>
             <div className="emp-user-name">
-              {loggedUser?.name || loggedUser?.username || "User"}
+              {profileLoading ? (
+                <span className="emp-topbar-sk" style={{width: 80, display: "inline-block", height: 16, borderRadius: 4}}></span>
+              ) : (
+                loggedUser?.name || loggedUser?.username || "User"
+              )}
             </div>
             <div
               className={`emp-top-icons ${
@@ -540,7 +504,11 @@ useEffect(() => {
               id="tour-profile"
               onClick={() => navigate("/employer/profile")}
             >
-              <i className="bi bi-person" />
+              {profileData?.company_logo ? (
+                <img src={profileData.company_logo} alt="profile" style={{ width: "100%", height: "100%", borderRadius: "50%", objectFit: "cover" }} />
+              ) : (
+                <i className="bi bi-person" />
+              )}
             </div>
 
             <button
@@ -586,7 +554,6 @@ useEffect(() => {
         </div>
       )}
 
-      {/* ── POPUP: FORM ── */}
       {empPopup === "form" && (
         <div className="emp-overlay">
           <div className="emp-popup-card emp-form-popup">
@@ -615,9 +582,7 @@ useEffect(() => {
               ))}
 
               {inviteError && (
-                <p style={{ color: "red", fontSize: "13px" }}>
-                  {inviteError}
-                </p>
+                <p style={{ color: "red", fontSize: "13px" }}>{inviteError}</p>
               )}
 
               {inviteSuccess && (
@@ -627,25 +592,21 @@ useEffect(() => {
               )}
 
               <button
-                className="emp-btn"
+                className="emp-btn emp-btn-blue"
                 onClick={handleAddMember}
-                disabled={inviteLoading || inviteSuccess}
+                disabled={inviteMutation.isPending || inviteSuccess}
               >
-                {inviteLoading
+                {inviteMutation.isPending
                   ? "Adding..."
                   : inviteSuccess
-                  ? "Redirecting..."
-                  : "Proceed"}
+                    ? "Redirecting..."
+                    : "Proceed"}
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* ── POPUP: SUCCESS ── */}
-      
-
-      {/* ── POPUP: LOGOUT ── */}
       {showLogoutModal && (
         <div
           className="logout-overlay"
