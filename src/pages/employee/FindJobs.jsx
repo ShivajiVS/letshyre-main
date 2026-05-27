@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
-import api from "../../services/api";
+import api from "@/services/api";
+import slide1 from "@/assets/Carousel-1.jpg";
+import slide2 from "@/assets/Carousel-2.jpg";
+import slide3 from "@/assets/Carousel-3.jpg";
 
 export function FindJobs() {
   const [Filter, setFilter] = useState(false);
@@ -28,19 +31,13 @@ export function FindJobs() {
 
   const slides = [
     {
-      image:
-        "https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg",
-      text: "Find Your Dream Job Today",
+      image: slide1,
     },
     {
-      image:
-        "https://images.pexels.com/photos/3184302/pexels-photo-3184302.jpeg",
-      text: "Discover Career Opportunities",
+      image: slide2,
     },
     {
-      image:
-        "https://images.pexels.com/photos/3184338/pexels-photo-3184338.jpeg",
-      text: "Build Your Future With Us",
+      image: slide3,
     },
   ];
 
@@ -115,8 +112,7 @@ export function FindJobs() {
     try {
       const res = await api.get("/user/v1/candidate_jobs/");
 
-      let appliedRaw =
-        res.data?.data || res.data?.results || res.data || [];
+      let appliedRaw = res.data?.data || res.data?.results || res.data || [];
 
       // ✅ Ensure it's always an array
       const applied = Array.isArray(appliedRaw)
@@ -177,25 +173,25 @@ export function FindJobs() {
       temp = temp.filter(
         (job) =>
           job?.title?.toLowerCase().includes(searchText.toLowerCase()) ||
-          getCompanyName(job).toLowerCase().includes(searchText.toLowerCase())
+          getCompanyName(job).toLowerCase().includes(searchText.toLowerCase()),
       );
     }
 
     if (filters.experience) {
       temp = temp.filter((job) =>
-        String(job?.experience_required).includes(filters.experience)
+        String(job?.experience_required).includes(filters.experience),
       );
     }
 
     if (filters.salary) {
       temp = temp.filter(
-        (job) => Number(job?.salary_range) >= Number(filters.salary)
+        (job) => Number(job?.salary_range) >= Number(filters.salary),
       );
     }
 
     if (filters.location) {
       temp = temp.filter((job) =>
-        job?.location?.toLowerCase().includes(filters.location.toLowerCase())
+        job?.location?.toLowerCase().includes(filters.location.toLowerCase()),
       );
     }
 
@@ -246,9 +242,9 @@ export function FindJobs() {
   };
 
   return (
-  <>
-    {/* ================= STYLE ================= */}
-    <style>{`
+    <>
+      {/* ================= STYLE ================= */}
+      <style>{`
 
 /* ===== MODAL OVERLAY ===== */
 .job-modal-overlay{
@@ -403,207 +399,206 @@ export function FindJobs() {
 
     `}</style>
 
-    {/* ================= YOUR EXISTING UI ================= */}
+      {/* ================= YOUR EXISTING UI ================= */}
 
-    {/* HERO */}
-    <div className="cd-welcome">
-      <h3>Welcome {userName}!</h3>
-
-      <p>
-        Start discovering opportunities that match your skills and ambitions
-      </p>
-
-      <div className="cd-banner">
-        {slides.map((slide, index) => (
-          <div
-            key={index}
-            className={`cd-slide ${index === activeIndex ? "active" : ""}`}
-          >
-            <img src={slide.image} alt="" />
-            <div className="cd-banner-text">{slide.text}</div>
-          </div>
-        ))}
-
-        <div className="cd-dots">
-          {slides.map((_, index) => (
-            <span
+      {/* HERO */}
+      <div className="cd-welcome">
+        <h3>Welcome {userName}!</h3>
+        <p>
+          Start discovering opportunities that match your skills and ambitions
+        </p>
+        <div className="cd-banner">
+          {slides.map((item, index) => (
+            <div
               key={index}
-              className={`dot ${index === activeIndex ? "active" : ""}`}
-              onClick={() => setActiveIndex(index)}
-            ></span>
+              className={`cd-slide ${index === activeIndex ? "active" : ""}`}
+            >
+              <img src={item.image} alt="" />
+            </div>
           ))}
+
+          <div className="cd-dots">
+            {slides.map((_, index) => (
+              <span
+                key={index}
+                className={`dot ${index === activeIndex ? "active" : ""}`}
+                onClick={() => setActiveIndex(index)}
+              ></span>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
 
-    {/* SEARCH */}
-    <div className="cd-search-row">
-      <input
-        placeholder="Search jobs..."
-        value={searchText}
-        onChange={(e) => setSearchText(e.target.value)}
-      />
+      {/* SEARCH */}
+      <div className="cd-search-row">
+        <input
+          placeholder="Search jobs..."
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+        />
 
-      <button onClick={() => setFilter((prev) => !prev)}>
-        <i className="bi bi-filter"></i>
-        Filters
-      </button>
-    </div>
-
-    {/* FILTERS */}
-    {Filter && (
-      <div className="filters-section">
-        <div className="filters-box">
-          <input
-            className="filters-btn"
-            placeholder="Experience"
-            onChange={(e) =>
-              setFilters({ ...filters, experience: e.target.value })
-            }
-          />
-
-          <input
-            className="filters-btn"
-            placeholder="Min Salary"
-            onChange={(e) =>
-              setFilters({ ...filters, salary: e.target.value })
-            }
-          />
-
-          <input
-            className="filters-btn"
-            placeholder="Location"
-            onChange={(e) =>
-              setFilters({ ...filters, location: e.target.value })
-            }
-          />
-        </div>
+        <button onClick={() => setFilter((prev) => !prev)}>
+          <i className="bi bi-filter"></i>
+          Filters
+        </button>
       </div>
-    )}
 
-    {/* TABS */}
-    <div className="cd-job-tabs">
-      <button
-        className={`cd-tab ${activeTab === "all" ? "active" : ""}`}
-        onClick={() => setActiveTab("all")}
-      >
-        All Jobs
-      </button>
+      {/* FILTERS */}
+      {Filter && (
+        <div className="filters-section">
+          <div className="filters-box">
+            <input
+              className="filters-btn"
+              placeholder="Experience"
+              onChange={(e) =>
+                setFilters({ ...filters, experience: e.target.value })
+              }
+            />
 
-      <button
-        className={`cd-tab ${activeTab === "suggested" ? "active" : ""}`}
-        onClick={() => setActiveTab("suggested")}
-      >
-        Suggested
-      </button>
-    </div>
+            <input
+              className="filters-btn"
+              placeholder="Min Salary"
+              onChange={(e) =>
+                setFilters({ ...filters, salary: e.target.value })
+              }
+            />
 
-    {/* JOBS */}
-    <div className="cd-job-list">
-      {loading ? (
-        <p>Loading...</p>
-      ) : filteredJobs.length === 0 ? (
-        <p>No jobs found</p>
-      ) : (
-        filteredJobs.map((job) => (
-          <div key={job.id} className="cd-job-card">
-            <img src={getLogo(job)} className="job-logo" alt="" />
+            <input
+              className="filters-btn"
+              placeholder="Location"
+              onChange={(e) =>
+                setFilters({ ...filters, location: e.target.value })
+              }
+            />
+          </div>
+        </div>
+      )}
 
-            <div className="job-content">
-              <div className="job-header">
-                <div>
-                  <h3 className="job-title">{job.title}</h3>
-                  <p className="job-company">{getCompanyName(job)}</p>
+      {/* TABS */}
+      <div className="cd-job-tabs">
+        <button
+          className={`cd-tab ${activeTab === "all" ? "active" : ""}`}
+          onClick={() => setActiveTab("all")}
+        >
+          All Jobs
+        </button>
+
+        <button
+          className={`cd-tab ${activeTab === "suggested" ? "active" : ""}`}
+          onClick={() => setActiveTab("suggested")}
+        >
+          Suggested
+        </button>
+      </div>
+
+      {/* JOBS */}
+      <div className="cd-job-list">
+        {loading ? (
+          <p>Loading...</p>
+        ) : filteredJobs.length === 0 ? (
+          <p>No jobs found</p>
+        ) : (
+          filteredJobs.map((job) => (
+            <div key={job.id} className="cd-job-card">
+              <img src={getLogo(job)} className="job-logo" alt="" />
+
+              <div className="job-content">
+                <div className="job-header">
+                  <div>
+                    <h3 className="job-title">{job.title}</h3>
+                    <p className="job-company">{getCompanyName(job)}</p>
+                  </div>
+
+                  <button
+                    className="job-open-btn"
+                    onClick={() => setSelectedJob(job)}
+                  >
+                    {isApplied(job.id) ? "Applied" : "Open"}
+                  </button>
                 </div>
 
-                <button
-                  className="job-open-btn"
-                  onClick={() => setSelectedJob(job)}
-                >
-                  {isApplied(job.id) ? "Applied" : "Open"}
-                </button>
-              </div>
+                <div className="job-meta">
+                  <span>{job.experience_required}</span>
+                  <span>₹ {job.salary_range}</span>
+                  <span>{job.location}</span>
+                  <span>{job.employment_type}</span>
+                  <span>{job.industry_type}</span>
+                </div>
 
-              <div className="job-meta">
-                <span>{job.experience_required}</span>
-                <span>₹ {job.salary_range}</span>
-                <span>{job.location}</span>
-                <span>{job.employment_type}</span>
-                <span>{job.industry_type}</span>
-              </div>
-
-              <div className="job-skills">
-                {Array.isArray(job.skills_required)
-                  ? job.skills_required.join(" · ")
-                  : "No skills"}
+                <div className="job-skills">
+                  {Array.isArray(job.skills_required)
+                    ? job.skills_required.join(" · ")
+                    : "No skills"}
+                </div>
               </div>
             </div>
-          </div>
-        ))
-      )}
-    </div>
-
-    {/* ================= ENHANCED MODAL ================= */}
-    {selectedJob && (
-      <div className="job-modal-overlay" onClick={() => setSelectedJob(null)}>
-        <div className="job-modal-card" onClick={(e) => e.stopPropagation()}>
-          
-          <span className="job-modal-close" onClick={() => setSelectedJob(null)}>
-            ×
-          </span>
-
-          {/* HEADER */}
-          <div className="job-modal-header">
-            <img src={getLogo(selectedJob)} alt="" />
-            <div>
-              <h3>{selectedJob.title}</h3>
-              <p>{getCompanyName(selectedJob)}</p>
-            </div>
-          </div>
-
-          {/* META */}
-          <div className="job-modal-meta">
-            <span>{selectedJob.experience_required} Years</span>
-            <span>₹ {selectedJob.salary_range}</span>
-            <span>{selectedJob.location}</span>
-            <span>{selectedJob.employment_type}</span>
-            <span>{selectedJob.industry_type}</span>
-          </div>
-
-          {/* SKILLS */}
-          <div className="job-section">
-            <h4>Skills Required</h4>
-            <div className="job-skills-tags">
-              {Array.isArray(selectedJob.skills_required) &&
-                selectedJob.skills_required.map((skill, i) => (
-                  <span key={i}>{skill}</span>
-                ))}
-            </div>
-          </div>
-
-          {/* DESCRIPTION */}
-          <div className="job-section">
-            <h4>Job Description</h4>
-            <p>{selectedJob.description || "No description available"}</p>
-          </div>
-
-          {/* APPLY */}
-          <button
-            className="apply-btn-main"
-            disabled={
-              applying === selectedJob.id || isApplied(selectedJob.id)
-            }
-            onClick={() => handleApply(selectedJob.id)}
-          >
-            {applying === selectedJob.id
-              ? "Applying..."
-              : isApplied(selectedJob.id)
-              ? "Already Applied"
-              : "Apply Now"}
-          </button>
-        </div>
+          ))
+        )}
       </div>
-    )}
-  </>
-);
+
+      {/* ================= ENHANCED MODAL ================= */}
+      {selectedJob && (
+        <div className="job-modal-overlay" onClick={() => setSelectedJob(null)}>
+          <div className="job-modal-card" onClick={(e) => e.stopPropagation()}>
+            <span
+              className="job-modal-close"
+              onClick={() => setSelectedJob(null)}
+            >
+              ×
+            </span>
+
+            {/* HEADER */}
+            <div className="job-modal-header">
+              <img src={getLogo(selectedJob)} alt="" />
+              <div>
+                <h3>{selectedJob.title}</h3>
+                <p>{getCompanyName(selectedJob)}</p>
+              </div>
+            </div>
+
+            {/* META */}
+            <div className="job-modal-meta">
+              <span>{selectedJob.experience_required} Years</span>
+              <span>₹ {selectedJob.salary_range}</span>
+              <span>{selectedJob.location}</span>
+              <span>{selectedJob.employment_type}</span>
+              <span>{selectedJob.industry_type}</span>
+            </div>
+
+            {/* SKILLS */}
+            <div className="job-section">
+              <h4>Skills Required</h4>
+              <div className="job-skills-tags">
+                {Array.isArray(selectedJob.skills_required) &&
+                  selectedJob.skills_required.map((skill, i) => (
+                    <span key={i}>{skill}</span>
+                  ))}
+              </div>
+            </div>
+
+            {/* DESCRIPTION */}
+            <div className="job-section">
+              <h4>Job Description</h4>
+              <p>{selectedJob.description || "No description available"}</p>
+            </div>
+
+            {/* APPLY */}
+            <button
+              className="apply-btn-main"
+              disabled={
+                applying === selectedJob.id || isApplied(selectedJob.id)
+              }
+              onClick={() => handleApply(selectedJob.id)}
+            >
+              {applying === selectedJob.id
+                ? "Applying..."
+                : isApplied(selectedJob.id)
+                  ? "Already Applied"
+                  : "Apply Now"}
+            </button>
+          </div>
+        </div>
+      )}
+    </>
+  );
 }

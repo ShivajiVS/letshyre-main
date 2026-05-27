@@ -1,15 +1,7 @@
-import user_pic from "../../assets/user-pic.jpeg";
-
 export default function EmployeeRightPanelForJobs({ profile }) {
-  const userName = profile?.user?.first_name
-    ? `${profile.user.first_name} ${profile.user.last_name || ""}`
-    : profile?.user?.username || profile?.name || "User";
-
-  const attempts =
-    profile?.remaining_attempts ?? profile?.ai_attempts_remaining ?? 2;
+  const userName = profile?.name;
 
   const handleTakeInterview = () => {
-    // ✅ Get user from localStorage (reliable source)
     let storedUser = null;
 
     try {
@@ -67,19 +59,11 @@ export default function EmployeeRightPanelForJobs({ profile }) {
       <h4>Take your AI Interview</h4>
 
       <div className="cd-profile-card">
-        <img
-          src={profile?.profile_photo || user_pic}
-          alt="user"
-          onError={(e) => {
-            e.target.src = user_pic;
-          }}
-        />
-
+        <img src={profile?.profile_photo} alt="user" />
         <h5>{userName}</h5>
-
         <p>
-          You have {attempts} more attempts left to improve your results and
-          boost your profile ranking.
+          You have {profile?.interview_attempts_remaining || 0} more attempts
+          left to improve your results and boost your profile ranking.
         </p>
 
         <button className="cd-ai-btn" onClick={handleTakeInterview}>

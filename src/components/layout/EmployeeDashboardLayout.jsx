@@ -1,61 +1,27 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { NavLink, Outlet, useNavigate, useLocation } from "react-router";
 
 import logo from "@/assets/logo2.png";
 import logoutImg from "@/assets/logout.png";
-import user_pic from "@/assets/user-pic.jpeg";
 
 import { logoutMe } from "@/services/auth.service";
 import LockedOverlay from "@/components/dashboard/LockedOverlay";
 import ProfileCompletion from "@/components/profile/ProfileCompletion";
+import { useCandidateProfile } from "@/hooks/useCandidateProfile";
 import "./EmployeeDashboardLayout.css";
 import EmployeeRightPanelForJobs from "./EmployeeRightPanelForJobs";
 
-import api from "../../services/api";
-
-
-
 export function EmployeeDashboardLayout() {
-  
-
-  const [user, setUser] = useState(null);
-  const [userData, setUserData] = useState(null);
   const [showProfileFlow, setShowProfileFlow] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 
-  const profileCompleted = userData?.is_profile_complete === true;
-
   const navigate = useNavigate();
   const location = useLocation();
 
-  console.log("user profilee", userData);
+  const { data: userData, isLoading } = useCandidateProfile();
 
-  // ✅ Load user from localStorage
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-
-    if (storedUser) {
-      try {
-        setUser(JSON.parse(storedUser));
-      } catch (err) {
-        console.error("Invalid user data");
-      }
-    }
-  }, []);
-
-  useEffect(() => {
-    api
-      .get("/user/v1/candidate_profile/")
-      .then((res) => {
-        const data = res.data?.data || res.data;
-        console.log("RightPanel Data:", data.id); // 👈 DEBUG
-        setUserData(data);
-      })
-      .catch((err) => {
-        console.error("RightPanel profile error:", err);
-      });
-  }, []);
+  const profileCompleted = userData?.is_profile_complete === true;
 
   const handleProfileComplete = () => {
     localStorage.setItem("profileCompleted", "true");
@@ -66,12 +32,11 @@ export function EmployeeDashboardLayout() {
     setShowLogoutModal(false);
     await logoutMe();
     setTimeout(() => {
-      localStorage.removeItem("user"); // ✅ clear user
+      localStorage.removeItem("user");
       navigate("/employee/sign-in", { replace: true });
     }, 800);
   };
 
-  // Helper for conditional titles
   const getPageTitle = () => {
     if (location.pathname.includes("profile"))
       return (
@@ -97,6 +62,38 @@ export function EmployeeDashboardLayout() {
       </>
     );
   };
+
+  if (isLoading) {
+    return (
+      <div className="cd-page">
+        <div className="cd-dashboard">
+          <aside className="cd-sidebar" />
+          <main className="cd-main">
+            <div
+              className="cd-topbar"
+              style={{
+                background:
+                  "linear-gradient(90deg,#e8eef7 25%,#d5e0f0 50%,#e8eef7 75%)",
+                backgroundSize: "600px 100%",
+                animation: "sk-shimmer 1.4s ease-in-out infinite",
+                minHeight: "72px",
+              }}
+            />
+            <div
+              style={{
+                borderRadius: "26px",
+                background:
+                  "linear-gradient(90deg,#e8eef7 25%,#d5e0f0 50%,#e8eef7 75%)",
+                backgroundSize: "600px 100%",
+                animation: "sk-shimmer 1.4s ease-in-out infinite",
+                minHeight: "420px",
+              }}
+            />
+          </main>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="cd-page">
@@ -187,16 +184,21 @@ export function EmployeeDashboardLayout() {
               >
                 <div className="cd-user-avatar-wrap">
                   <img
-                    src={userData && userData.profile_photo}
+                    src={userData?.profile_photo || ""}
                     alt="user"
                     className="cd-user-avatar"
+                    onError={(e) => {
+                      e.currentTarget.src = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(
+                        userData?.name || "User",
+                      )}`;
+                    }}
                   />
                   <span className="cd-user-status"></span>
                 </div>
 
                 <div className="cd-user-info">
                   <span className="cd-user-name">
-                    {user?.name || user?.username || "User"}
+                    {userData?.name || "User"}
                   </span>
                 </div>
 
@@ -251,7 +253,7 @@ export function EmployeeDashboardLayout() {
               <i className="bi bi-x-lg"></i>
             </div>
             <img src={logoutImg} alt="Logout" className="logout-img" />
-            <h3>Oh no, you’re leaving</h3>
+            <h3>Oh no, you're leaving</h3>
             <p>Are you sure you want to logout?</p>
             <div className="logout-actions">
               <button

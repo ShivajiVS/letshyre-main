@@ -1,7 +1,6 @@
 import { Helmet } from "react-helmet-async";
 
 import Navbar from "@/components/landing/navbar";
-import Hero from "@/components/landing/hero";
 import Candidate from "@/components/landing/Candidate";
 import Video_section from "@/components/landing/Video-part";
 import TestimonialsSection from "@/components/landing/Testimonials";
@@ -103,7 +102,6 @@ export function Landing() {
   return (
     <>
       <Helmet>
-        {/* ── Primary Meta ── */}
         <title>
           LetsHyre — AI Hiring Platform for Notice-Period Talent | Smart
           Recruiting
@@ -117,7 +115,10 @@ export function Landing() {
           content="AI hiring platform, AI recruitment, notice period talent, AI interviews, automated screening, resume evaluation, HR tech, smart recruiting, candidate verification, letshyre"
         />
         <meta name="author" content="LetsHyre" />
-        <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+        <meta
+          name="robots"
+          content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+        />
 
         {/* ── Canonical (avoids www/non-www duplicate content) ── */}
         <link rel="canonical" href="https://letshyre.com/" />
@@ -138,10 +139,7 @@ export function Landing() {
           content="Automate resume screening, AI interviews, and candidate verification. Build your dream team 40% faster with LetsHyre."
         />
         <meta property="og:url" content="https://letshyre.com/" />
-        <meta
-          property="og:image"
-          content="https://letshyre.com/og-cover.png"
-        />
+        <meta property="og:image" content="https://letshyre.com/og-cover.png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:image:alt" content="LetsHyre AI Hiring Platform" />
@@ -162,22 +160,12 @@ export function Landing() {
           name="twitter:image"
           content="https://letshyre.com/og-cover.png"
         />
-        <meta
-          name="twitter:image:alt"
-          content="LetsHyre AI Hiring Platform"
-        />
+        <meta name="twitter:image:alt" content="LetsHyre AI Hiring Platform" />
 
         {/* ── Additional SEO Signals ── */}
         <meta name="theme-color" content="#2563eb" />
-        <meta
-          name="application-name"
-          content="LetsHyre"
-        />
-        <link
-          rel="alternate"
-          href="https://www.letshyre.com/"
-          hrefLang="en"
-        />
+        <meta name="application-name" content="LetsHyre" />
+        <link rel="alternate" href="https://www.letshyre.com/" hrefLang="en" />
 
         {/* ── Preconnect (performance = SEO signal) ── */}
         <link rel="preconnect" href="https://api.letshyre.com" />
@@ -193,14 +181,11 @@ export function Landing() {
         <script type="application/ld+json">
           {JSON.stringify(softwareSchema)}
         </script>
-        <script type="application/ld+json">
-          {JSON.stringify(faqSchema)}
-        </script>
+        <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
       </Helmet>
 
       <Navbar />
       <Hero2 />
-      {/* <Hero /> */}
       <Assistance />
       <Candidate />
       <Video_section />
@@ -212,4 +197,3 @@ export function Landing() {
     </>
   );
 }
-

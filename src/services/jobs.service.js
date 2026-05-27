@@ -1,12 +1,5 @@
 import api from "./api";
 
-/* ===============================
-   JOB SERVICES
-================================ */
-
-/**
- * Get all jobs
- */
 const getAllJobs = async (params = {}) => {
   try {
     const response = await api.get("/jobs/", { params });
@@ -16,9 +9,6 @@ const getAllJobs = async (params = {}) => {
   }
 };
 
-/**
- * Get single job by ID
- */
 const getJobById = async (jobId) => {
   try {
     const response = await api.get(`/jobs/${jobId}/`);
@@ -28,9 +18,6 @@ const getJobById = async (jobId) => {
   }
 };
 
-/**
- * Apply for a job
- */
 const applyForJob = async (jobId) => {
   try {
     const response = await api.post(`/jobs/${jobId}/apply/`);

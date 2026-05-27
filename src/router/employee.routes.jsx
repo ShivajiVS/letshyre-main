@@ -79,8 +79,9 @@ export const employeeRoutes = [
           {
             path: "score-card",
             async lazy() {
-              const { ScoreCard } = await import("@/pages/employee/ScoreCard");
-              return { Component: ScoreCard };
+              const { EmployeeScoreCard } =
+                await import("@/pages/employee/EmployeeScoreCard");
+              return { Component: EmployeeScoreCard };
             },
           },
           {
