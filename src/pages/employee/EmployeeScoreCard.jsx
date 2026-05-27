@@ -63,7 +63,6 @@ export function EmployeeScoreCard() {
 
   return (
     <div className="sc-section-main">
-
       <h3>Here's The Candiate's Scorecard</h3>
       <p className="pp-grey-text">
         Your AI-generated scorecard highlights what went great and where you can

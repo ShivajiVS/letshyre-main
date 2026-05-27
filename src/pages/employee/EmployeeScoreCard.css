@@ -1,6 +1,4 @@
-/* ====================================================
-         Score Card Section
-===================================================== */
+
 
 .ep-page {
   background-color: #eef4ff;
@@ -29,8 +27,8 @@
 
 .sc-section-main > h3 {
   color: var(--secondary-sky-blue);
-  margin-bottom: 5px;
-  font-size: 21px;
+  margin-bottom: 8px;
+  font-size: 20px;
   font-weight: 700;
 }
 .pp-grey-text {
@@ -46,7 +44,7 @@
   border-radius: 16px;
   padding: 22px 36px;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
-  margin-top: 18px;
+  margin-top: 17px;
   margin-bottom: 20px;
 }
 
@@ -678,7 +676,7 @@
   background: #fff;
   border-radius: 24px;
   padding: 30px;
-  box-shadow: 0 10px 30px rgba(0,0,0,.03);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
   margin-top: 24px;
 }
 
@@ -686,7 +684,7 @@
   font-size: 20px;
   color: #1e293b;
   margin-bottom: 24px;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-weight: 700;
 }
 
@@ -696,12 +694,12 @@
   border-radius: 16px;
   margin-bottom: 20px;
   transition: 0.3s;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 .esc-qa-card:hover {
   border-color: #cbd5e1;
-  box-shadow: 0 10px 25px rgba(0,0,0,.02);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.02);
 }
 
 .esc-qa-header {
@@ -718,11 +716,26 @@
   font-weight: 600;
   text-transform: uppercase;
 }
-.esc-qa-badge.mcq { background: #e0ecff; color: #2563eb; }
-.esc-qa-badge.typing { background: #f3e8ff; color: #9333ea; }
-.esc-qa-badge.coding { background: #dcfce7; color: #16a34a; }
-.esc-qa-badge.audio { background: #fff3cd; color: #d97706; }
-.esc-qa-badge.default { background: #f1f5f9; color: #475569; }
+.esc-qa-badge.mcq {
+  background: #e0ecff;
+  color: #2563eb;
+}
+.esc-qa-badge.typing {
+  background: #f3e8ff;
+  color: #9333ea;
+}
+.esc-qa-badge.coding {
+  background: #dcfce7;
+  color: #16a34a;
+}
+.esc-qa-badge.audio {
+  background: #fff3cd;
+  color: #d97706;
+}
+.esc-qa-badge.default {
+  background: #f1f5f9;
+  color: #475569;
+}
 
 .esc-qa-score {
   font-size: 14px;
@@ -754,9 +767,9 @@
 }
 
 .esc-qa-question p {
-  font-size: 16px;
+  font-size: 14px;
   color: #1e293b;
-  font-weight: 500;
+  font-weight: 400;
   line-height: 1.6;
   margin: 0;
 }
@@ -828,7 +841,7 @@
 .esc-empty-card {
   text-align: center;
   max-width: 480px;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -851,8 +864,12 @@
 
 /* ================= SKELETONS ================= */
 @keyframes escShimmer {
-  0% { background-position: -800px 0; }
-  100% { background-position: 800px 0; }
+  0% {
+    background-position: -800px 0;
+  }
+  100% {
+    background-position: 800px 0;
+  }
 }
 
 .esc-sk {

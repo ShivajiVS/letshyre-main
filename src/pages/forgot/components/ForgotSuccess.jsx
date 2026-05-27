@@ -4,12 +4,9 @@ import { useNavigate } from "react-router";
 function ForgotSuccess({ role }) {
   const navigate = useNavigate();
 
-  const redirectPath =
-    role === "employer" ? "/employee-sign-in" : "/employer/sign-in";
-
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigate(redirectPath, { replace: true });
+      navigate("/get-started", { replace: true });
     }, 5000);
 
     return () => clearTimeout(timer);

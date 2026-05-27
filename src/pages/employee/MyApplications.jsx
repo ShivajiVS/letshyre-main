@@ -59,15 +59,16 @@ export function MyApplications() {
 /* ===== WELCOME & TABS ===== */
 .ma-welcome {
   // background: #fff;
-  padding: 30px 10px;
+  padding: 0px 10px;
   border-radius: 26px;
   box-shadow: 0 10px 35px rgba(0,0,0,.04);
   margin-bottom: 24px;
 }
 
 .ma-welcome h3 {
-  font-size: 22px;
+  font-size: 20px;
   margin-bottom: 6px;
+  color:var(--secondary-sky-blue);
 }
 
 .ma-welcome p {

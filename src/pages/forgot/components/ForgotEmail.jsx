@@ -26,7 +26,7 @@ function ForgotEmail({ onNext, onBack }) {
         otp_type: "Forgot Password",
       });
 
-      const otpSessionKey = response.data?.otp_session_key;
+      const otpSessionKey = response?.otp_session_key;
 
       if (!otpSessionKey) {
         throw new Error("OTP session key missing");
