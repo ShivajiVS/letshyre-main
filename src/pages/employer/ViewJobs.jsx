@@ -67,7 +67,10 @@ export function ViewJobs() {
   return (
     <>
       <div className="ho-header">
-        <h1>All Jobs</h1>
+        <div className="ho-header-text">
+          <h1>All Jobs</h1>
+          <p className="ho-header-subtitle">View and manage all jobs you’ve posted.</p>
+        </div>
       </div>
       <div className="cd-job-tabs">
         {["all", "open", "closed", "paused", "pending"].map((tab) => (

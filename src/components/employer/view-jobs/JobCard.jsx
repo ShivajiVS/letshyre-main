@@ -3,26 +3,14 @@ import React from "react";
 export const JobCard = ({ job, onView }) => {
   return (
     <div className="cd-job-card" key={job.id} onClick={() => onView(job.id)}>
-      <div className="job-logo-wrapper">
-        <img
-          src={job.logo}
-          className="job-logo"
-          alt={`${job.company} logo`}
-          onError={(e) => {
-            e.target.src =
-              "https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png";
-          }}
-        />
-      </div>
+
       <div className="job-content">
         <div className="job-header">
           <div>
             <h3 className="job-title">{job.title}</h3>
             <p className="job-company-meta">
-              <span className="job-company-name">{job.company}</span>
               <span className="job-posted-date">
-                {" "}
-                • Posted{" "}
+                Posted{" "}
                 {job.job_posted_date
                   ? new Date(job.job_posted_date).toLocaleDateString(
                       undefined,
