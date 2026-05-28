@@ -1,12 +1,8 @@
-/* ============================================================
-   EmployerDashboardLayout.css — Modern Premium Design
-   ============================================================ */
-
 .emp-dashboard {
   display: flex;
-  min-height: 100vh;
+  height: 100vh;
   background-color: #f8fafc;
-  overflow-x: hidden;
+  overflow: hidden;
   box-sizing: border-box;
   position: relative;
   font-family: "Inter", sans-serif;
@@ -23,8 +19,8 @@
   border-radius: 20px;
   display: flex;
   flex-direction: column;
-  height: auto;
-  min-height: calc(100vh - 32px);
+  height: calc(100vh - 32px);
+  overflow-y: auto;
   border: 1.5px solid #eef2f8;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
   transition:
@@ -195,6 +191,8 @@
   gap: 16px;
   width: 100%;
   min-width: 0;
+  height: calc(100vh - 32px);
+  overflow: hidden;
 }
 
 /* ── Topbar ── */
@@ -207,6 +205,7 @@
   padding: 12px 24px;
   border: 1.5px solid #eef2f8;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+  flex-shrink: 0;
 }
 
 .emp-topbar-box {
@@ -304,8 +303,11 @@
 .emp-content {
   background-color: transparent;
   border-radius: 20px;
-  min-height: calc(100vh - 125px);
+  flex: 1;
+  overflow-y: auto;
   position: relative;
+  /* Add padding at bottom so scrolling reaches past last items nicely */
+  padding-bottom: 24px;
 }
 
 /* ─────────────────────────────────────────

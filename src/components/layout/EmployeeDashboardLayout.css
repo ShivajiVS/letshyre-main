@@ -1,17 +1,19 @@
 /* ================= PAGE ================= */
 .cd-page {
-  min-height: 95vh;
+  height: 100vh;
   background-color: #eef4ff;
-  overflow-x: hidden;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 /* ================= DASHBOARD ================= */
 .cd-dashboard {
   display: flex;
   gap: 7px;
-  min-height: 100vh;
+  height: 100vh;
   transition: filter 0.35s ease;
   padding: 14px;
+  box-sizing: border-box;
 }
 
 /* Blur + dim when locked */
@@ -29,6 +31,8 @@
   display: flex;
   flex-direction: column;
   border-right: 1px solid #dbe8ff;
+  height: calc(100vh - 28px);
+  overflow-y: auto;
 }
 
 .cd-logo {
@@ -112,6 +116,8 @@
   padding-left: 7px;
   display: flex;
   flex-direction: column;
+  height: calc(100vh - 28px);
+  overflow: hidden;
 }
 
 /* ================= TOP BAR ================= */
@@ -123,6 +129,7 @@
   background-color: white;
   padding: 12px;
   border-radius: 12px;
+  flex-shrink: 0;
 }
 
 .cd-page-title {
@@ -175,6 +182,9 @@
   grid-template-columns: 1fr;
   gap: 14px;
   transition: grid-template-columns 0.3s ease;
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 16px;
 }
 
 /* PROFILE FULL WIDTH MODE */
@@ -187,8 +197,6 @@
   background: white;
   padding: 12px;
   border-radius: 16px;
-  max-height: 80.5vh; /*LIMIT HEIGHT*/
-  overflow-y: auto; /* ENABLE SCROLL */
 }
 
 .cd-center::-webkit-scrollbar {
@@ -966,7 +974,7 @@
   display: flex;
   flex-direction: column;
   min-width: 0;
-  flex: 1;
+  flex: 1;  
 }
 
 .cd-user-name {
