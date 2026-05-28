@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import {
   fetchJobs,
   fetchKyc,
@@ -81,6 +82,10 @@ export const useDeleteJob = () => {
     mutationFn: (jobId) => deleteJob(jobId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["jobs"] });
+      toast.success("Job deleted successfully!");
+    },
+    onError: (err) => {
+      toast.error(err?.response?.data?.message || "Failed to delete job.");
     },
   });
 };
@@ -89,8 +94,13 @@ export const useUpdateJob = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({ jobId, payload }) => updateJob(jobId, payload),
-    onSuccess: () => {
+    onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ["jobs"] });
+      queryClient.invalidateQueries({ queryKey: ["jobDetail", variables.jobId] });
+      toast.success("Job updated successfully!");
+    },
+    onError: (err) => {
+      toast.error(err?.response?.data?.message || "Failed to update job.");
     },
   });
 };
@@ -99,8 +109,13 @@ export const usePatchJobStatus = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({ jobId, status }) => patchJobStatus(jobId, status),
-    onSuccess: () => {
+    onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ["jobs"] });
+      queryClient.invalidateQueries({ queryKey: ["jobDetail", variables.jobId] });
+      toast.success(`Job status updated to ${variables.status}!`);
+    },
+    onError: (err) => {
+      toast.error(err?.response?.data?.message || "Failed to update job status.");
     },
   });
 };

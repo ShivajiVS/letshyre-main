@@ -1,7 +1,7 @@
 import React from 'react';
 import { JobCard } from './JobCard';
 
-export const JobList = ({ jobs, onView, onEdit, onDelete, onStatusChange }) => {
+export const JobList = ({ jobs, onView }) => {
   if (!jobs || jobs.length === 0) {
     return (
       <div className="ho-empty">
@@ -17,9 +17,6 @@ export const JobList = ({ jobs, onView, onEdit, onDelete, onStatusChange }) => {
           key={job.id}
           job={job}
           onView={onView}
-          onEdit={onEdit}
-          onDelete={onDelete}
-          onStatusChange={onStatusChange}
         />
       ))}
     </div>

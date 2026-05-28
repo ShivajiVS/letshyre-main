@@ -954,6 +954,11 @@
   margin-bottom: 20px;
   padding: 10px 15px; /* micro alignment fix */
 }
+.ho-header h1 {
+  color: var(--secondary-sky-blue);
+  font-size: 20px;
+  font-weight: 700;
+}
 
 .pagination-container {
   display: flex;
@@ -1015,7 +1020,7 @@
   background: #f0e6ff;
   color: #6f42c1;
   border: 1px solid #6f42c1;
-}/* ================= EMPTY & LOADING STATES ================= */
+} /* ================= EMPTY & LOADING STATES ================= */
 .ho-empty {
   text-align: center;
   padding: 60px 20px;
@@ -1078,13 +1083,13 @@
 }
 
 .skill-pill {
-  background-color: var(--primary-lite-blue);
-  color: var(--brand-blue);
+  background-color: #f1f5f9;
+  color: #475569;
   padding: 4px 10px;
   border-radius: 12px;
   font-size: 13px;
   font-weight: 500;
-  border: 1px solid #dbeafe;
+  border: 1px solid #e2e8f0;
   transition: all 0.2s ease;
 }
 
@@ -1132,7 +1137,9 @@
   color: var(--brand-blue) !important;
   background: white !important;
   font-weight: 600 !important;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08), 0 1px 3px rgba(0,0,0,0.04) !important;
+  box-shadow:
+    0 4px 12px rgba(37, 99, 235, 0.08),
+    0 1px 3px rgba(0, 0, 0, 0.04) !important;
   transform: translateY(-1px) !important;
 }
 
@@ -1224,7 +1231,7 @@
   border: 1px solid #e2e8f0 !important;
   padding: 8px !important;
   background: white !important;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
   object-fit: contain !important;
 }
 
@@ -1274,7 +1281,7 @@
   border-radius: 12px !important;
   border: none !important;
   padding: 0 !important;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1) !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1) !important;
   object-fit: cover !important;
 }
 .job-logo-wrapper {
