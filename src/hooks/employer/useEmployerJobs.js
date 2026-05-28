@@ -6,6 +6,9 @@ import {
   getJobDetail,
   updateJob,
   patchJobStatus,
+  parseJD,
+  createJob,
+  getIndustries,
 } from "@/services/employer/jobs.service";
 
 const fetchJobsList = async ({ queryKey }) => {
@@ -101,6 +104,30 @@ export const usePatchJobStatus = () => {
       toast.error(
         err?.response?.data?.message || "Failed to update job status.",
       );
+    },
+  });
+};
+
+export const useIndustries = () => {
+  return useQuery({
+    queryKey: ["industries"],
+    queryFn: () => getIndustries().then((res) => res.data?.data || res.data),
+    staleTime: 1000 * 60 * 60, // Cache for 1 hour
+  });
+};
+
+export const useParseJD = () => {
+  return useMutation({
+    mutationFn: (formData) => parseJD(formData),
+  });
+};
+
+export const useCreateJob = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (payload) => createJob(payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["jobs"] });
     },
   });
 };

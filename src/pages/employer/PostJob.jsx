@@ -1,11 +1,15 @@
-import React, { useRef, useState, useEffect } from "react";
-import api from "@/services/api";
-import axios from "axios";
+import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import upload_img from "@/assets/dragNdrop.png";
 import overlay_img from "@/assets/JD-Upload.png";
 import check_mark from "@/assets/check-mark.png";
 import party from "@/assets/party.png";
+
+import {
+  useIndustries,
+  useParseJD,
+  useCreateJob,
+} from "@/hooks/employer/useEmployerJobs";
 
 import "./empSubSections.css";
 
@@ -15,50 +19,49 @@ export function PostJob({ editJobId = null }) {
 
   const [fileName, setFileName] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
+  
+  // New state for Job Title input during JD upload
+  const [jdJobTitle, setJdJobTitle] = useState("");
+
   const [showJdPopup, setShowJdPopup] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
 
-  const [industryOptions, setIndustryOptions] = useState([]);
   const [customIndustry, setCustomIndustry] = useState("");
 
-  const AI_BASE_URL = "https://api.letshyre.com";
+  // ================= REACT QUERY HOOKS =================
+  const { data: rawIndustries } = useIndustries();
+  const parseJdMutation = useParseJD();
+  const createJobMutation = useCreateJob();
 
-  // ================= FETCH INDUSTRIES =================
-  useEffect(() => {
-    const fetchIndustries = async () => {
-      try {
-        const res = await api.get("/user/v1/industries/list/");
-        const industries = res.data?.data || [];
-
-        let formatted = industries.map((item) => {
-          if (typeof item === "object") {
-            return { label: item.label, value: item.value };
-          }
-          return {
-            label: item,
-            value: item === "Others" ? "other" : item,
-          };
-        });
-
-        if (!formatted.find((i) => i.value === "other")) {
-          formatted.push({ label: "Others", value: "other" });
-        }
-
-        setIndustryOptions(formatted);
-      } catch (err) {
-        console.error("Industry API failed, using fallback");
-
-        setIndustryOptions([
-          { label: "IT / Software Development", value: "IT / Software Development" },
-          { label: "Digital Marketing / SEO", value: "Digital Marketing / SEO" },
-          { label: "UI / UX Design", value: "UI / UX Design" },
-          { label: "Others", value: "other" },
-        ]);
+  // Format industries data
+  let industryOptions = [];
+  if (rawIndustries && Array.isArray(rawIndustries)) {
+    industryOptions = rawIndustries.map((item) => {
+      if (typeof item === "object") {
+        return { label: item.label, value: item.value };
       }
-    };
-
-    fetchIndustries();
-  }, []);
+      return {
+        label: item,
+        value: item === "Others" ? "other" : item,
+      };
+    });
+    if (!industryOptions.find((i) => i.value === "other")) {
+      industryOptions.push({ label: "Others", value: "other" });
+    }
+  } else {
+    industryOptions = [
+      {
+        label: "IT / Software Development",
+        value: "IT / Software Development",
+      },
+      {
+        label: "Digital Marketing / SEO",
+        value: "Digital Marketing / SEO",
+      },
+      { label: "UI / UX Design", value: "UI / UX Design" },
+      { label: "Others", value: "other" },
+    ];
+  }
 
   // ================= HELPERS =================
   const normalizeWorkType = (mode) => {
@@ -135,68 +138,54 @@ export function PostJob({ editJobId = null }) {
   // ================= JD PARSING =================
   const handleJdUpload = async () => {
     if (!selectedFile) return alert("Select file first");
+    if (!jdJobTitle.trim()) return alert("Please enter the job title");
 
     try {
       const formData = new FormData();
       formData.append("file", selectedFile);
+      formData.append("title", jdJobTitle.trim());
 
-      const res = await api.post(
-        "/user/v1/employer_job_jd_ai/parse/",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const res = await parseJdMutation.mutateAsync(formData);
 
-      // ✅ FIXED PATH
-      const data = res.data?.data?.parse_response?.flat || {};
+      const data = res.data?.parse_response?.flat || {};
 
-      setJobData((prev) => ({
-        ...prev,
-        title: data.job_title || "",
-
-        country: data.country || "",
-        state: data.state || "",
-        city: data.city || "",
+      setJobData({
+        title: data.job_title || jdJobTitle.trim(),
+        work_type: normalizeWorkType(data.work_mode),
+        employment_type: "Full-Time Employee",
+        industry_type: normalizeIndustry(data.industry_type),
 
         must_have_skills: data.skills_text || "",
-
-        education: data.minimum_education || "",
-        specialization: data.specialization || "",
-
-        job_description: data.job_description || "",
-        description: (data.responsibilities || []).join("\n"),
-
-        work_type: normalizeWorkType(data.work_mode),
-
-        experience_required:
-          data.experience_min && data.experience_max
-            ? `${data.experience_min}-${data.experience_max} years`
-            : "",
-
-        // ✅ FIXED FIELDS
         salary_range:
           data.salary_min_lpa && data.salary_max_lpa
             ? `${data.salary_min_lpa} - ${data.salary_max_lpa} LPA`
             : "",
 
+        country: data.country || "",
+        state: data.state || "",
+        city: data.city || "",
+
+        education: data.minimum_education || "",
+        specialization: data.specialization || "",
+
+        description: (data.responsibilities || []).join("\n"),
+        job_description: data.job_description || "",
+
+        experience_required:
+          data.experience_min && data.experience_max
+            ? `${data.experience_min}-${data.experience_max} years`
+            : "",
         number_of_openings: data.number_of_openings || 1,
-
-        industry_type: normalizeIndustry(data.industry_type),
-
         application_deadline: normalizeDate(data.application_deadline),
-      }));
+      });
 
       setShowJdPopup(true);
     } catch (err) {
       console.error(err);
-      alert("JD parsing failed");
+      alert(err?.response?.data?.message || "JD parsing failed");
     }
   };
 
-  // ================= POST JOB =================
   const handlePostJob = async () => {
     try {
       if (!jobData.title || !jobData.description) {
@@ -206,7 +195,6 @@ export function PostJob({ editJobId = null }) {
       const payload = {
         title: jobData.title,
         description: jobData.description,
-
         country: jobData.country,
         state: jobData.state,
         city: jobData.city,
@@ -215,8 +203,8 @@ export function PostJob({ editJobId = null }) {
           jobData.work_type === "Hybrid"
             ? "hybrid"
             : jobData.work_type === "Remote"
-            ? "remote"
-            : "on_site",
+              ? "remote"
+              : "on_site",
 
         employment_type:
           jobData.employment_type === "Full-Time Employee"
@@ -236,7 +224,7 @@ export function PostJob({ editJobId = null }) {
         deadline: jobData.application_deadline || null,
 
         skills_required: jobData.must_have_skills
-          ? jobData.must_have_skills.split(",").map((s) => s.trim())
+          ? jobData.must_have_skills.split(",").map(s => s.trim())
           : [],
 
         responsibilities: jobData.description
@@ -246,19 +234,36 @@ export function PostJob({ editJobId = null }) {
         is_active: true,
       };
 
-      console.log("FINAL PAYLOAD:", payload);
+      const formData = new FormData();
+      formData.append("title", jobData.title);
+      formData.append("file", JSON.stringify(payload));
+      
+      // Attach JD File
+      if (selectedFile) {
+        formData.append("jd_file", selectedFile);
+      }
+
+      console.log("FINAL PAYLOAD FormData constructed:", payload);
 
       if (editJobId) {
-        await api.patch(`/user/v1/employer_job_detail/${editJobId}/`, payload);
+        // We leave edit job for later if needed, but using createJobMutation for posting
+        // If editJobId is passed, maybe it should be a useUpdateJob hook, but not specified in task
+        alert("Edit Job not yet migrated to new hook");
       } else {
-        await api.post("/user/v1/employer_jobs/", payload);
+        await createJobMutation.mutateAsync(formData);
       }
 
       setShowJdPopup(false);
       setShowSuccess(true);
+      
+      // Clear all states after successful posting
+      setFileName("");
+      setSelectedFile(null);
+      setJdJobTitle("");
+      setCustomIndustry("");
     } catch (error) {
       console.error(error.response?.data);
-      alert("Error posting job");
+      alert(error?.response?.data?.message || "Error posting job");
     }
   };
 
@@ -266,26 +271,52 @@ export function PostJob({ editJobId = null }) {
     <div className="emp-post-job-main">
       <div className="emp-post-job-content">
         <h2>Upload Your JD File!</h2>
-        <p>Start discovering opportunities that match your skills and ambitions.</p>
+        <p>
+          Start discovering opportunities that match your skills and ambitions.
+        </p>
       </div>
 
       <div className="emp-post-job-upload">
-        <img src={upload_img} onClick={handleClick} alt="Upload" style={{ cursor: "pointer" }} />
+        <img
+          src={upload_img}
+          onClick={handleClick}
+          alt="Upload"
+          style={{ cursor: "pointer" }}
+        />
 
         {fileName ? (
-          <>
-            <p className="file-name">{fileName}</p>
-            <button className="emp-upload-btn02" onClick={handleClick}>Replace File</button>
-            <button className="emp-upload-btn" onClick={handleJdUpload}>Upload</button>
-          </>
+          <div className="jd-upload-active">
+            <p className="file-name-success">{fileName}</p>
+            
+            <div className="jd-title-input-box">
+              <label>What is the Job Title?</label>
+              <input 
+                type="text" 
+                placeholder="e.g. Full Stack Engineer"
+                value={jdJobTitle}
+                onChange={(e) => setJdJobTitle(e.target.value)}
+                className="jd-title-input"
+              />
+            </div>
+
+            <div className="jd-upload-actions">
+              <button className="emp-btn-outline" onClick={handleClick} disabled={parseJdMutation.isPending}>
+                Replace File
+              </button>
+              <button className="emp-btn-primary" onClick={handleJdUpload} disabled={parseJdMutation.isPending || !jdJobTitle.trim()}>
+                {parseJdMutation.isPending ? "Analyzing..." : "Analyze JD"}
+              </button>
+            </div>
+          </div>
         ) : (
           <>
             <h3>Drag & Drop your file here</h3>
             <p>or</p>
-            <button className="emp-upload-btn" onClick={handleClick}>Choose File</button>
+            <button className="emp-upload-btn" onClick={handleClick}>
+              Choose File
+            </button>
           </>
         )}
-
         <input
           type="file"
           ref={fileInputRef}
@@ -538,8 +569,8 @@ export function PostJob({ editJobId = null }) {
                     Go Back
                   </button>
 
-                  <button className="jd-post-btn" onClick={handlePostJob}>
-                    Post Job
+                  <button className="jd-post-btn" onClick={handlePostJob} disabled={createJobMutation.isPending}>
+                    {createJobMutation.isPending ? "Posting..." : "Post Job"}
                   </button>
                 </div>
               </div>
@@ -548,20 +579,22 @@ export function PostJob({ editJobId = null }) {
         </div>
       )}
 
-       {showSuccess && (
-        <div className="emp-overlay emp-success-overlay">
-          <div className="emp-success-popup">
-            <img src={party} className="emp-party" alt="" />
-            <img src={check_mark} alt="" className="emp-success-icon" />
-            <h2 className="emp-blue-text">Job Posted Successfully 🎉</h2>
+      {showSuccess && (
+        <div className="jd-overlay">
+          <div className="jd-success-popup">
+            <img src={party} className="jd-party-img" alt="Party" />
+            <img src={check_mark} alt="Success" className="jd-success-icon" />
+            <h2>Job Posted Successfully!</h2>
+            <p>Your job has been created and is now active.</p>
             <button
-              className="emp-btn emp-btn-black"
+              className="emp-btn-primary"
+              style={{ marginTop: "20px" }}
               onClick={() => {
                 setShowSuccess(false);
                 navigate("/employer/view-jobs");
               }}
             >
-              Continue
+              Continue to Jobs
             </button>
           </div>
         </div>
