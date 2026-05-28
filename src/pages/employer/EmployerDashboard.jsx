@@ -22,7 +22,7 @@ export function EmployerDashboard() {
     try {
       // ✅ Jobs
       const jobRes = await api.get("/user/v1/employer_jobs/");
-      const jobsData = jobRes.data?.data || [];
+      const jobsData = jobRes.data?.data.results || [];
       setJobs(jobsData);
 
       // ✅ Applicants (sum from jobs if no direct API)
@@ -157,7 +157,6 @@ export function EmployerDashboard() {
             </div>
           </div>
         </div>
-
       </div>
 
       {/* ================= METRICS ================= */}
@@ -201,9 +200,7 @@ export function EmployerDashboard() {
               ))}
             </div>
 
-            <p className="sc-subtitle">
-              Here are all the jobs that you posted
-            </p>
+            <p className="sc-subtitle">Here are all the jobs that you posted</p>
           </div>
         </div>
 
@@ -283,9 +280,7 @@ export function EmployerDashboard() {
                     ></div>
                   </div>
 
-                  <span className="ds-score">
-                    {job.applicants_count || 0}
-                  </span>
+                  <span className="ds-score">{job.applicants_count || 0}</span>
                 </div>
               </div>
             ))}

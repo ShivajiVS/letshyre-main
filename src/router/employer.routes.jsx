@@ -78,6 +78,13 @@ export const employerRoutes = [
             },
           },
           {
+            path: "view-jobs/:jobId",
+            async lazy() {
+              const { JobDetail } = await import("@/pages/employer/JobDetail");
+              return { Component: JobDetail };
+            },
+          },
+          {
             path: "candidate-list",
             async lazy() {
               const { CandidateList } =
@@ -145,3 +152,5 @@ export const employerRoutes = [
     ],
   },
 ];
+
+// JobDetail

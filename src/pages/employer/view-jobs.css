@@ -1015,4 +1015,348 @@
   background: #f0e6ff;
   color: #6f42c1;
   border: 1px solid #6f42c1;
+}/* ================= EMPTY & LOADING STATES ================= */
+.ho-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: #6b7280;
+  font-size: 18px;
+  font-weight: 500;
+  background: white;
+  border-radius: 12px;
+  border: 2px dashed #dbeafe;
+  margin: 20px 15px;
+}
+
+.ho-loading {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 20px 15px;
+}
+
+.job-skeleton {
+  height: 120px;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+  background-size: 400% 100%;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}
+
+.ho-error {
+  text-align: center;
+  padding: 40px 20px;
+  color: #ef4444;
+  font-size: 16px;
+  font-weight: 500;
+  background: #fef2f2;
+  border-radius: 12px;
+  border: 1px solid #fecaca;
+  margin: 20px 15px;
+}
+
+/* ================= SKILL PILLS & ICONS ================= */
+.job-meta i {
+  color: var(--secondary-sky-blue);
+  margin-right: 4px;
+}
+
+.job-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.skill-pill {
+  background-color: var(--primary-lite-blue);
+  color: var(--brand-blue);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 500;
+  border: 1px solid #dbeafe;
+  transition: all 0.2s ease;
+}
+
+.skill-pill:hover {
+  background-color: #dbeafe;
+}
+
+.skill-pill.extra {
+  background-color: #f1f5f9;
+  color: #64748b;
+  border-color: #e2e8f0;
+}
+
+/* ================= MODERN SEGMENTED TABS ================= */
+.cd-job-tabs {
+  display: flex !important;
+  gap: 4px !important;
+  margin: 12px 15px 20px 15px !important;
+  padding: 6px !important;
+  background: var(--primary-lite-blue) !important;
+  border-radius: 12px !important;
+  width: fit-content !important;
+  border-bottom: none !important;
+}
+
+.cd-tab {
+  background: transparent !important;
+  border: none !important;
+  padding: 8px 24px !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+  color: #64748b !important;
+  border-radius: 8px !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative !important;
+}
+
+.cd-tab:hover {
+  color: var(--brand-blue) !important;
+  background: rgba(255, 255, 255, 0.5) !important;
+}
+
+.cd-tab.active {
+  color: var(--brand-blue) !important;
+  background: white !important;
+  font-weight: 600 !important;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08), 0 1px 3px rgba(0,0,0,0.04) !important;
+  transform: translateY(-1px) !important;
+}
+
+.cd-tab.active::after {
+  display: none !important;
+}
+
+/* ================= ENHANCED BUTTONS ================= */
+.job-actions .btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  font-weight: 600;
+  border-radius: 10px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.job-actions .btn i {
+  font-size: 14px;
+}
+
+.btn-view {
+  background: #f0f6ff;
+  color: var(--brand-blue);
+}
+.btn-view:hover {
+  background: var(--brand-blue);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+.btn-edit {
+  background: #f8fafc;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+}
+.btn-edit:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+  border-color: #cbd5e1;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.btn-delete {
+  background: #fff1f2;
+  color: #e11d48;
+  border: 1px solid #ffe4e6;
+}
+.btn-delete:hover {
+  background: #e11d48;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(225, 29, 72, 0.2);
+}
+
+/* ================= FINAL JOBCARD OVERRIDES ================= */
+.cd-job-card {
+  padding: 24px 28px !important;
+  gap: 16px !important;
+  cursor: pointer !important;
+}
+
+.job-content {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+}
+
+.enhanced-card {
+  transition: border-color 0.2s ease !important;
+}
+
+/* Remove hover animation (lifting and heavy shadow) */
+.enhanced-card:hover {
+  transform: none !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04) !important;
+  border-color: #dbeafe !important;
+  background-color: #f8fafc !important;
+}
+
+/* Improve Image */
+.job-logo {
+  width: 72px !important;
+  height: 72px !important;
+  border-radius: 14px !important;
+  border: 1px solid #e2e8f0 !important;
+  padding: 8px !important;
+  background: white !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06) !important;
+  object-fit: contain !important;
+}
+
+.job-logo-wrapper {
+  margin-top: 4px;
+}
+
+.job-meta {
+  gap: 16px !important;
+  margin: 8px 0 !important;
+  line-height: 1.6 !important;
+}
+
+/* ================= MERGE ENHANCED CARD STYLES ================= */
+.cd-job-card {
+  border: 1px solid #dbeafe !important;
+  transition: all 0.25s ease !important;
+}
+
+.cd-job-card:hover {
+  background-color: #f8fafc !important;
+  border-color: #cbd5e1 !important;
+}
+
+/* ================= KILL ALL HOVER EFFECTS ON JOBCARD ================= */
+.cd-job-card:hover {
+  transform: none !important;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06) !important;
+  background-color: white !important;
+  border-color: #dbeafe !important;
+}
+
+/* ================= EXACT MATCH DESIGN OVERRIDES ================= */
+
+/* Card Setup */
+.cd-job-card {
+  border: 1px solid #f1f5f9 !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03) !important;
+  background-color: white !important;
+  border-radius: 12px !important;
+}
+
+/* Image */
+.job-logo {
+  width: 64px !important;
+  height: 64px !important;
+  border-radius: 12px !important;
+  border: none !important;
+  padding: 0 !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1) !important;
+  object-fit: cover !important;
+}
+.job-logo-wrapper {
+  margin-top: 0 !important;
+}
+
+/* Header Text */
+.job-title {
+  color: var(--brand-blue) !important;
+  font-size: 1.15rem !important;
+  font-weight: 600 !important;
+  margin-bottom: 4px !important;
+}
+.job-company-meta {
+  font-size: 14px;
+  color: #64748b;
+  margin: 0;
+}
+.job-company-name {
+  color: var(--slate-900, #0f172a);
+  font-weight: 500;
+}
+.job-posted-date {
+  color: #94a3b8;
+}
+
+/* Action Buttons */
+.job-actions .btn {
+  border-radius: 999px !important;
+  font-size: 13px !important;
+  padding: 6px 14px !important;
+  font-weight: 500 !important;
+  border: 1px solid transparent;
+}
+.job-actions .btn i {
+  font-size: 13px !important;
+}
+
+/* Edit Button */
+.btn-edit {
+  background: white !important;
+  color: #475569 !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+/* Delete Button */
+.btn-delete {
+  background: #fff1f2 !important;
+  color: #dc2626 !important;
+  border: 1px solid #fee2e2 !important;
+}
+
+/* Status Dropdown/Button */
+.status-pending {
+  background: #fefce8 !important;
+  color: #ca8a04 !important;
+  border: 1px solid #fef08a !important;
+}
+.status-open {
+  background: #f0fdf4 !important;
+  color: #16a34a !important;
+  border: 1px solid #bbf7d0 !important;
+}
+.status-paused {
+  background: #f8fafc !important;
+  color: #64748b !important;
+  border: 1px solid #e2e8f0 !important;
+}
+.status-closed {
+  background: #fef2f2 !important;
+  color: #ef4444 !important;
+  border: 1px solid #fecaca !important;
+}
+
+select.status-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22currentColor%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 12px center !important;
+  background-size: 8px auto !important;
+  padding-right: 28px !important;
+  cursor: pointer;
 }

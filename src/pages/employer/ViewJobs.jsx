@@ -1,5 +1,6 @@
 // ViewJobs component with React Query hooks, URL query params, loading skeletons, and full modals
 import { useState, useEffect, useMemo } from "react";
+import { useSearchParams } from "react-router";
 import "./view-jobs.css";
 import overlay_img from "@/assets/JD-Upload.png";
 import {
@@ -7,7 +8,7 @@ import {
   useDeleteJob,
   useUpdateJob,
   usePatchJobStatus,
-} from "@/hooks/useEmployerJobs";
+} from "@/hooks/employer/useEmployerJobs";
 import api from "@/services/api"; // For view job details
 import { JobList } from "@/components/employer/view-jobs/JobList";
 import { Pagination } from "@/components/employer/view-jobs/Pagination";
@@ -16,51 +17,57 @@ import { LoadingSkeleton } from "@/components/employer/view-jobs/LoadingSkeleton
 export function ViewJobs() {
   const [editingJob, setEditingJob] = useState(null);
   const [selectedJob, setSelectedJob] = useState(null);
-  const [statusModal, setStatusModal] = useState(null);
   const [updateError, setUpdateError] = useState(null);
-  const [activeTab, setActiveTab] = useState("all");
-  const [currentPage, setCurrentPage] = useState(1);
-  const jobsPerPage = 5;
 
   // URL query parameters
-  const searchParams = new URLSearchParams(window.location.search);
-  const urlStatus = searchParams.get("status");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const urlStatus = searchParams.get("status") || "all";
   const approvalStatus = searchParams.get("approval_status");
+  const currentPage = parseInt(searchParams.get("page") || "1", 10);
 
-  // Fix #4: Memoize queryParams to prevent infinite React Query refetching
   const queryParams = useMemo(() => {
-    const params = {};
-    if (urlStatus) params.status = urlStatus;
+    const params = { page: currentPage };
+    if (urlStatus && urlStatus !== "all") {
+      if (urlStatus === "pending") {
+        params.approval_status = "pending";
+      } else {
+        params.status = urlStatus;
+      }
+    }
     if (approvalStatus) params.approval_status = approvalStatus;
     return params;
-  }, [urlStatus, approvalStatus]);
+  }, [urlStatus, approvalStatus, currentPage]);
 
-  // React Query hooks
-  const { data: jobs = [], isLoading, isError } = useJobs(queryParams);
+  const { data: jobsData = {}, isLoading, isError } = useJobs(queryParams);
   const deleteMutation = useDeleteJob();
   const updateMutation = useUpdateJob();
   const statusMutation = usePatchJobStatus();
 
-  // Fix #1: Tab filtering uses lowercase consistently
-  const filteredJobs =
-    activeTab === "all"
-      ? jobs
-      : jobs.filter((j) => j.status === activeTab);
+  // The backend paginated response structure:
+  // { count, total_pages, current_page, page_size, next, previous, results }
+  const currentJobs = jobsData.results || [];
+  const totalPages = jobsData.total_pages || 1;
 
-  // Pagination
-  const indexOfLastJob = currentPage * jobsPerPage;
-  const indexOfFirstJob = indexOfLastJob - jobsPerPage;
-  const currentJobs = filteredJobs.slice(indexOfFirstJob, indexOfLastJob);
-  const totalPages = Math.ceil(filteredJobs.length / jobsPerPage);
+  const handleTabChange = (tab) => {
+    setSearchParams((prev) => {
+      const newParams = new URLSearchParams(prev);
+      if (tab === "all") {
+        newParams.delete("status");
+      } else {
+        newParams.set("status", tab);
+      }
+      newParams.set("page", "1");
+      return newParams;
+    });
+  };
 
-  // Sync tab with URL status
-  useEffect(() => {
-    if (urlStatus) {
-      const lc = urlStatus.toLowerCase();
-      const validTabs = ["open", "closed", "paused", "pending"];
-      setActiveTab(validTabs.includes(lc) ? lc : "all");
-    }
-  }, [urlStatus]);
+  const handlePageChange = (page) => {
+    setSearchParams((prev) => {
+      const newParams = new URLSearchParams(prev);
+      newParams.set("page", page.toString());
+      return newParams;
+    });
+  };
 
   // Fix #10: Escape key closes any open modal
   useEffect(() => {
@@ -68,7 +75,6 @@ export function ViewJobs() {
       if (e.key === "Escape") {
         setSelectedJob(null);
         setEditingJob(null);
-        setStatusModal(null);
       }
     };
     document.addEventListener("keydown", handleEsc);
@@ -77,7 +83,7 @@ export function ViewJobs() {
 
   // Fix #11: Lock body scroll when any modal is open
   useEffect(() => {
-    if (selectedJob || editingJob || statusModal) {
+    if (selectedJob || editingJob) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
@@ -85,7 +91,7 @@ export function ViewJobs() {
     return () => {
       document.body.style.overflow = "";
     };
-  }, [selectedJob, editingJob, statusModal]);
+  }, [selectedJob, editingJob]);
 
   const handleDelete = (jobId) => {
     if (!confirm("Delete this job?")) return;
@@ -149,14 +155,12 @@ export function ViewJobs() {
   };
 
   const handleStatusChange = (jobId, newStatus) => {
-    const formattedStatus =
-      newStatus.charAt(0).toUpperCase() + newStatus.slice(1);
+    const formattedStatus = newStatus.charAt(0).toUpperCase() + newStatus.slice(1);
     statusMutation.mutate(
       { jobId, status: formattedStatus },
       {
-        onSuccess: () => setStatusModal(null),
         onError: (err) => console.error("Status update failed:", err),
-      },
+      }
     );
   };
 
@@ -194,9 +198,7 @@ export function ViewJobs() {
       specialization: editingJob.specialization,
       deadline: editingJob.deadline || null,
       description: editingJob.overview,
-      responsibilities: editingJob.responsibilities
-        .split("\n")
-        .filter(Boolean),
+      responsibilities: editingJob.responsibilities.split("\n").filter(Boolean),
       location: editingJob.location,
       jd_file_url: editingJob.jd_file_url,
       minimum_education: editingJob.minimum_education,
@@ -210,6 +212,7 @@ export function ViewJobs() {
       ...(editingJob.job_status && { job_status: editingJob.job_status }),
       ...(editingJob.status && { status: editingJob.status }),
     };
+
     updateMutation.mutate(
       { jobId: editingJob.id, payload },
       {
@@ -236,35 +239,30 @@ export function ViewJobs() {
       <div className="ho-header">
         <h1>All Jobs</h1>
       </div>
-      {/* Fix #1: All tabs are lowercase, Fix #5: Reset page on tab switch */}
       <div className="cd-job-tabs">
         {["all", "open", "closed", "paused", "pending"].map((tab) => (
           <button
             key={tab}
-            className={`cd-tab ${activeTab === tab ? "active" : ""}`}
-            onClick={() => {
-              setActiveTab(tab);
-              setCurrentPage(1);
-            }}
+            className={`cd-tab ${urlStatus.toLowerCase() === tab ? "active" : ""}`}
+            onClick={() => handleTabChange(tab)}
           >
             {tab.toUpperCase()}
           </button>
         ))}
       </div>
-      {/* Fix #12: Removed duplicate "No jobs found" – JobList already handles it */}
       <div className="cd-job-list">
         <JobList
           jobs={currentJobs}
           onView={setSelectedJob}
           onEdit={handleEdit}
           onDelete={handleDelete}
-          onStatus={(job) => job.isApproved && setStatusModal(job)}
+          onStatusChange={handleStatusChange}
         />
       </div>
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}
-        onPageChange={setCurrentPage}
+        onPageChange={handlePageChange}
       />
 
       {/* ================= VIEW JOB MODAL ================= */}
@@ -344,7 +342,10 @@ export function ViewJobs() {
                   <input
                     value={editingJob.skills}
                     onChange={(e) =>
-                      setEditingJob((prev) => ({ ...prev, skills: e.target.value }))
+                      setEditingJob((prev) => ({
+                        ...prev,
+                        skills: e.target.value,
+                      }))
                     }
                   />
                 </div>
@@ -354,7 +355,10 @@ export function ViewJobs() {
                     <input
                       value={editingJob.salary}
                       onChange={(e) =>
-                        setEditingJob((prev) => ({ ...prev, salary: e.target.value }))
+                        setEditingJob((prev) => ({
+                          ...prev,
+                          salary: e.target.value,
+                        }))
                       }
                     />
                   </div>
@@ -402,7 +406,10 @@ export function ViewJobs() {
                     <input
                       value={editingJob.state}
                       onChange={(e) =>
-                        setEditingJob((prev) => ({ ...prev, state: e.target.value }))
+                        setEditingJob((prev) => ({
+                          ...prev,
+                          state: e.target.value,
+                        }))
                       }
                     />
                   </div>
@@ -411,7 +418,10 @@ export function ViewJobs() {
                     <input
                       value={editingJob.city}
                       onChange={(e) =>
-                        setEditingJob((prev) => ({ ...prev, city: e.target.value }))
+                        setEditingJob((prev) => ({
+                          ...prev,
+                          city: e.target.value,
+                        }))
                       }
                     />
                   </div>
@@ -461,7 +471,10 @@ export function ViewJobs() {
                     rows={4}
                     value={editingJob.overview}
                     onChange={(e) =>
-                      setEditingJob((prev) => ({ ...prev, overview: e.target.value }))
+                      setEditingJob((prev) => ({
+                        ...prev,
+                        overview: e.target.value,
+                      }))
                     }
                   />
                 </div>
@@ -508,61 +521,6 @@ export function ViewJobs() {
         </div>
       )}
 
-      {/* ================= STATUS MODAL ================= */}
-      {statusModal && (
-        <div className="jd-overlay" onClick={() => setStatusModal(null)}>
-          <div
-            className="jd-card-main"
-            style={{ maxWidth: "400px", textAlign: "center" }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h2 className="jd-heading">Change Job Status</h2>
-            {!statusModal.isApproved ? (
-              <p style={{ marginTop: "20px", color: "red" }}>
-                Job is pending admin approval. Cannot change status.
-              </p>
-            ) : (
-              <>
-                <h3 style={{ marginTop: "15px" }}>{statusModal.title}</h3>
-                <div
-                  className="jd-actions"
-                  style={{ justifyContent: "center", marginTop: "20px" }}
-                >
-                  {/* Fix #9: Disabled state on status buttons */}
-                  <button
-                    className="jd-post-btn"
-                    onClick={() => handleStatusChange(statusModal.id, "Open")}
-                    disabled={statusMutation.isPending}
-                  >
-                    Open
-                  </button>
-                  <button
-                    className="jd-back-btn"
-                    onClick={() => handleStatusChange(statusModal.id, "Paused")}
-                    disabled={statusMutation.isPending}
-                  >
-                    Pause
-                  </button>
-                  <button
-                    className="btn btn-delete"
-                    onClick={() => handleStatusChange(statusModal.id, "Closed")}
-                    disabled={statusMutation.isPending}
-                  >
-                    Close
-                  </button>
-                </div>
-              </>
-            )}
-            <button
-              className="jd-back-btn"
-              style={{ marginTop: "20px" }}
-              onClick={() => setStatusModal(null)}
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      )}
     </>
   );
 }

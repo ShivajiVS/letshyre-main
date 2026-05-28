@@ -6,30 +6,22 @@ import {
   getJobDetail,
   updateJob,
   patchJobStatus,
-} from "@/services/employerApi";
+} from "@/services/employer/jobs.service";
 
-const fetchJobsWithFilters = async ({ queryKey }) => {
+const fetchJobsWithKyc = async ({ queryKey }) => {
   const [_key, params] = queryKey;
-  const { status, approval_status } = params || {};
-  const res = await fetchJobs();
-  let data = Array.isArray(res.data) ? res.data : res.data?.data || [];
-
-  // Filter by status if provided
-  if (status) {
-    const lower = status.toLowerCase();
-    data = data.filter((j) => (j.status || "").toLowerCase() === lower);
+  
+  // Clean up params (e.g. remove "all" status if we want to fetch everything)
+  const apiParams = { ...params };
+  if (apiParams.status && apiParams.status.toLowerCase() === "all") {
+    delete apiParams.status;
   }
 
-  // Filter by approval_status if provided (pending means not approved)
-  if (approval_status) {
-    if (approval_status === "pending") {
-      data = data.filter(
-        (j) => String(j.job_status).toLowerCase() !== "approved",
-      );
-    }
-  }
+  const res = await fetchJobs(apiParams);
+  const responseData = res.data?.data || res.data;
+  let jobsList = responseData?.results || [];
 
-  // Enrich with KYC data (optional)
+  // Fetch KYC to map company names and logos
   try {
     const kycRes = await fetchKyc();
     const kycData = kycRes.data?.data || kycRes.data;
@@ -41,7 +33,7 @@ const fetchJobsWithFilters = async ({ queryKey }) => {
     } else if (kycData && typeof kycData === "object") {
       kycMap[kycData.employer] = kycData;
     }
-    data = data.map((j) => {
+    jobsList = jobsList.map((j) => {
       const kyc = kycMap[j.employer] || {};
       const isApproved = String(j.job_status).toLowerCase() === "approved";
       return {
@@ -58,14 +50,19 @@ const fetchJobsWithFilters = async ({ queryKey }) => {
     console.warn("KYC fetch failed:", e);
   }
 
-  return data;
+  // Return the full paginated response with enriched results
+  return {
+    ...responseData,
+    results: jobsList,
+  };
 };
 
 export const useJobs = (params) => {
   return useQuery({
     queryKey: ["jobs", params],
-    queryFn: fetchJobsWithFilters,
+    queryFn: fetchJobsWithKyc,
     staleTime: 5 * 60 * 1000, // 5 minutes
+    keepPreviousData: true,
   });
 };
 
