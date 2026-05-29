@@ -42,9 +42,9 @@ const MENU_ITEMS = [
   },
   {
     id: "tour-candidates",
-    to: "/employer/candidate-list",
+    to: "/employer/candidate-pool",
     icon: "bi-people-fill",
-    label: "Candidate List",
+    label: "Candidate Pool",
   },
   {
     id: "tour-team",

@@ -85,11 +85,11 @@ export const employerRoutes = [
             },
           },
           {
-            path: "candidate-list",
+            path: "candidate-pool",
             async lazy() {
-              const { CandidateList } =
-                await import("@/pages/employer/CandidateList");
-              return { Component: CandidateList };
+              const { CandidatePool } =
+                await import("@/pages/employer/CandidatePool");
+              return { Component: CandidatePool };
             },
           },
           {

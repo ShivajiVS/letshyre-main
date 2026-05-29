@@ -1,0 +1,220 @@
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router";
+
+import { useOpenJobs, useAIMatchedCandidates } from "@/hooks/employer/useCandidatePool";
+import { JobSelector } from "./candidate-pool/JobSelector";
+import { CandidateCard } from "./candidate-pool/CandidateCard";
+import { CandidatePoolSkeleton } from "./candidate-pool/CandidatePoolSkeleton";
+import { EmptyState } from "./candidate-pool/EmptyState";
+
+import "@/pages/styles/candidate-pool.css";
+
+export function CandidatePool() {
+  const navigate = useNavigate();
+
+  // ================= STATE =================
+  const [selectedJobId, setSelectedJobId] = useState(null);
+  const [jobPage, setJobPage] = useState(1);
+
+  // ================= QUERIES =================
+  const {
+    data: jobsData,
+    isLoading: jobsLoading,
+    isError: jobsError,
+    refetch: refetchJobs,
+  } = useOpenJobs(jobPage);
+
+  const {
+    data: candidatesData,
+    isLoading: candidatesLoading,
+    isError: candidatesError,
+    refetch: refetchCandidates,
+  } = useAIMatchedCandidates(selectedJobId);
+
+  // ================= AUTO-SELECT FIRST JOB =================
+  const jobs = jobsData?.results || [];
+  const totalJobPages = jobsData?.total_pages || 1;
+
+  useEffect(() => {
+    if (jobs.length > 0 && !selectedJobId) {
+      setSelectedJobId(jobs[0].id);
+    }
+  }, [jobs, selectedJobId]);
+
+  // ================= HANDLERS =================
+  const handleSelectJob = (jobId) => {
+    setSelectedJobId(jobId);
+  };
+
+  const handleJobPageChange = (page) => {
+    setJobPage(page);
+    setSelectedJobId(null); // Reset selection when changing pages
+  };
+
+  const handleViewProfile = (candidateId) => {
+    navigate(`/employer/employee-score-card?candidate=${candidateId}`);
+  };
+
+  // ================= DERIVED DATA =================
+  const candidates = candidatesData?.matches || [];
+  const totalCandidates = candidatesData?.total_candidates || 0;
+  const matchedCount = candidatesData?.matched_candidates_count || 0;
+
+  // Find the selected job title for display
+  const selectedJob = jobs.find((j) => j.id === selectedJobId);
+
+  return (
+    <div className="cp-page">
+      {/* ================= HEADER ================= */}
+      <div className="cp-header">
+        <div className="cp-header-text">
+          <h1>Candidate Pool</h1>
+          <p className="cp-header-subtitle">
+            Discover AI-matched candidates for your open positions.
+          </p>
+        </div>
+      </div>
+
+      {/* ================= STATS ROW ================= */}
+      {jobsLoading && !jobsData ? (
+        <CandidatePoolSkeleton variant="stats" />
+      ) : (
+        <div className="cp-stats-row">
+          <div className="cp-stat-card">
+            <div className="cp-stat-icon cp-stat-icon--blue">
+              <i className="bi bi-briefcase" aria-hidden="true" />
+            </div>
+            <div>
+              <div className="cp-stat-value">{jobsData?.count || 0}</div>
+              <div className="cp-stat-label">Open Positions</div>
+            </div>
+          </div>
+
+          <div className="cp-stat-card">
+            <div className="cp-stat-icon cp-stat-icon--green">
+              <i className="bi bi-people" aria-hidden="true" />
+            </div>
+            <div>
+              <div className="cp-stat-value">{totalCandidates}</div>
+              <div className="cp-stat-label">Total Candidates</div>
+            </div>
+          </div>
+
+          <div className="cp-stat-card">
+            <div className="cp-stat-icon cp-stat-icon--purple">
+              <i className="bi bi-stars" aria-hidden="true" />
+            </div>
+            <div>
+              <div className="cp-stat-value">{matchedCount}</div>
+              <div className="cp-stat-label">AI Matches</div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ================= JOBS ERROR ================= */}
+      {jobsError && (
+        <EmptyState
+          variant="error"
+          icon="bi-exclamation-triangle"
+          title="Failed to load jobs"
+          description="We couldn't fetch your open positions. Please check your connection and try again."
+          actionLabel="Retry"
+          onAction={refetchJobs}
+        />
+      )}
+
+      {/* ================= JOB SELECTOR ================= */}
+      {!jobsError && (
+        <JobSelector
+          jobs={jobs}
+          selectedJobId={selectedJobId}
+          onSelectJob={handleSelectJob}
+          isLoading={jobsLoading}
+          currentPage={jobPage}
+          totalPages={totalJobPages}
+          onPageChange={handleJobPageChange}
+        />
+      )}
+
+      {/* ================= NO OPEN JOBS ================= */}
+      {!jobsLoading && !jobsError && jobs.length === 0 && (
+        <EmptyState
+          icon="bi-briefcase"
+          title="No Open Jobs"
+          description="You don't have any open positions yet. Post a job to start receiving AI-matched candidates."
+          actionLabel="Post a Job"
+          onAction={() => navigate("/employer/post-job")}
+        />
+      )}
+
+      {/* ================= CANDIDATES SECTION ================= */}
+      {selectedJobId && (
+        <>
+          {/* Candidates Header */}
+          <div className="cp-candidates-header">
+            <h2 className="cp-candidates-title">
+              <i className="bi bi-people" aria-hidden="true" />
+              Matched Candidates
+              {selectedJob && (
+                <span className="cp-candidates-count">
+                  for {selectedJob.title}
+                </span>
+              )}
+            </h2>
+          </div>
+
+          {/* Loading */}
+          {candidatesLoading && (
+            <CandidatePoolSkeleton variant="candidates" />
+          )}
+
+          {/* Error */}
+          {candidatesError && !candidatesLoading && (
+            <EmptyState
+              variant="error"
+              icon="bi-exclamation-triangle"
+              title="Failed to load candidates"
+              description="We couldn't fetch the matched candidates for this job. Please try again."
+              actionLabel="Retry"
+              onAction={refetchCandidates}
+            />
+          )}
+
+          {/* Empty matches */}
+          {!candidatesLoading && !candidatesError && candidates.length === 0 && (
+            <EmptyState
+              icon="bi-person-x"
+              title="No Matches Yet"
+              description="Our AI hasn't found matching candidates for this job yet. Check back later as more candidates take their interviews."
+            />
+          )}
+
+          {/* Candidates Grid */}
+          {!candidatesLoading && !candidatesError && candidates.length > 0 && (
+            <div className="cp-candidates-grid">
+              {candidates.map((candidate, index) => (
+                <CandidateCard
+                  key={`${candidate.candidate_id}-${index}`}
+                  candidate={candidate}
+                  onViewProfile={handleViewProfile}
+                />
+              ))}
+            </div>
+          )}
+        </>
+      )}
+
+      {/* ================= NO JOB SELECTED PROMPT ================= */}
+      {!selectedJobId && !jobsLoading && !jobsError && jobs.length > 0 && (
+        <div className="cp-select-prompt">
+          <div className="cp-select-prompt-icon">
+            <i className="bi bi-hand-index-thumb" aria-hidden="true" />
+          </div>
+          <h3>Select a Job Above</h3>
+          <p>Choose one of your open positions to view AI-matched candidates.</p>
+        </div>
+      )}
+    </div>
+  );
+}
