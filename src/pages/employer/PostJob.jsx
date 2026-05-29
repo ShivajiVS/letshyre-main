@@ -1,9 +1,10 @@
 import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router";
-import upload_img from "@/assets/dragNdrop.png";
-import overlay_img from "@/assets/JD-Upload.png";
-import check_mark from "@/assets/check-mark.png";
-import party from "@/assets/party.png";
+import { toast } from "sonner";
+
+import { JdUploadSection } from "./components/post-job/JdUploadSection";
+import { JdFormPopup } from "./components/post-job/JdFormPopup";
+import { SuccessPopup } from "./components/post-job/SuccessPopup";
 
 import {
   useIndustries,
@@ -12,6 +13,7 @@ import {
 } from "@/hooks/employer/useEmployerJobs";
 
 import "./empSubSections.css";
+import "./PostJob.css";
 
 export function PostJob({ editJobId = null }) {
   const navigate = useNavigate();
@@ -137,8 +139,14 @@ export function PostJob({ editJobId = null }) {
 
   // ================= JD PARSING =================
   const handleJdUpload = async () => {
-    if (!selectedFile) return alert("Select file first");
-    if (!jdJobTitle.trim()) return alert("Please enter the job title");
+    if (!selectedFile) {
+      toast.error("Select file first");
+      return;
+    }
+    if (!jdJobTitle.trim()) {
+      toast.error("Please enter the job title");
+      return;
+    }
 
     try {
       const formData = new FormData();
@@ -147,19 +155,39 @@ export function PostJob({ editJobId = null }) {
 
       const res = await parseJdMutation.mutateAsync(formData);
 
-      const data = res.data?.parse_response?.flat || {};
+      const rawData = res.data?.data || res.data || {};
+      const data = rawData.parse_response?.flat || rawData.parsed_fields || {};
+
+      let expReq = "";
+      if (data.experience_min !== undefined && data.experience_min !== null && data.experience_max !== undefined && data.experience_max !== null) {
+        expReq = `${data.experience_min}-${data.experience_max} years`;
+      } else if (data.experience_min !== undefined && data.experience_min !== null) {
+        expReq = `${data.experience_min} years`;
+      } else if (data.experience_max !== undefined && data.experience_max !== null) {
+        expReq = `Up to ${data.experience_max} years`;
+      }
+
+      let salRange = "";
+      if (data.salary_min_lpa !== undefined && data.salary_min_lpa !== null && data.salary_max_lpa !== undefined && data.salary_max_lpa !== null) {
+        salRange = `${data.salary_min_lpa} - ${data.salary_max_lpa} LPA`;
+      } else if (data.salary_min_lpa !== undefined && data.salary_min_lpa !== null) {
+        salRange = `${data.salary_min_lpa} LPA`;
+      } else if (data.salary_max_lpa !== undefined && data.salary_max_lpa !== null) {
+        salRange = `Up to ${data.salary_max_lpa} LPA`;
+      }
+
+      const skills = Array.isArray(data.required_skills) 
+        ? data.required_skills.join(", ") 
+        : (data.skills_text || "");
 
       setJobData({
         title: data.job_title || jdJobTitle.trim(),
         work_type: normalizeWorkType(data.work_mode),
-        employment_type: "Full-Time Employee",
+        employment_type: data.employment_type || "Full-Time Employee",
         industry_type: normalizeIndustry(data.industry_type),
 
-        must_have_skills: data.skills_text || "",
-        salary_range:
-          data.salary_min_lpa && data.salary_max_lpa
-            ? `${data.salary_min_lpa} - ${data.salary_max_lpa} LPA`
-            : "",
+        must_have_skills: skills,
+        salary_range: salRange,
 
         country: data.country || "",
         state: data.state || "",
@@ -168,28 +196,28 @@ export function PostJob({ editJobId = null }) {
         education: data.minimum_education || "",
         specialization: data.specialization || "",
 
-        description: (data.responsibilities || []).join("\n"),
+        description: Array.isArray(data.responsibilities) ? data.responsibilities.join("\n") : (data.responsibilities || ""),
         job_description: data.job_description || "",
 
-        experience_required:
-          data.experience_min && data.experience_max
-            ? `${data.experience_min}-${data.experience_max} years`
-            : "",
+        experience_required: expReq,
         number_of_openings: data.number_of_openings || 1,
         application_deadline: normalizeDate(data.application_deadline),
       });
 
       setShowJdPopup(true);
+      toast.success("JD Analyzed Successfully!");
     } catch (err) {
       console.error(err);
-      alert(err?.response?.data?.message || "JD parsing failed");
+      const apiError = err?.response?.data?.message || err?.response?.data?.error || "JD parsing failed";
+      toast.error(typeof apiError === "string" ? apiError : "JD parsing failed");
     }
   };
 
   const handlePostJob = async () => {
     try {
       if (!jobData.title || !jobData.description) {
-        return alert("Title & Description required");
+        toast.error("Title & Description required");
+        return;
       }
 
       const payload = {
@@ -248,9 +276,10 @@ export function PostJob({ editJobId = null }) {
       if (editJobId) {
         // We leave edit job for later if needed, but using createJobMutation for posting
         // If editJobId is passed, maybe it should be a useUpdateJob hook, but not specified in task
-        alert("Edit Job not yet migrated to new hook");
+        toast.info("Edit Job not yet migrated to new hook");
       } else {
         await createJobMutation.mutateAsync(formData);
+        toast.success("Job Created Successfully!");
       }
 
       setShowJdPopup(false);
@@ -263,7 +292,22 @@ export function PostJob({ editJobId = null }) {
       setCustomIndustry("");
     } catch (error) {
       console.error(error.response?.data);
-      alert(error?.response?.data?.message || "Error posting job");
+      
+      let errorMsg = "Error posting job";
+      const resData = error.response?.data;
+      
+      if (resData?.errors) {
+        // Extract first error message from DRF errors object
+        const firstKey = Object.keys(resData.errors)[0];
+        if (firstKey) {
+          const firstError = resData.errors[firstKey];
+          errorMsg = `${firstKey}: ${Array.isArray(firstError) ? firstError[0] : firstError}`;
+        }
+      } else if (resData?.message) {
+        errorMsg = resData.message;
+      }
+      
+      toast.error(errorMsg);
     }
   };
 
@@ -276,328 +320,32 @@ export function PostJob({ editJobId = null }) {
         </p>
       </div>
 
-      <div className="emp-post-job-upload">
-        <img
-          src={upload_img}
-          onClick={handleClick}
-          alt="Upload"
-          style={{ cursor: "pointer" }}
-        />
-
-        {fileName ? (
-          <div className="jd-upload-active">
-            <p className="file-name-success">{fileName}</p>
-            
-            <div className="jd-title-input-box">
-              <label>What is the Job Title?</label>
-              <input 
-                type="text" 
-                placeholder="e.g. Full Stack Engineer"
-                value={jdJobTitle}
-                onChange={(e) => setJdJobTitle(e.target.value)}
-                className="jd-title-input"
-              />
-            </div>
-
-            <div className="jd-upload-actions">
-              <button className="emp-btn-outline" onClick={handleClick} disabled={parseJdMutation.isPending}>
-                Replace File
-              </button>
-              <button className="emp-btn-primary" onClick={handleJdUpload} disabled={parseJdMutation.isPending || !jdJobTitle.trim()}>
-                {parseJdMutation.isPending ? "Analyzing..." : "Analyze JD"}
-              </button>
-            </div>
-          </div>
-        ) : (
-          <>
-            <h3>Drag & Drop your file here</h3>
-            <p>or</p>
-            <button className="emp-upload-btn" onClick={handleClick}>
-              Choose File
-            </button>
-          </>
-        )}
-        <input
-          type="file"
-          ref={fileInputRef}
-          hidden
-          accept=".pdf,.doc,.docx"
-          onChange={handleFileChange}
-        />
-      </div>
+      <JdUploadSection
+        fileName={fileName}
+        jdJobTitle={jdJobTitle}
+        setJdJobTitle={setJdJobTitle}
+        handleClick={handleClick}
+        handleJdUpload={handleJdUpload}
+        isPending={parseJdMutation.isPending}
+        fileInputRef={fileInputRef}
+        handleFileChange={handleFileChange}
+      />
 
       {showJdPopup && (
-        <div className="jd-overlay">
-          <div className="jd-card-main">
-            <h2 className="jd-heading">Role Ready!</h2>
-
-            <div className="jd-card">
-              <div className="jd-left">
-                <img className="jd-upload-img" src={overlay_img} alt="" />
-                <h4>Verify Your Job Details</h4>
-                <p>
-                  Our AI has parsed your JD. Review everything before posting.
-                </p>
-              </div>
-
-              <div className="jd-right">
-                <h3 className="jd-title">Refine Your New Listing</h3>
-
-                {/* ===== BASIC INFO ===== */}
-                <div className="jd-row-3">
-                  <div className="jd-field">
-                    <label>Job Title</label>
-                    <input
-                      value={jobData.title}
-                      onChange={(e) => handleChange("title", e.target.value)}
-                    />
-                  </div>
-
-                  <div className="jd-field">
-                    <label>Work Type</label>
-                    <select
-                      className="jd-input"
-                      value={jobData.work_type}
-                      onChange={(e) =>
-                        handleChange("work_type", e.target.value)
-                      }
-                    >
-                      <option value="Hybrid">Hybrid</option>
-                      <option value="Remote">Remote</option>
-                      <option value="On-site">On-site</option>
-                    </select>
-                  </div>
-
-                  <div className="jd-field">
-                    <label>Employment Type</label>
-                    <select
-                      className="jd-input"
-                      value={jobData.employment_type}
-                      onChange={(e) =>
-                        handleChange("employment_type", e.target.value)
-                      }
-                    >
-                      <option value="Full-Time Employee">
-                        Full-Time Employee
-                      </option>
-                      <option value="Part-Time Employee">
-                        Part-Time Employee
-                      </option>
-                    </select>
-                  </div>
-                </div>
-
-                {/* ===== INDUSTRY ===== */}
-                <div className="jd-box">
-                  <label>Industry Type</label>
-
-                  <select
-                    className="jd-input"
-                    value={jobData.industry_type}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      handleChange("industry_type", value);
-
-                      // reset custom if not other
-                      if (value !== "other") {
-                        setCustomIndustry("");
-                      }
-                    }}
-                  >
-                    <option value="">Select Industry</option>
-
-                    {industryOptions.map((opt, index) => (
-                      <option
-                        key={`${opt.value}-${index}`} // ✅ avoids duplicate key issue
-                        value={opt.value}
-                      >
-                        {opt.label}
-                      </option>
-                    ))}
-                  </select>
-
-                  {/* ✅ Custom Industry */}
-                  {jobData.industry_type === "other" && (
-                    <input
-                      style={{ marginTop: "8px" }}
-                      placeholder="Enter industry"
-                      value={customIndustry}
-                      onChange={(e) => setCustomIndustry(e.target.value)}
-                    />
-                  )}
-                </div>
-
-                {/* ===== SKILLS ===== */}
-                <div className="jd-box">
-                  <label>Must-Have Skills (comma separated)</label>
-                  <input
-                    value={jobData.must_have_skills}
-                    onChange={(e) =>
-                      handleChange("must_have_skills", e.target.value)
-                    }
-                  />
-                </div>
-
-                {/* ===== SALARY + EXPERIENCE + OPENINGS ===== */}
-                <div className="jd-row-3">
-                  <div className="jd-field">
-                    <label>Salary Range</label>
-                    <input
-                      value={jobData.salary_range}
-                      onChange={(e) =>
-                        handleChange("salary_range", e.target.value)
-                      }
-                    />
-                  </div>
-
-                  <div className="jd-field">
-                    <label>Experience Required</label>
-                    <input
-                      value={jobData.experience_required}
-                      onChange={(e) =>
-                        handleChange("experience_required", e.target.value)
-                      }
-                    />
-                  </div>
-
-                  <div className="jd-field">
-                    <label>Openings</label>
-                    <input
-                      type="number"
-                      value={jobData.number_of_openings}
-                      onChange={(e) =>
-                        handleChange("number_of_openings", e.target.value)
-                      }
-                    />
-                  </div>
-                </div>
-
-                {/* ===== LOCATION ===== */}
-                <div className="jd-row-3">
-                  <div className="jd-field">
-                    <label>Country</label>
-                    <input
-                      value={jobData.country}
-                      onChange={(e) => handleChange("country", e.target.value)}
-                    />
-                  </div>
-
-                  <div className="jd-field">
-                    <label>State</label>
-                    <input
-                      value={jobData.state}
-                      onChange={(e) => handleChange("state", e.target.value)}
-                    />
-                  </div>
-
-                  <div className="jd-field">
-                    <label>City</label>
-                    <input
-                      value={jobData.city}
-                      onChange={(e) => handleChange("city", e.target.value)}
-                    />
-                  </div>
-                </div>
-
-                {/* ===== EDUCATION ===== */}
-                <div className="jd-row-3">
-                  <div className="jd-field">
-                    <label>Minimum Education</label>
-                    <input
-                      value={jobData.education}
-                      onChange={(e) =>
-                        handleChange("education", e.target.value)
-                      }
-                    />
-                  </div>
-
-                  <div className="jd-field">
-                    <label>Specialization</label>
-                    <input
-                      value={jobData.specialization}
-                      onChange={(e) =>
-                        handleChange("specialization", e.target.value)
-                      }
-                    />
-                  </div>
-                </div>
-
-                {/* ===== DEADLINE ===== */}
-                <div className="jd-row-3">
-                  <div className="jd-field">
-                    <label>Application Deadline</label>
-                    <input
-                      type="date"
-                      value={jobData.application_deadline}
-                      onChange={(e) =>
-                        handleChange("application_deadline", e.target.value)
-                      }
-                    />
-                  </div>
-                </div>
-
-                {/* ===== JOB OVERVIEW ===== */}
-                <div className="jd-box">
-                  <label>Job Overview</label>
-                  <textarea
-                    value={jobData.job_description}
-                    onChange={(e) =>
-                      handleChange("job_description", e.target.value)
-                    }
-                    rows={4}
-                  />
-                </div>
-
-                {/* ===== RESPONSIBILITIES ===== */}
-                <div className="jd-box">
-                  <label>Responsibilities</label>
-                  <textarea
-                    value={jobData.description}
-                    onChange={(e) =>
-                      handleChange("description", e.target.value)
-                    }
-                    rows={5}
-                  />
-                </div>
-
-                {/* ===== ACTIONS ===== */}
-                <div className="jd-actions">
-                  <button
-                    className="jd-back-btn"
-                    onClick={() => setShowJdPopup(false)}
-                  >
-                    Go Back
-                  </button>
-
-                  <button className="jd-post-btn" onClick={handlePostJob} disabled={createJobMutation.isPending}>
-                    {createJobMutation.isPending ? "Posting..." : "Post Job"}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <JdFormPopup
+          jobData={jobData}
+          handleChange={handleChange}
+          industryOptions={industryOptions}
+          customIndustry={customIndustry}
+          setCustomIndustry={setCustomIndustry}
+          setShowJdPopup={setShowJdPopup}
+          handlePostJob={handlePostJob}
+          isPending={createJobMutation.isPending}
+        />
       )}
 
       {showSuccess && (
-        <div className="jd-overlay">
-          <div className="jd-success-popup">
-            <img src={party} className="jd-party-img" alt="Party" />
-            <img src={check_mark} alt="Success" className="jd-success-icon" />
-            <h2>Job Posted Successfully!</h2>
-            <p>Your job has been created and is now active.</p>
-            <button
-              className="emp-btn-primary"
-              style={{ marginTop: "20px" }}
-              onClick={() => {
-                setShowSuccess(false);
-                navigate("/employer/view-jobs");
-              }}
-            >
-              Continue to Jobs
-            </button>
-          </div>
-        </div>
+        <SuccessPopup setShowSuccess={setShowSuccess} />
       )}
     </div>
   );
