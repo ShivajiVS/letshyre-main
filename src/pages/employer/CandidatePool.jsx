@@ -1,14 +1,17 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 
-import { useOpenJobs, useAIMatchedCandidates } from "@/hooks/employer/useCandidatePool";
+import {
+  useOpenJobs,
+  useAIMatchedCandidates,
+} from "@/hooks/employer/useCandidatePool";
 import { JobSelector } from "./candidate-pool/JobSelector";
 import { CandidateCard } from "./candidate-pool/CandidateCard";
 import { CandidatePoolSkeleton } from "./candidate-pool/CandidatePoolSkeleton";
 import { EmptyState } from "./candidate-pool/EmptyState";
 import UnlockProfileModal from "@/components/UnlockProfileModal";
 
-import "@/pages/styles/candidate-pool.css";
+import "@/pages/employer/styles/candidate-pool.css";
 
 export function CandidatePool() {
   const navigate = useNavigate();
@@ -54,7 +57,7 @@ export function CandidatePool() {
   };
 
   const handleViewProfile = (candidateId) => {
-    const candidate = candidates.find(c => c.candidate_id === candidateId);
+    const candidate = candidates.find((c) => c.candidate_id === candidateId);
     if (!candidate) return;
 
     const modalCandidate = {
@@ -64,26 +67,26 @@ export function CandidatePool() {
       avatar: (candidate.candidate_name || "?")
         .split(" ")
         .slice(0, 2)
-        .map(n => n[0])
+        .map((n) => n[0])
         .join("")
         .toUpperCase(),
       profile_photo_url: candidate.profile_photo_url,
-      roles: []
+      roles: [],
     };
 
     // Primary role
     modalCandidate.roles.push({
       role: candidate.ai_match?.role_applied || "—",
-      score: Math.round(candidate.score || 0)
+      score: Math.round(candidate.score || 0),
     });
 
     // Additional roles from interview_attempts
     if (candidate.interview_attempts) {
-      candidate.interview_attempts.forEach(attempt => {
+      candidate.interview_attempts.forEach((attempt) => {
         if (attempt.role) {
           modalCandidate.roles.push({
             role: attempt.role,
-            score: Math.round(attempt.overall_score || 0)
+            score: Math.round(attempt.overall_score || 0),
           });
         }
       });
@@ -209,9 +212,7 @@ export function CandidatePool() {
           </div>
 
           {/* Loading */}
-          {candidatesLoading && (
-            <CandidatePoolSkeleton variant="candidates" />
-          )}
+          {candidatesLoading && <CandidatePoolSkeleton variant="candidates" />}
 
           {/* Error */}
           {candidatesError && !candidatesLoading && (
@@ -226,13 +227,15 @@ export function CandidatePool() {
           )}
 
           {/* Empty matches */}
-          {!candidatesLoading && !candidatesError && candidates.length === 0 && (
-            <EmptyState
-              icon="bi-person-x"
-              title="No Matches Yet"
-              description="Our AI hasn't found matching candidates for this job yet. Check back later as more candidates take their interviews."
-            />
-          )}
+          {!candidatesLoading &&
+            !candidatesError &&
+            candidates.length === 0 && (
+              <EmptyState
+                icon="bi-person-x"
+                title="No Matches Yet"
+                description="Our AI hasn't found matching candidates for this job yet. Check back later as more candidates take their interviews."
+              />
+            )}
 
           {/* Candidates Grid */}
           {!candidatesLoading && !candidatesError && candidates.length > 0 && (
@@ -256,7 +259,9 @@ export function CandidatePool() {
             <i className="bi bi-hand-index-thumb" aria-hidden="true" />
           </div>
           <h3>Select a Job Above</h3>
-          <p>Choose one of your open positions to view AI-matched candidates.</p>
+          <p>
+            Choose one of your open positions to view AI-matched candidates.
+          </p>
         </div>
       )}
 

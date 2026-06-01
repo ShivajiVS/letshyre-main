@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
 import { toast } from "sonner";
 import {
   useCalculateCost,
@@ -12,6 +13,7 @@ import "./styles/subscriptions.css";
 
 export function Subscriptions() {
   const [tokens, setTokens] = useState(10);
+  const navigate = useNavigate();
   const isRazorpayLoaded = useLoadRazorpay();
 
   const {
@@ -74,6 +76,7 @@ export function Subscriptions() {
 
             if (verifyRes.success || verifyRes.status === 200) {
               toast.success("Payment successful! Tokens added to your account.");
+              navigate("/employer/dashboard");
             } else {
               toast.error("Payment verification failed.");
             }
