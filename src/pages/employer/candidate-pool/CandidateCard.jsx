@@ -1,8 +1,8 @@
 /**
  * CandidateCard — Rich candidate card for the Candidate Pool page.
  *
- * Displays candidate profile, AI match score (circular ring), skills,
- * role/skills match bars, rationale, and interview info.
+ * Displays candidate profile, AI match score (circular ring),
+ * role/skills/AI match bars, interview attempts, rationale, and meta info.
  *
  * @param {object} candidate - Candidate match object from the API
  * @param {function} onViewProfile - Callback when card is clicked
@@ -70,10 +70,16 @@ const getInitials = (name) => {
   return parts[0][0]?.toUpperCase() || "?";
 };
 
+/** Color class for interview score */
+const getScoreColor = (score) => {
+  if (score >= 70) return "cp-interview-score--high";
+  if (score >= 40) return "cp-interview-score--medium";
+  return "cp-interview-score--low";
+};
+
 export const CandidateCard = ({ candidate, onViewProfile }) => {
   const aiMatch = candidate?.ai_match || {};
   const score = aiMatch.ai_matching_score || candidate?.score || 0;
-  const skills = aiMatch.skills || [];
   const interviewAttempts = candidate?.interview_attempts || [];
 
   return (
@@ -122,12 +128,10 @@ export const CandidateCard = ({ candidate, onViewProfile }) => {
             {aiMatch.role_applied || "—"}
           </p>
         </div>
-
-        <ScoreRing score={score} />
       </div>
 
-      {/* Score Bars */}
-      <div className="cp-scores-row">
+      {/* Score Bars: Role Match, Skills Match, AI Matching */}
+      <div className="cp-scores-row cp-scores-row--three">
         <MiniScoreBar
           label="Role Match"
           value={aiMatch.role_match_score}
@@ -138,21 +142,33 @@ export const CandidateCard = ({ candidate, onViewProfile }) => {
           value={aiMatch.skills_match_score}
           colorClass="cp-mini-bar-fill--purple"
         />
+        <MiniScoreBar
+          label="AI Match"
+          value={aiMatch.ai_matching_score}
+          colorClass="cp-mini-bar-fill--green"
+        />
       </div>
 
-      {/* Skills */}
-      {skills.length > 0 && (
-        <div className="cp-card-skills">
-          {skills.slice(0, 4).map((skill, i) => (
-            <span key={i} className="cp-skill-tag">
-              {skill}
-            </span>
-          ))}
-          {skills.length > 4 && (
-            <span className="cp-skill-tag cp-skill-tag--extra">
-              +{skills.length - 4}
-            </span>
-          )}
+      {/* Interview Attempts */}
+      {interviewAttempts.length > 0 && (
+        <div className="cp-interviews">
+          <div className="cp-interviews-header">
+            <i className="bi bi-camera-video" aria-hidden="true" />
+            <span>Interview Attempts ({interviewAttempts.length})</span>
+          </div>
+          <div className="cp-interviews-list">
+            {interviewAttempts.map((attempt, i) => (
+              <div key={i} className="cp-interview-item">
+                <span className="cp-interview-role">
+                  <i className="bi bi-briefcase" aria-hidden="true" />
+                  {attempt.role || "—"}
+                </span>
+                <span className={`cp-interview-score ${getScoreColor(attempt.overall_score)}`}>
+                  {Math.round(attempt.overall_score || 0)}%
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
       )}
 
@@ -163,7 +179,7 @@ export const CandidateCard = ({ candidate, onViewProfile }) => {
         </p>
       )}
 
-      {/* Bottom: Experience + Interviews + View Button */}
+      {/* Bottom: Experience + View Button */}
       <div className="cp-card-bottom">
         <div style={{ display: "flex", gap: "14px", flexWrap: "wrap" }}>
           {aiMatch.years_experience != null && (

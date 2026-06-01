@@ -1,6 +1,7 @@
 import { useState } from "react";
+import "./styles/unlock-profile-modal.css";
 
-export default function UnlockProfileModal({ candidate, onClose }) {
+export default function UnlockProfileModal({ candidate, onClose, onUnlock }) {
   // Extract primary role and any extra roles from the candidate data
   const [primary, ...extras] = candidate.roles;
 
@@ -57,9 +58,22 @@ export default function UnlockProfileModal({ candidate, onClose }) {
           <div className="up-primary-info">
             <div
               className="ho-avatar"
-              style={{ background: candidate.avatarBg, width: 42, height: 42 }}
+              style={{ background: candidate.profile_photo_url ? 'transparent' : candidate.avatarBg || '#1e293b', width: 42, height: 42, overflow: 'hidden' }}
             >
-              {candidate.avatar}
+              {candidate.profile_photo_url ? (
+                <img 
+                  src={candidate.profile_photo_url} 
+                  alt={candidate.name} 
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                  onError={(e) => {
+                    e.target.style.display = "none";
+                    e.target.nextElementSibling.style.display = "flex";
+                  }}
+                />
+              ) : null}
+              <div style={{ display: candidate.profile_photo_url ? "none" : "flex", alignItems: "center", justifyContent: "center", width: "100%", height: "100%" }}>
+                {candidate.avatar}
+              </div>
             </div>
             <div>
               <p className="up-c-name">{candidate.name}</p>
@@ -86,8 +100,13 @@ export default function UnlockProfileModal({ candidate, onClose }) {
               The candidate has appeared in other interview as well
             </p>
             <div className="up-extra-box">
-              {extras.map((ex) => (
-                <div key={ex.role} className="up-extra-row">
+              {extras.map((ex, i) => (
+                <div 
+                  key={`${ex.role}-${i}`} 
+                  className="up-extra-row"
+                  onClick={() => handleExtraToggle(`${ex.role}-${i}`)}
+                  style={{ cursor: 'pointer' }}
+                >
                   <p className="up-c-role">
                     <span className="ho-code-icon">&lt;/&gt;</span> {ex.role}
                     {/* Muted Sub-Score */}
@@ -96,8 +115,9 @@ export default function UnlockProfileModal({ candidate, onClose }) {
                   <input
                     type="checkbox"
                     className="up-checkbox"
-                    checked={selectedExtras.includes(ex.role)}
-                    onChange={() => handleExtraToggle(ex.role)}
+                    checked={selectedExtras.includes(`${ex.role}-${i}`)}
+                    onChange={() => handleExtraToggle(`${ex.role}-${i}`)}
+                    onClick={(e) => e.stopPropagation()} // Prevent bubble to row so it doesn't toggle twice
                   />
                 </div>
               ))}
@@ -112,7 +132,13 @@ export default function UnlockProfileModal({ candidate, onClose }) {
             <br />
             Interview Recording, and Resume.
           </p>
-          <button className="up-btn" onClick={onClose}>
+          <button 
+            className="up-btn" 
+            onClick={() => {
+              if (onUnlock) onUnlock(candidate.id, selectedExtras, totalCredits);
+              else onClose();
+            }}
+          >
             Unlock Profile for {totalCredits}C
           </button>
         </div>

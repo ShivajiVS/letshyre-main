@@ -6,6 +6,7 @@ import { JobSelector } from "./candidate-pool/JobSelector";
 import { CandidateCard } from "./candidate-pool/CandidateCard";
 import { CandidatePoolSkeleton } from "./candidate-pool/CandidatePoolSkeleton";
 import { EmptyState } from "./candidate-pool/EmptyState";
+import UnlockProfileModal from "@/components/UnlockProfileModal";
 
 import "@/pages/styles/candidate-pool.css";
 
@@ -15,6 +16,7 @@ export function CandidatePool() {
   // ================= STATE =================
   const [selectedJobId, setSelectedJobId] = useState(null);
   const [jobPage, setJobPage] = useState(1);
+  const [candidateToUnlock, setCandidateToUnlock] = useState(null);
 
   // ================= QUERIES =================
   const {
@@ -52,6 +54,48 @@ export function CandidatePool() {
   };
 
   const handleViewProfile = (candidateId) => {
+    const candidate = candidates.find(c => c.candidate_id === candidateId);
+    if (!candidate) return;
+
+    const modalCandidate = {
+      id: candidate.candidate_id,
+      name: candidate.candidate_name,
+      // Create fallback initials in case there's no photo
+      avatar: (candidate.candidate_name || "?")
+        .split(" ")
+        .slice(0, 2)
+        .map(n => n[0])
+        .join("")
+        .toUpperCase(),
+      profile_photo_url: candidate.profile_photo_url,
+      roles: []
+    };
+
+    // Primary role
+    modalCandidate.roles.push({
+      role: candidate.ai_match?.role_applied || "—",
+      score: Math.round(candidate.score || 0)
+    });
+
+    // Additional roles from interview_attempts
+    if (candidate.interview_attempts) {
+      candidate.interview_attempts.forEach(attempt => {
+        if (attempt.role) {
+          modalCandidate.roles.push({
+            role: attempt.role,
+            score: Math.round(attempt.overall_score || 0)
+          });
+        }
+      });
+    }
+
+    setCandidateToUnlock(modalCandidate);
+  };
+
+  const handleUnlockProfile = (candidateId, selectedExtras, totalCredits) => {
+    // Navigate or call API to spend credits, then navigate
+    // For now, just navigate
+    setCandidateToUnlock(null);
     navigate(`/employer/employee-score-card?candidate=${candidateId}`);
   };
 
@@ -214,6 +258,15 @@ export function CandidatePool() {
           <h3>Select a Job Above</h3>
           <p>Choose one of your open positions to view AI-matched candidates.</p>
         </div>
+      )}
+
+      {/* ================= MODALS ================= */}
+      {candidateToUnlock && (
+        <UnlockProfileModal
+          candidate={candidateToUnlock}
+          onClose={() => setCandidateToUnlock(null)}
+          onUnlock={handleUnlockProfile}
+        />
       )}
     </div>
   );
