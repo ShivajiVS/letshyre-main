@@ -25,14 +25,16 @@ export function OrderSummary({ costData, isPending, onPay, isPaying }) {
         Order Summary
       </h2>
 
-      <div className="summary-details">
-        <div className="summary-row">
-          <span>Cost per token</span>
-          <span>₹{costPerToken.toFixed(2)}</span>
-        </div>
-        <div className="summary-row total">
-          <span>Total Amount</span>
-          <span>₹{amountToPay.toFixed(2)}</span>
+      <div className="summary-details-wrapper">
+        <div className="summary-details">
+          <div className="summary-row">
+            <span>Cost per token</span>
+            <span>₹{costPerToken.toFixed(2)}</span>
+          </div>
+          <div className="summary-row total">
+            <span>Total Amount</span>
+            <span>₹{amountToPay.toFixed(2)}</span>
+          </div>
         </div>
       </div>
 

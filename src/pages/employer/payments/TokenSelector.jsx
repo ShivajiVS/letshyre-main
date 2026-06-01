@@ -38,7 +38,7 @@ export function TokenSelector({ selectedTokens, onChange, isPending }) {
             onClick={() => handlePackageClick(pkg)}
             disabled={isPending}
           >
-            {pkg} Tokens
+            <span>{pkg} Tokens</span>
           </button>
         ))}
       </div>
