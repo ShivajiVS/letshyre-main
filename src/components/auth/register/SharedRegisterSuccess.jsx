@@ -15,7 +15,9 @@ export function SharedRegisterSuccess({ role }) {
           <i className="bi bi-check-lg"></i>
         </div>
         
-        <h2 className="success-title">Account Created!</h2>
+        <h2 className="success-title">
+          {role === "employer" ? "Employer Account Created!" : "Employee Account Created!"}
+        </h2>
         
         <p className="success-subtitle">
           Your LetsHyre account has been created successfully. You can now login.

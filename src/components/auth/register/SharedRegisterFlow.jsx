@@ -72,6 +72,7 @@ export function SharedRegisterFlow({ role }) {
 
             {step === "otp" && (
               <SharedOtpVerify
+                role={role}
                 email={registerData.email}
                 otpSessionKey={registerData.emailOtpSessionKey}
                 onNext={() => goNext("mobile")}
@@ -80,6 +81,7 @@ export function SharedRegisterFlow({ role }) {
 
             {step === "mobile" && (
               <SharedMobileVerify
+                role={role}
                 onNext={({ mobile, otpSessionKey }) => {
                   setRegisterData((prev) => ({
                     ...prev,
@@ -93,6 +95,7 @@ export function SharedRegisterFlow({ role }) {
 
             {step === "mobileOtp" && (
               <SharedMobileOtp
+                role={role}
                 mobile={registerData.phone_number}
                 otpSessionKey={registerData.mobileOtpSessionKey}
                 onNext={() => goNext("password")}

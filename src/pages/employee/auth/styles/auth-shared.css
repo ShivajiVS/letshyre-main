@@ -67,7 +67,9 @@ h5 {
 /* ================= PAGE LAYOUT ================= */
 .candidate-page-main {
   width: 100%;
-  padding: 5%;
+  min-height: 100vh;
+  padding: 40px 20px;
+  box-sizing: border-box;
   background-color: var(--color-bg);
   display: flex;
   justify-content: center;
@@ -78,7 +80,7 @@ h5 {
 .candidate-page {
   position: relative;
   width: 85%;
-  height: 85vh;
+  min-height: 85vh;
   display: flex;
   gap: 14%;
   justify-content: center;
@@ -90,16 +92,19 @@ h5 {
 
 /* ================= FORM ELEMENTS ================= */
 .cl-title {
-  font-size: 22px;
-  margin-bottom: 5px;
+  font-size: 26px;
+  margin-bottom: 24px;
   text-align: center;
   color: white;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .cl-sub-para {
-  color: white;
+  color: rgba(255, 255, 255, 0.95);
   text-align: center;
-  margin-top: -5%;
+  margin-top: -15px;
+  margin-bottom: 20px;
+  line-height: 1.5;
 }
 
 .cl-form {
@@ -124,7 +129,16 @@ h5 {
 }
 
 .cl-input::placeholder {
-  color: black;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+/* Fix browser autofill background color */
+.cl-input:-webkit-autofill,
+.cl-input:-webkit-autofill:hover,
+.cl-input:-webkit-autofill:focus,
+.cl-input:-webkit-autofill:active {
+  transition: background-color 5000s ease-in-out 0s;
+  -webkit-text-fill-color: black !important;
 }
 
 .cl-icon {
@@ -148,9 +162,10 @@ h5 {
 
 .form-subtext {
   text-align: center;
-  color: white;
+  color: #0f172a;
   font-weight: 600;
-  margin-top: 10px;
+  margin-top: 15px;
+  font-size: 15px;
 }
 
 /* ================= BACKGROUND BALLS ================= */
@@ -212,8 +227,8 @@ h5 {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 30%;
-  max-width: 420px;
+  width: 40%;
+  max-width: 480px;
   transition:
     transform 0.4s ease,
     opacity 0.4s ease;
@@ -223,7 +238,7 @@ h5 {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 40%;
+  width: 45%;
   max-width: 480px;
   transition:
     transform 0.4s ease,
@@ -256,19 +271,28 @@ h5 {
 /* ================= REGISTER BOX (Register + Forgot steps) ================= */
 .register-box {
   width: 100%;
-  max-width: 420px;
+  max-width: 480px;
   display: flex;
   flex-direction: column;
   gap: 15px;
   text-align: center;
-  padding: 20px;
-  border-radius: 10px;
+  padding: 24px 32px;
+  border-radius: 12px;
   border: 1px solid white;
   z-index: 2;
   transition:
     transform 0.9s ease,
     opacity 0.9s ease;
   box-shadow: inset 0 0 50px #c5d6f3;
+}
+
+.register-box .cl-title {
+  margin-bottom: 0px;
+}
+
+.register-box .cl-sub-para {
+  margin-top: -5px;
+  margin-bottom: 10px;
 }
 
 .register-box .cl-btn {
@@ -281,9 +305,11 @@ h5 {
 }
 
 .register-box .form-subtext a {
-  color: #3b6df0;
-  font-weight: 600;
+  color: #1d4ed8;
+  font-weight: 700;
   cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 /* ================= OTP INPUTS ================= */

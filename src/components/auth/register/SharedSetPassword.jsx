@@ -46,7 +46,9 @@ export function SharedSetPassword({ registerData, onNext, role }) {
 
   return (
     <div className="register-box">
-      <h1 className="cl-title">Set Password</h1>
+      <h1 className="cl-title">
+        {role === "employer" ? "Employer Password" : "Employee Password"}
+      </h1>
       <p className="cl-sub-para">Secure your account with a strong password</p>
 
       <form className="cl-form" onSubmit={handleSubmit(onSubmit)}>

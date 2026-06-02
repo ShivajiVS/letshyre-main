@@ -7,7 +7,7 @@ const mobileSchema = z.object({
   mobile: z.string().length(10, "Enter valid 10 digit mobile number").regex(/^\d+$/, "Must be digits only"),
 });
 
-export function SharedMobileVerify({ onNext }) {
+export function SharedMobileVerify({ onNext, role }) {
   const mutation = useSendMobileOtpMutation();
 
   const {
@@ -45,7 +45,9 @@ export function SharedMobileVerify({ onNext }) {
 
   return (
     <div className="register-box">
-      <h1 className="cl-title">Register</h1>
+      <h1 className="cl-title">
+        {role === "employer" ? "Employer Registration" : "Employee Registration"}
+      </h1>
 
       <p className="cl-sub-para">
         Enter your mobile number to secure your LetsHyre account

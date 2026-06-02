@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useVerifyEmailOtpMutation, useSendEmailOtpMutation } from "@/hooks/useRegisterMutations";
 
-export function SharedOtpVerify({ email, otpSessionKey, onNext }) {
+export function SharedOtpVerify({ email, otpSessionKey, onNext, role }) {
   const [otp, setOtp] = useState("");
   const [error, setError] = useState("");
   const [info, setInfo] = useState("");
@@ -100,7 +100,9 @@ export function SharedOtpVerify({ email, otpSessionKey, onNext }) {
 
   return (
     <div className="register-box">
-      <h1 className="cl-title">Verification</h1>
+      <h1 className="cl-title">
+        {role === "employer" ? "Employer Verification" : "Employee Verification"}
+      </h1>
       <p className="cl-sub-para">Enter the OTP we sent to your email</p>
 
       <form className="cl-form" onSubmit={handleSubmit}>

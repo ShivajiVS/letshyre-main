@@ -53,12 +53,14 @@ export function SharedRegisterEmail({ onNext, role }) {
 
   return (
     <div className="register-box">
-      <h1 className="cl-title cl-title22">Register</h1>
+      <h1 className="cl-title cl-title22">
+        {role === "employer" ? "Employer Registration" : "Employee Registration"}
+      </h1>
 
       <p className="cl-sub-para">
         {role === "employer"
           ? "Build your dream team faster. Enter your work email."
-          : "Create your LetsHyre account"}
+          : "Create your LetsHyre account to find your next job."}
       </p>
 
       <form className="cl-form register-form-align" onSubmit={handleSubmit(onSubmit)}>

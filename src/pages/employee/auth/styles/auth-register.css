@@ -46,12 +46,7 @@
 }
 
 /* ================= REGISTER FORM ALIGNMENT ================= */
-.register-form-align {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin-top: 10px;
-}
+/* Removed .register-form-align to rely on .cl-form gap */
 
 /* ================= PHONE INPUT OVERRIDE ================= */
 .lh-phone-input {
