@@ -52,8 +52,9 @@ export function SharedRegisterFlow({ role }) {
 
         <div className="auth-card">
           {/* ================= FORM SECTION ================= */}
-          <div className={`auth-form ${animating ? "slide-out-left" : "slide-in"}`}>
-            
+          <div
+            className={`auth-form ${animating ? "slide-out-left" : "slide-in"}`}
+          >
             {step === "email" && (
               <SharedRegisterEmail
                 role={role}
@@ -111,11 +112,12 @@ export function SharedRegisterFlow({ role }) {
             )}
 
             {step === "success" && <SharedRegisterSuccess role={role} />}
-
           </div>
 
           {/* ================= IMAGE SECTION ================= */}
-          <div className={`auth-image ${animating ? "slide-out-right" : "slide-in"}`}>
+          <div
+            className={`auth-image ${animating ? "slide-out-right" : "slide-in"}`}
+          >
             <img src={stepImage[step]} alt="Registration step" />
           </div>
         </div>
