@@ -1,27 +1,17 @@
 import { useEffect, useRef, useState } from "react";
-import authService from "@/services/auth.service";
+import { useVerifyMobileOtpMutation, useSendMobileOtpMutation } from "@/hooks/useRegisterMutations";
 
-function OtpVerify02({
-  email,
-  otpSessionKey,
-  onNext,
-  onBack,
-  subtitle = "Enter the OTP we sent to your email",
-}) {
+export function SharedMobileOtp({ mobile, otpSessionKey, onNext }) {
   const [otp, setOtp] = useState("");
   const [error, setError] = useState("");
   const [info, setInfo] = useState("");
   const [timer, setTimer] = useState(30);
-
-  // ✅ FIX: fallback to localStorage
-  const [currentSessionKey, setCurrentSessionKey] = useState(
-    otpSessionKey || localStorage.getItem("email_otp_session") || ""
-  );
-
-  const [loading, setLoading] = useState(false);
-  const [resending, setResending] = useState(false);
+  const [currentSessionKey, setCurrentSessionKey] = useState(otpSessionKey);
 
   const inputRefs = useRef([]);
+
+  const verifyMutation = useVerifyMobileOtpMutation();
+  const resendMutation = useSendMobileOtpMutation();
 
   /* ================= TIMER ================= */
   useEffect(() => {
@@ -41,8 +31,8 @@ function OtpVerify02({
 
     const otpArr = otp.split("");
     otpArr[index] = value;
-
     const newOtp = otpArr.join("").slice(0, 6);
+
     setOtp(newOtp);
     setError("");
     setInfo("");
@@ -59,7 +49,7 @@ function OtpVerify02({
   };
 
   /* ================= VERIFY OTP ================= */
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setError("");
     setInfo("");
@@ -69,90 +59,51 @@ function OtpVerify02({
       return;
     }
 
-    if (!currentSessionKey) {
-      setError("Session expired. Please resend OTP.");
-      return;
-    }
-
-    try {
-      setLoading(true);
-
-      await authService.verifyEmailOtp({
-        email,
-        otp,
-        otp_session_key: currentSessionKey,
-      });
-
-      // ✅ success
-      onNext();
-
-    } catch (err) {
-      setError(
-        err?.response?.data?.message ||
-        "Invalid OTP. Please try again."
-      );
-    } finally {
-      setLoading(false);
-    }
+    verifyMutation.mutate(
+      { phone_number: mobile, otpSessionKey: currentSessionKey, otpCode: otp },
+      {
+        onSuccess: () => {
+          onNext();
+        },
+      }
+    );
   };
 
   /* ================= RESEND OTP ================= */
-  const handleResendOtp = async (e) => {
+  const handleResendOtp = (e) => {
     e.preventDefault();
-    if (resending) return;
+    if (resendMutation.isPending) return;
 
     setError("");
     setInfo("");
 
-    try {
-      setResending(true);
+    resendMutation.mutate(
+      { phone_number: mobile },
+      {
+        onSuccess: (response) => {
+          const newSessionKey =
+            response?.data?.otp_session_key ||
+            response?.data?.data?.otp_session_key;
 
-      const response = await authService.sendRegisterEmailOtp({
-        email,
-        otp_type: "Registration",
-      });
+          if (newSessionKey) {
+            setCurrentSessionKey(newSessionKey);
+          }
 
-      console.log("RESEND RESPONSE:", response);
-
-      // ✅ FIX: support all formats
-      const newSessionKey =
-        response?.data?.data?.otp_session_key ||
-        response?.data?.otp_session_key ||
-        response?.otp_session_key;
-
-      if (!newSessionKey) {
-        throw new Error("Session key missing in resend response");
+          setOtp("");
+          setTimer(30);
+          setInfo("OTP resent successfully");
+          inputRefs.current[0]?.focus();
+        },
       }
-
-      // ✅ update session everywhere
-      setCurrentSessionKey(newSessionKey);
-      localStorage.setItem("email_otp_session", newSessionKey);
-
-      // ✅ reset UI
-      setOtp("");
-      setTimer(30);
-      setInfo("OTP resent successfully");
-
-      inputRefs.current[0]?.focus();
-
-    } catch (err) {
-      setError(
-        err?.response?.data?.message ||
-        err?.message ||
-        "Failed to resend OTP. Please try again."
-      );
-    } finally {
-      setResending(false);
-    }
+    );
   };
 
   return (
     <div className="register-box">
       <h1 className="cl-title">Verification</h1>
-      <p className="cl-sub-para">{subtitle}</p>
+      <p className="cl-sub-para">Enter the OTP we sent to your mobile</p>
 
       <form className="cl-form" onSubmit={handleSubmit}>
-        {/* OTP INPUTS */}
         <div className="otp-inputs">
           {[0, 1, 2, 3, 4, 5].map((_, index) => (
             <input
@@ -168,17 +119,14 @@ function OtpVerify02({
           ))}
         </div>
 
-        {/* ERROR / INFO */}
         {error && <p style={{ color: "red", fontSize: 14 }}>{error}</p>}
         {info && <p style={{ color: "green", fontSize: 14 }}>{info}</p>}
 
-        {/* BUTTON */}
-        <button className="cl-btn" disabled={loading}>
-          {loading ? "Verifying..." : "Verify & Continue"}
+        <button className="cl-btn button01" type="submit" disabled={verifyMutation.isPending}>
+          {verifyMutation.isPending ? "Verifying..." : "Verify & Continue"}
         </button>
       </form>
 
-      {/* RESEND */}
       <p className="otp-help-text">Didn’t receive code?</p>
 
       <p className="form-subtext">
@@ -194,25 +142,14 @@ function OtpVerify02({
             href="#"
             onClick={handleResendOtp}
             style={{
-              pointerEvents: resending ? "none" : "auto",
-              opacity: resending ? 0.6 : 1,
+              pointerEvents: resendMutation.isPending ? "none" : "auto",
+              opacity: resendMutation.isPending ? 0.6 : 1,
             }}
           >
-            {resending ? "Resending..." : "Resend OTP"}
+            {resendMutation.isPending ? "Resending..." : "Resend OTP"}
           </a>
         )}
       </p>
-
-      {/* BACK */}
-      {onBack && (
-        <p className="form-subtext">
-          <a href="#" onClick={onBack}>
-            Back
-          </a>
-        </p>
-      )}
     </div>
   );
 }
-
-export default OtpVerify02;

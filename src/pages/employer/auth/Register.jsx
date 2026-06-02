@@ -1,7 +1,5 @@
-import EmployerRegisterFlow from "../components/EmployerRegisterFlow";
-
-import "@/pages/employee/auth/styles/auth-register.css";
+import { SharedRegisterFlow } from "@/components/auth/register/SharedRegisterFlow";
 
 export function EmployerRegister() {
-  return <EmployerRegisterFlow />;
+  return <SharedRegisterFlow role="employer" />;
 }

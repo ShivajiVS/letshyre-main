@@ -1,10 +1,10 @@
 import { useState } from "react";
-import RegisterEmail from "./RegisterEmail";
-import OtpVerify from "./OtpVerify";
-import MobileVerify from "./MobileVerify";
-import MobileOtp from "./MobileOtp";
-import SetPassword from "./SetPassword";
-import RegisterSuccess from "./RegisterSuccess";
+import { SharedRegisterEmail } from "./SharedRegisterEmail";
+import { SharedOtpVerify } from "./SharedOtpVerify";
+import { SharedMobileVerify } from "./SharedMobileVerify";
+import { SharedMobileOtp } from "./SharedMobileOtp";
+import { SharedSetPassword } from "./SharedSetPassword";
+import { SharedRegisterSuccess } from "./SharedRegisterSuccess";
 
 import imgEmail from "@/assets/register01.png";
 import imgOtp from "@/assets/otp1.png";
@@ -13,23 +13,21 @@ import imgOtp2 from "@/assets/otp1.png";
 import imgPassword from "@/assets/password1.png";
 import imgSuccess from "@/assets/login-img01.png";
 
-export function RegisterFlow({ onBackToLogin }) {
+import "@/pages/employee/auth/styles/auth-register.css";
+
+export function SharedRegisterFlow({ role }) {
   const [step, setStep] = useState("email");
   const [animating, setAnimating] = useState(false);
 
-  const [mobileOtpSessionKey, setMobileOtpSessionKey] = useState("");
-  const [mobileNumber, setMobileNumber] = useState("");
-
-  /* ================= REGISTER DATA ================= */
   const [registerData, setRegisterData] = useState({
     name: "",
     username: "",
     email: "",
     emailOtpSessionKey: "",
     phone_number: "",
+    mobileOtpSessionKey: "",
   });
 
-  /* ================= STEP NAVIGATION ================= */
   const goNext = (nextStep) => {
     setAnimating(true);
     setTimeout(() => {
@@ -38,7 +36,6 @@ export function RegisterFlow({ onBackToLogin }) {
     }, 400);
   };
 
-  /* ================= IMAGE MAP ================= */
   const stepImage = {
     email: imgEmail,
     otp: imgOtp,
@@ -54,18 +51,17 @@ export function RegisterFlow({ onBackToLogin }) {
         <div className="cl-ball022"></div>
 
         <div className="auth-card">
-          {/* ================= FORM ================= */}
-          <div
-            className={`auth-form ${animating ? "slide-out-left" : "slide-in"}`}
-          >
-            {/* EMAIL STEP */}
+          {/* ================= FORM SECTION ================= */}
+          <div className={`auth-form ${animating ? "slide-out-left" : "slide-in"}`}>
+            
             {step === "email" && (
-              <RegisterEmail
+              <SharedRegisterEmail
+                role={role}
                 onNext={(data) => {
                   setRegisterData((prev) => ({
                     ...prev,
-                    name: data.name, // ✅ FIXED
-                    username: data.username, // ✅ FIXED
+                    name: data.name,
+                    username: data.username,
                     email: data.email,
                     emailOtpSessionKey: data.emailOtpSessionKey,
                   }));
@@ -74,63 +70,50 @@ export function RegisterFlow({ onBackToLogin }) {
               />
             )}
 
-            {/* EMAIL OTP */}
             {step === "otp" && (
-              <OtpVerify
+              <SharedOtpVerify
                 email={registerData.email}
                 otpSessionKey={registerData.emailOtpSessionKey}
                 onNext={() => goNext("mobile")}
-                onBack={() => goNext("email")}
               />
             )}
 
-            {/* MOBILE NUMBER */}
             {step === "mobile" && (
-              <MobileVerify
+              <SharedMobileVerify
                 onNext={({ mobile, otpSessionKey }) => {
-                  setMobileNumber(mobile);
-                  setMobileOtpSessionKey(otpSessionKey);
-
                   setRegisterData((prev) => ({
                     ...prev,
-                    phone_number: mobile, // ✅ SAVE MOBILE
+                    phone_number: mobile,
+                    mobileOtpSessionKey: otpSessionKey,
                   }));
-
                   goNext("mobileOtp");
                 }}
-                onBack={() => goNext("otp")}
               />
             )}
 
-            {/* MOBILE OTP */}
             {step === "mobileOtp" && (
-              <MobileOtp
-                mobile={mobileNumber}
-                otpSessionKey={mobileOtpSessionKey}
+              <SharedMobileOtp
+                mobile={registerData.phone_number}
+                otpSessionKey={registerData.mobileOtpSessionKey}
                 onNext={() => goNext("password")}
-                onBack={() => goNext("mobile")}
               />
             )}
 
-            {/* SET PASSWORD */}
             {step === "password" && (
-              <SetPassword
-                registerData={registerData} // ✅ SEND FULL DATA
+              <SharedSetPassword
+                role={role}
+                registerData={registerData}
                 onNext={() => goNext("success")}
               />
             )}
 
-            {/* SUCCESS */}
-            {step === "success" && <RegisterSuccess />}
+            {step === "success" && <SharedRegisterSuccess role={role} />}
+
           </div>
 
-          {/* ================= IMAGE ================= */}
-          <div
-            className={`auth-image ${
-              animating ? "slide-out-right" : "slide-in"
-            }`}
-          >
-            <img src={stepImage[step]} alt="Register step" />
+          {/* ================= IMAGE SECTION ================= */}
+          <div className={`auth-image ${animating ? "slide-out-right" : "slide-in"}`}>
+            <img src={stepImage[step]} alt="Registration step" />
           </div>
         </div>
       </div>

@@ -1,23 +1,17 @@
 import { useEffect, useRef, useState } from "react";
-import authService from "@/services/auth.service";
-import "./registerFlow.css";
+import { useVerifyEmailOtpMutation, useSendEmailOtpMutation } from "@/hooks/useRegisterMutations";
 
-function OtpVerify({
-  email,
-  otpSessionKey,
-  onNext,
-  onBack,
-  subtitle = "Enter the OTP we sent to your email",
-}) {
+export function SharedOtpVerify({ email, otpSessionKey, onNext }) {
   const [otp, setOtp] = useState("");
   const [error, setError] = useState("");
-  const [info, setInfo] = useState(""); // ✅ success/info message
+  const [info, setInfo] = useState("");
   const [timer, setTimer] = useState(30);
   const [currentSessionKey, setCurrentSessionKey] = useState(otpSessionKey);
-  const [loading, setLoading] = useState(false);
-  const [resending, setResending] = useState(false);
 
   const inputRefs = useRef([]);
+
+  const verifyMutation = useVerifyEmailOtpMutation();
+  const resendMutation = useSendEmailOtpMutation();
 
   /* ================= TIMER ================= */
   useEffect(() => {
@@ -55,7 +49,7 @@ function OtpVerify({
   };
 
   /* ================= VERIFY OTP ================= */
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setError("");
     setInfo("");
@@ -65,78 +59,53 @@ function OtpVerify({
       return;
     }
 
-    try {
-      setLoading(true);
-
-      await authService.verifyEmailOtp({
-        email,
-        otp,
-        otp_session_key: currentSessionKey,
-      });
-
-      onNext();
-    } catch (err) {
-      setError(
-        err?.response?.data?.message ||
-        "Invalid OTP. Please try again."
-      );
-    } finally {
-      setLoading(false);
-    }
+    verifyMutation.mutate(
+      { email, otpSessionKey: currentSessionKey, otpCode: otp },
+      {
+        onSuccess: () => {
+          onNext();
+        },
+      }
+    );
   };
 
   /* ================= RESEND OTP ================= */
-  const handleResendOtp = async (e) => {
+  const handleResendOtp = (e) => {
     e.preventDefault();
-    if (resending) return;
+    if (resendMutation.isPending) return;
 
     setError("");
     setInfo("");
 
-    try {
-      setResending(true);
+    resendMutation.mutate(
+      { email },
+      {
+        onSuccess: (response) => {
+          const newSessionKey =
+            response?.data?.otp_session_key ||
+            response?.data?.data?.otp_session_key;
 
-      const response = await authService.sendRegisterEmailOtp({
-        email,
-        otp_type: "Registration",
-      });
+          if (newSessionKey) {
+            setCurrentSessionKey(newSessionKey);
+          }
 
-      const newSessionKey =
-        response?.data?.otp_session_key ||
-        response?.data?.data?.otp_session_key;
-
-      if (!newSessionKey) {
-        setError("Failed to resend OTP. Please try again.");
-        return;
+          setOtp("");
+          setTimer(30);
+          setInfo("OTP resent successfully");
+          inputRefs.current[0]?.focus();
+        },
       }
-
-      // ✅ update session key
-      setCurrentSessionKey(newSessionKey);
-
-      // ✅ reset UI
-      setOtp("");
-      setTimer(30);
-      setInfo("OTP resent successfully");
-      inputRefs.current[0]?.focus();
-
-    } catch (err) {
-      setError(
-        err?.response?.data?.message ||
-        "Failed to resend OTP. Please try again."
-      );
-    } finally {
-      setResending(false);
-    }
+    );
   };
 
   return (
     <div className="register-box">
       <h1 className="cl-title">Verification</h1>
-      <p className="cl-sub-para">{subtitle}</p>
+      <p className="cl-sub-para">Enter the OTP we sent to your email</p>
 
       <form className="cl-form" onSubmit={handleSubmit}>
         <div className="otp-inputs">
-          {[0,1,2,3,4,5].map((_, index) => (
+          {[0, 1, 2, 3, 4, 5].map((_, index) => (
             <input
               key={index}
               ref={(el) => (inputRefs.current[index] = el)}
@@ -144,22 +113,20 @@ function OtpVerify({
               maxLength="1"
               className="otp-box"
               value={otp[index] || ""}
-              onChange={(e)=>handleChange(e.target.value,index)}
-              onKeyDown={(e)=>handleKeyDown(e,index)}
+              onChange={(e) => handleChange(e.target.value, index)}
+              onKeyDown={(e) => handleKeyDown(e, index)}
             />
           ))}
         </div>
 
-        {/* messages */}
         {error && <p style={{ color: "red", fontSize: 14 }}>{error}</p>}
         {info && <p style={{ color: "green", fontSize: 14 }}>{info}</p>}
 
-        <button className="cl-btn button01" disabled={loading}>
-          {loading ? "Verifying..." : "Verify & Continue"}
+        <button className="cl-btn button01" type="submit" disabled={verifyMutation.isPending}>
+          {verifyMutation.isPending ? "Verifying..." : "Verify & Continue"}
         </button>
       </form>
 
-      {/* RESEND */}
       <p className="otp-help-text">Didn’t receive code?</p>
 
       <p className="form-subtext">
@@ -174,20 +141,15 @@ function OtpVerify({
           <a
             href="#"
             onClick={handleResendOtp}
-            style={{ pointerEvents: resending ? "none" : "auto", opacity: resending ? 0.6 : 1 }}
+            style={{
+              pointerEvents: resendMutation.isPending ? "none" : "auto",
+              opacity: resendMutation.isPending ? 0.6 : 1,
+            }}
           >
-            {resending ? "Resending..." : "Resend OTP"}
+            {resendMutation.isPending ? "Resending..." : "Resend OTP"}
           </a>
         )}
       </p>
-
-      {/* {onBack && (
-        <p className="form-subtext">
-          <a href="#" onClick={onBack}>Back</a>
-        </p>
-      )} */}
     </div>
   );
 }
-
-export default OtpVerify;
