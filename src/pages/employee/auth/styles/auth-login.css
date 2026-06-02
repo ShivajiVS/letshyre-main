@@ -1,13 +1,5 @@
-/* ===============================================
-   AUTH LOGIN STYLES
-   For: CandidateLogin, EmployerLogin
-   
-   USAGE: import "./auth-login.css" in your login component
-   (auto-includes auth-shared.css)
-=============================================== */
 @import "./auth-shared.css";
 
-/* ================= LOGIN IMAGE ================= */
 .candidate-img-part {
   width: 40%;
   z-index: 1;
@@ -21,11 +13,10 @@
   aspect-ratio: 1 / 1;
 }
 
-/* ================= LOGIN FORM CARD ================= */
 .form-part {
-  width: 35%;
-  max-width: 420px;
-  padding: 30px 32px 24px;
+  width: 40%;
+  max-width: 480px;
+  padding: 40px 32px;
   border-radius: 12px;
   border: 1px solid white;
   z-index: 2;
@@ -137,8 +128,6 @@
 /* Mobile */
 @media (max-width: 767px) {
   .form-part {
-    padding: 5% 10% 5% 10%;
-    border-radius: 20px;
     background: linear-gradient(
       180deg,
       #73a5ef 16%,
@@ -146,19 +135,16 @@
       #a3d3f1 80%,
       #cdfcf3 100%
     );
-    box-shadow: 0 0 30px rgb(12, 62, 107);
+    box-shadow: none;
     border: none;
   }
 
-  .candidate-img-part,
-  .form-part {
-    width: 100%;
+  .candidate-img-part {
+    display: none;
   }
 
-  .candidate-mainImg {
-    max-width: 320px;
-    margin: 0 auto;
-    display: block;
+  .form-part {
+    width: 100%;
   }
 
   .cl-animate-out .candidate-img-part {

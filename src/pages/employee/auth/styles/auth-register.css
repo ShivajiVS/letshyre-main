@@ -172,7 +172,7 @@
   .cl-ball022 { display: none; }
 
   .register-box {
-    padding: 5% 10% 5% 10%;
+    padding: 35px 20px;
     border-radius: 20px;
     background: linear-gradient(
       180deg,
@@ -181,8 +181,8 @@
       #a3d3f1 80%,
       #cdfcf3 100%
     );
-    box-shadow: 0 0 30px rgb(12, 62, 107);
-    border: none;
+    box-shadow: none;
+    border: 1px solid rgba(255, 255, 255, 0.4);
   }
 
   .lh-phone-input .PhoneInputInput { font-size: 16px; }

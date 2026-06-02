@@ -276,7 +276,7 @@ h5 {
   flex-direction: column;
   gap: 15px;
   text-align: center;
-  padding: 24px 32px;
+  padding: 40px 32px;
   border-radius: 12px;
   border: 1px solid white;
   z-index: 2;
@@ -516,21 +516,29 @@ h5 {
 
 /* Mobile */
 @media (max-width: 767px) {
+  .candidate-page-main {
+    padding: 40px 4px;
+  }
   .candidate-page {
     flex-direction: column;
     height: auto;
+    width: 100%;
     gap: 30px;
-    padding: 40px 20px;
+    padding: 0;
+    box-shadow: none;
   }
   .auth-card {
     flex-direction: column;
     height: auto;
     gap: 30px;
   }
-  .auth-form,
-  .auth-image {
+  .auth-form {
     width: 100%;
     text-align: center;
+  }
+
+  .auth-image {
+    display: none;
   }
   .slide-out-left {
     transform: translateY(-120%);
