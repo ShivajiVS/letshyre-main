@@ -4,7 +4,6 @@ import { toast } from "sonner";
 import {
   useCalculateCost,
   useCreateOrder,
-  useVerifyOrder,
 } from "../../hooks/payments/useCreditPurchase";
 import { useLoadRazorpay } from "../../hooks/payments/useLoadRazorpay";
 import { TokenSelector } from "./payments/TokenSelector";
@@ -24,7 +23,6 @@ export function Subscriptions() {
   } = useCalculateCost(tokens);
 
   const { mutateAsync: createOrder, isPending: isCreatingOrder } = useCreateOrder();
-  const { mutateAsync: verifyOrder } = useVerifyOrder();
 
   const handlePayment = async () => {
     if (!isRazorpayLoaded) {
@@ -65,25 +63,10 @@ export function Subscriptions() {
         theme: {
           color: "#2563eb",
         },
-        handler: async function (response) {
-          try {
-            // 3. Verify payment on our backend
-            const verifyRes = await verifyOrder({
-              razorpay_order_id: response.razorpay_order_id,
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_signature: response.razorpay_signature,
-            });
-
-            if (verifyRes.success || verifyRes.status === 200) {
-              toast.success("Payment successful! Tokens added to your account.");
-              navigate("/employer/dashboard");
-            } else {
-              toast.error("Payment verification failed.");
-            }
-          } catch (err) {
-            console.error("Verification error:", err);
-            toast.error("Payment verified locally, but backend sync failed.");
-          }
+        handler: function (response) {
+          navigate(
+            `/employer/payment-verification?razorpay_order_id=${response.razorpay_order_id}&razorpay_payment_id=${response.razorpay_payment_id}&razorpay_signature=${response.razorpay_signature}&purchase_id=${purchase_id}`
+          );
         },
         prefill: {
           name: "Employer", // Ideally from user context
@@ -96,7 +79,7 @@ export function Subscriptions() {
       const rzp = new window.Razorpay(options);
       
       rzp.on("payment.failed", function (response) {
-        toast.error(`Payment Failed: ${response.error.description}`);
+        navigate(`/employer/payment-verification?error=true&description=${encodeURIComponent(response.error.description || 'Payment Failed')}`);
       });
 
       rzp.open();

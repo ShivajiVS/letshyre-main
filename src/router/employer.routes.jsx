@@ -99,14 +99,7 @@ export const employerRoutes = [
               return { Component: Team };
             },
           },
-          {
-            path: "managing-subscriptions",
-            async lazy() {
-              const { Subscriptions } =
-                await import("@/pages/employer/Subscriptions");
-              return { Component: Subscriptions };
-            },
-          },
+
           {
             path: "invoice",
             async lazy() {
@@ -145,6 +138,39 @@ export const employerRoutes = [
               const { EmployerNotFound } =
                 await import("@/pages/employer/404/EmployerNotFound");
               return { Component: EmployerNotFound };
+            },
+          },
+        ],
+      },
+
+      //Subscriptions has no layout
+      {
+        loader: requireAuth({
+          allowedRoles: [ROLES.EMPLOYER],
+        }),
+        async lazy() {
+          const { EmployerErrorBoundary } =
+            await import("@/pages/employer/EmployerCore");
+
+          return {
+            ErrorBoundary: EmployerErrorBoundary,
+          };
+        },
+        children: [
+          {
+            path: "managing-subscriptions",
+            async lazy() {
+              const { Subscriptions } =
+                await import("@/pages/employer/Subscriptions");
+              return { Component: Subscriptions };
+            },
+          },
+          {
+            path: "payment-verification",
+            async lazy() {
+              const { PaymentVerification } =
+                await import("@/pages/employer/payments/PaymentVerification");
+              return { Component: PaymentVerification };
             },
           },
         ],
