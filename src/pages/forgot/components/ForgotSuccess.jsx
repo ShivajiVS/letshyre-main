@@ -22,8 +22,9 @@ function ForgotSuccess({ role }) {
         <p className="success-subtitle">Redirecting to login...</p>
 
         <button
-          className="cl-btn success-btn"
-          onClick={() => navigate(redirectPath, { replace: true })}
+          className="cl-btn button01"
+          onClick={() => navigate("/get-started", { replace: true })}
+          style={{ marginTop: "2rem", padding: "18px 40px", fontSize: "16px" }}
         >
           Back to Login
         </button>

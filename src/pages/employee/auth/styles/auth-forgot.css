@@ -101,4 +101,22 @@
   .form-slide-out { transform: translateY(-120%); }
   .image-slide-out { transform: translateY(120%); }
   .form-slide-in, .image-slide-in { transform: translateY(0); }
+
+  .forgot-ball {
+    display: none;
+  }
+
+  .register-box {
+    padding: 35px 20px;
+    border-radius: 20px;
+    background: linear-gradient(
+      180deg,
+      #73a5ef 16%,
+      #79a9ef 38%,
+      #a3d3f1 80%,
+      #cdfcf3 100%
+    );
+    box-shadow: none;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+  }
 }

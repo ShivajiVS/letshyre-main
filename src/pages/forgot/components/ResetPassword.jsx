@@ -1,96 +1,99 @@
 import { useState } from "react";
-import authService from "@/services/auth.service";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { useForgotPasswordMutation } from "@/hooks/useForgotMutations";
+
+const passwordSchema = z
+  .object({
+    password: z.string().min(8, "Password must be at least 8 characters"),
+    confirm: z.string(),
+  })
+  .refine((data) => data.password === data.confirm, {
+    message: "Passwords do not match",
+    path: ["confirm"],
+  });
 
 function ForgotResetPassword({ email, otpSessionKey, onNext }) {
-
-  const [password, setPassword] = useState("");
-  const [confirm, setConfirm] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const handleSubmit = async (e) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(passwordSchema),
+  });
 
-  e.preventDefault();
+  const forgotPasswordMutation = useForgotPasswordMutation();
 
-  if (password !== confirm) {
-    setError("Passwords do not match");
-    return;
-  }
-
-  try {
-
-    setLoading(true);
-
-    await authService.forgotPassword({
-      email,
-      otp_session_key: otpSessionKey,
-      new_password: password,
-      confirm_password: confirm
-    });
-
-    onNext();
-
-  } catch (err) {
-
-    setError(
-      err?.response?.data?.message ||
-      err?.message ||
-      "Password reset failed"
+  const onSubmit = (data) => {
+    forgotPasswordMutation.mutate(
+      {
+        email,
+        otpSessionKey,
+        newPassword: data.password,
+        confirmPassword: data.confirm,
+      },
+      {
+        onSuccess: () => {
+          onNext();
+        },
+      }
     );
-
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   return (
     <div className="register-box">
-
       <h1 className="cl-title">Set New Password</h1>
 
-      <p className="cl-sub-para">
-        Create a new secure password
-      </p>
+      <p className="cl-sub-para">Create a new secure password</p>
 
-      <form className="cl-form" onSubmit={handleSubmit}>
-
+      <form className="cl-form" onSubmit={handleSubmit(onSubmit)}>
         <div className="cl-input-group">
           <input
             type={showPassword ? "text" : "password"}
             className="cl-input"
             placeholder="New password"
-            value={password}
-            onChange={(e)=>setPassword(e.target.value)}
+            {...register("password")}
           />
           <i
-            className={`bi ${
-              showPassword ? "bi-eye-slash" : "bi-eye"
-            } cl-icon`}
+            className={`bi ${showPassword ? "bi-eye-slash" : "bi-eye"} cl-icon`}
             onClick={() => setShowPassword(!showPassword)}
           ></i>
         </div>
+        {errors.password && (
+          <p style={{ color: "red", fontSize: "14px", textAlign: "left" }}>
+            {errors.password.message}
+          </p>
+        )}
 
         <div className="cl-input-group">
           <input
-            type={showPassword ? "text" : "password"}
+            type={showConfirmPassword ? "text" : "password"}
             className="cl-input"
             placeholder="Confirm password"
-            value={confirm}
-            onChange={(e)=>setConfirm(e.target.value)}
+            {...register("confirm")}
           />
+          <i
+            className={`bi ${showConfirmPassword ? "bi-eye-slash" : "bi-eye"} cl-icon`}
+            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+          ></i>
         </div>
-
-        {error && (
-          <p style={{color:"red",fontSize:"14px"}}>{error}</p>
+        {errors.confirm && (
+          <p style={{ color: "red", fontSize: "14px", textAlign: "left" }}>
+            {errors.confirm.message}
+          </p>
         )}
 
-        <button className="cl-btn" disabled={loading}>
-          {loading ? "Resetting..." : "Reset Password"}
+        <button
+          className="cl-btn button01"
+          disabled={forgotPasswordMutation.isPending}
+        >
+          {forgotPasswordMutation.isPending ? "Resetting..." : "Reset Password"}
         </button>
-
       </form>
-
     </div>
   );
 }

@@ -1,48 +1,38 @@
-import { useState } from "react";
-import authService from "@/services/auth.service";
 import { Link } from "react-router";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { useForgotSendOtpMutation } from "@/hooks/useForgotMutations";
 
 import "@/pages/employee/auth/EmployeeSignIn";
 
+const emailSchema = z.object({
+  email: z.string().email("Please enter a valid email address"),
+});
+
 function ForgotEmail({ onNext, onBack }) {
-  const [email, setEmail] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(emailSchema),
+  });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
+  const sendOtpMutation = useForgotSendOtpMutation();
 
-    if (!email) {
-      setError("Email is required");
-      return;
-    }
-
-    try {
-      setLoading(true);
-
-      const response = await authService.sendRegisterEmailOtp({
-        email,
-        otp_type: "Forgot Password",
-      });
-
-      const otpSessionKey = response?.otp_session_key;
-
-      if (!otpSessionKey) {
-        throw new Error("OTP session key missing");
-      }
-
-      onNext({
-        email,
-        otpSessionKey,
-      });
-    } catch (err) {
-      setError(
-        err?.response?.data?.message || err?.message || "Failed to send OTP",
-      );
-    } finally {
-      setLoading(false);
-    }
+  const onSubmit = (data) => {
+    sendOtpMutation.mutate(data, {
+      onSuccess: (response) => {
+        const otpSessionKey = response?.otp_session_key;
+        if (otpSessionKey) {
+          onNext({
+            email: data.email,
+            otpSessionKey,
+          });
+        }
+      },
+    });
   };
 
   return (
@@ -53,25 +43,27 @@ function ForgotEmail({ onNext, onBack }) {
         No worries - we’ll send you an OTP to reset your password
       </p>
 
-      <form className="cl-form" onSubmit={handleSubmit}>
+      <form className="cl-form" onSubmit={handleSubmit(onSubmit)}>
         <div className="cl-input-group">
           <input
             type="email"
             className="cl-input"
             placeholder="Email address"
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-              setError("");
-            }}
+            {...register("email")}
           />
           <i className="bi bi-envelope cl-icon"></i>
         </div>
+        {errors.email && (
+          <p style={{ color: "red", fontSize: "14px", textAlign: "left" }}>
+            {errors.email.message}
+          </p>
+        )}
 
-        {error && <p style={{ color: "red", fontSize: "14px" }}>{error}</p>}
-
-        <button className="cl-btn button01" disabled={loading}>
-          {loading ? "Sending..." : "Send OTP"}
+        <button
+          className="cl-btn button01"
+          disabled={sendOtpMutation.isPending}
+        >
+          {sendOtpMutation.isPending ? "Sending..." : "Send OTP"}
         </button>
       </form>
 

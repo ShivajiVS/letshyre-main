@@ -14,7 +14,7 @@ import ForgotSuccess from "./components/ForgotSuccess";
 import "./ForgotPassword.css";
 
 export function ForgotPassword({ onBackToLogin }) {
-  const [step, setStep] = useState("email");
+  const [step, setStep] = useState("success");
   const [animating, setAnimating] = useState(false);
 
   const location = useLocation();
