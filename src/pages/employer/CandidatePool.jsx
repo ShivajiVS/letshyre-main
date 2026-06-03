@@ -4,7 +4,9 @@ import { useNavigate } from "react-router";
 import {
   useOpenJobs,
   useAIMatchedCandidates,
+  useUnlockCandidateProfile,
 } from "@/hooks/employer/useCandidatePool";
+import { showSuccess, showError } from "@/utils/toast";
 import { JobSelector } from "./candidate-pool/JobSelector";
 import { CandidateCard } from "./candidate-pool/CandidateCard";
 import { CandidatePoolSkeleton } from "./candidate-pool/CandidatePoolSkeleton";
@@ -35,6 +37,8 @@ export function CandidatePool() {
     isError: candidatesError,
     refetch: refetchCandidates,
   } = useAIMatchedCandidates(selectedJobId);
+
+  const unlockMutation = useUnlockCandidateProfile();
 
   // ================= AUTO-SELECT FIRST JOB =================
   const jobs = jobsData?.results || [];
@@ -96,10 +100,22 @@ export function CandidatePool() {
   };
 
   const handleUnlockProfile = (candidateId, selectedExtras, totalCredits) => {
-    // Navigate or call API to spend credits, then navigate
-    // For now, just navigate
-    setCandidateToUnlock(null);
-    navigate(`/employer/employee-score-card?candidate=${candidateId}`);
+    unlockMutation.mutate(
+      {
+        candidate: candidateId,
+        interview: selectedExtras,
+      },
+      {
+        onSuccess: (data) => {
+          showSuccess(data?.message || "Candidate Profile Unlocked successfully.");
+          setCandidateToUnlock(null);
+          navigate(`/employer/employee-score-card?candidate=${candidateId}`);
+        },
+        onError: (error) => {
+          showError(error?.response?.data?.message || "Failed to unlock profile.");
+        }
+      }
+    );
   };
 
   // ================= DERIVED DATA =================
@@ -271,6 +287,7 @@ export function CandidatePool() {
           candidate={candidateToUnlock}
           onClose={() => setCandidateToUnlock(null)}
           onUnlock={handleUnlockProfile}
+          isUnlocking={unlockMutation.isPending || unlockMutation.isLoading}
         />
       )}
     </div>

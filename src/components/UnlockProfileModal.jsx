@@ -1,18 +1,22 @@
 import { useState } from "react";
+import { useCandidateInterviews } from "@/hooks/employer/useCandidatePool";
 import "./styles/unlock-profile-modal.css";
 
-export default function UnlockProfileModal({ candidate, onClose, onUnlock }) {
-  // Extract primary role and any extra roles from the candidate data
-  const [primary, ...extras] = candidate.roles;
+export default function UnlockProfileModal({ candidate, onClose, onUnlock, isUnlocking }) {
+  // Extract primary role from the candidate data
+  const primary = candidate.roles[0];
+  
+  // Fetch candidate's past interview scores dynamically
+  const { data: extrasData = [], isLoading } = useCandidateInterviews(candidate.id);
 
-  // Track which extra roles are checked (primary is always checked visually)
+  // Track which extra interviews are checked (stores interview_id)
   const [selectedExtras, setSelectedExtras] = useState([]);
 
-  const handleExtraToggle = (roleName) => {
+  const handleExtraToggle = (interviewId) => {
     setSelectedExtras((prev) =>
-      prev.includes(roleName)
-        ? prev.filter((r) => r !== roleName)
-        : [...prev, roleName],
+      prev.includes(interviewId)
+        ? prev.filter((id) => id !== interviewId)
+        : [...prev, interviewId],
     );
   };
 
@@ -94,17 +98,21 @@ export default function UnlockProfileModal({ candidate, onClose, onUnlock }) {
         </div>
 
         {/* Extra Roles Box (Only shows if candidate applied for multiple roles) */}
-        {extras.length > 0 && (
+        {isLoading ? (
+          <div className="up-extra-box" style={{ padding: '16px', display: 'flex', justifyContent: 'center' }}>
+            <span style={{ color: '#64748b', fontSize: '14px' }}>Loading interviews...</span>
+          </div>
+        ) : extrasData.length > 0 ? (
           <>
             <p className="up-extra-label">
               The candidate has appeared in other interview as well
             </p>
             <div className="up-extra-box">
-              {extras.map((ex, i) => (
+              {extrasData.map((ex) => (
                 <div 
-                  key={`${ex.role}-${i}`} 
+                  key={ex.interview_id} 
                   className="up-extra-row"
-                  onClick={() => handleExtraToggle(`${ex.role}-${i}`)}
+                  onClick={() => handleExtraToggle(ex.interview_id)}
                   style={{ cursor: 'pointer' }}
                 >
                   <p className="up-c-role">
@@ -115,15 +123,15 @@ export default function UnlockProfileModal({ candidate, onClose, onUnlock }) {
                   <input
                     type="checkbox"
                     className="up-checkbox"
-                    checked={selectedExtras.includes(`${ex.role}-${i}`)}
-                    onChange={() => handleExtraToggle(`${ex.role}-${i}`)}
+                    checked={selectedExtras.includes(ex.interview_id)}
+                    onChange={() => handleExtraToggle(ex.interview_id)}
                     onClick={(e) => e.stopPropagation()} // Prevent bubble to row so it doesn't toggle twice
                   />
                 </div>
               ))}
             </div>
           </>
-        )}
+        ) : null}
 
         {/* Footer */}
         <div className="up-footer">
@@ -138,8 +146,10 @@ export default function UnlockProfileModal({ candidate, onClose, onUnlock }) {
               if (onUnlock) onUnlock(candidate.id, selectedExtras, totalCredits);
               else onClose();
             }}
+            disabled={isUnlocking}
+            style={{ opacity: isUnlocking ? 0.7 : 1, cursor: isUnlocking ? 'not-allowed' : 'pointer' }}
           >
-            Unlock Profile for {totalCredits}C
+            {isUnlocking ? "Unlocking..." : `Unlock Profile for ${totalCredits}C`}
           </button>
         </div>
       </div>

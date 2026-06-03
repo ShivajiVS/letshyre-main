@@ -17,3 +17,19 @@ export const fetchOpenJobs = (params) => {
 export const fetchAIMatchedCandidates = (jobId) => {
   return api.get(`/user/v1/employer_job_ai/matching/${jobId}/`);
 };
+
+/**
+ * Fetch candidate's past interview scores.
+ * GET /user/v1/employer_candidate_interviews/[candidate-id]/
+ */
+export const fetchCandidateInterviews = (candidateId) => {
+  return api.get(`/user/v1/employer_candidate_interviews/${candidateId}/`);
+};
+
+/**
+ * Unlock candidate profile with selected interviews.
+ * POST /user/v1/employer_unlock_candidate/
+ */
+export const unlockCandidateProfile = (data) => {
+  return api.post(`/user/v1/employer_unlock_candidate/`, data);
+};
