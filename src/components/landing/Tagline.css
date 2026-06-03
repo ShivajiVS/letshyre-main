@@ -10,6 +10,12 @@
   animation-range: 0 100vh;
 }
 
+@media (max-width: 767px) {
+  .tagline-wrapper {
+    margin-top: 3rem;
+  }
+}
+
 @keyframes taglineScrollZoom {
   0% {
     transform: scale(1);
