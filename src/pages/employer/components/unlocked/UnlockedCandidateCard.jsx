@@ -100,7 +100,7 @@ export const UnlockedCandidateCard = ({ candidate }) => {
           View Profile
         </Link>
         <Link
-          to={`/employer/employee-score-card?candidate=${candidate.candidate}`}
+          to={`/employer/employee-score-card?id=${candidate.id}`}
           className="uc-btn-primary"
         >
           View Scorecard <i className="bi bi-arrow-right"></i>

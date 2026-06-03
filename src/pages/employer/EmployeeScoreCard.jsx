@@ -127,7 +127,7 @@ export function EmployeeScoreCard() {
             <div className="sc-left-part">
               {/* PROFILE CARD */}
               <div className="sc-profile-card">
-                <img src={scData.scorecard_image || user_pic} alt="candidate" />
+                <img src={scData.candidate_profile_photo || user_pic} alt="candidate" />
                 <div className="sc-profile-overlay">
                   <h3>{scData.candidate_name || "Candidate"}</h3>
                   <p>{scData.candidate_role || "Role"}</p>
