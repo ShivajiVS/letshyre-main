@@ -90,47 +90,21 @@ export const UnlockedCandidateCard = ({ candidate }) => {
             <span>{candidate.candidate_location || "Not specified"}</span>
           </div>
         </div>
-
-        {/* CTC Information */}
-        <div className="uc-ctc-box">
-          <div className="uc-ctc-item">
-            <span className="uc-ctc-label">Current CTC</span>
-            <span className="uc-ctc-value">
-              {candidate.candidate_current_ctc
-                ? `₹${(candidate.candidate_current_ctc / 100000).toFixed(1)}L`
-                : "N/A"}
-            </span>
-          </div>
-          <div className="uc-ctc-divider"></div>
-          <div className="uc-ctc-item">
-            <span className="uc-ctc-label">Expected CTC</span>
-            <span className="uc-ctc-value">
-              {candidate.candidate_expected_ctc
-                ? `₹${(candidate.candidate_expected_ctc / 100000).toFixed(1)}L`
-                : "N/A"}
-            </span>
-          </div>
-        </div>
       </div>
 
       <div className="uc-card-footer">
+        <Link
+          to={`/employer/employee-profile?candidate=${candidate.candidate}`}
+          className="uc-btn-secondary"
+        >
+          View Profile
+        </Link>
         <Link
           to={`/employer/employee-score-card?candidate=${candidate.candidate}`}
           className="uc-btn-primary"
         >
           View Scorecard <i className="bi bi-arrow-right"></i>
         </Link>
-        {candidate.candidate_resume && (
-          <a
-            href={candidate.candidate_resume}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="uc-btn-secondary"
-            title="Download Resume"
-          >
-            <i className="bi bi-file-earmark-pdf"></i>
-          </a>
-        )}
       </div>
     </article>
   );
