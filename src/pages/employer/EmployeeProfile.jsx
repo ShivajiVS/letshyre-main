@@ -211,7 +211,7 @@ function ScoreCard({ score, interviewAttempts, maxInterviews, candidateId }) {
 
       <div className="gauge-details-btn-container">
         <Link 
-          to={`/employer/employee-score-card?candidate=${candidateId}`} 
+          to={`/employer/employee-score-card?id=${candidateId}`} 
           className="gauge-details-btn"
         >
           Check Full Details
@@ -515,7 +515,7 @@ export function EmployeeProfile() {
             score={profile.profile_completion_score ?? 0}
             interviewAttempts={profile.interview_attempts_used}
             maxInterviews={profile.max_interviews_allowed}
-            candidateId={profile.id}
+            candidateId={id}
           />
 
           {/* Roles Applied */}
