@@ -9,6 +9,19 @@ export default function UnlockProfileModal({ candidate, onClose, onUnlock, isUnl
   // Fetch candidate's past interview scores dynamically
   const { data: extrasData = [], isLoading } = useCandidateInterviews(candidate.id);
 
+  // Filter out the primary interview (match by role and rounded score) and limit to max 2
+  let primaryFound = false;
+  let primaryInterviewId = null;
+  
+  const displayExtras = extrasData.filter((ex) => {
+    if (!primaryFound && ex.role === primary.role && Math.round(ex.score) === primary.score) {
+      primaryFound = true;
+      primaryInterviewId = ex.interview_id;
+      return false; // Exclude the one that matches primary
+    }
+    return true;
+  }).slice(0, 2);
+
   // Track which extra interviews are checked (stores interview_id)
   const [selectedExtras, setSelectedExtras] = useState([]);
 
@@ -20,8 +33,13 @@ export default function UnlockProfileModal({ candidate, onClose, onUnlock, isUnl
     );
   };
 
+  // Only count selected extras that are currently displayed (handles edge cases with HMR or hidden items)
+  const validSelectedExtras = selectedExtras.filter((id) =>
+    displayExtras.some((ex) => ex.interview_id === id)
+  );
+
   // Dynamically calculate credits: 1 for the main profile + 1 for each extra role checked
-  const totalCredits = 1 + selectedExtras.length;
+  const totalCredits = 1 + validSelectedExtras.length;
 
   return (
     <div
@@ -102,13 +120,13 @@ export default function UnlockProfileModal({ candidate, onClose, onUnlock, isUnl
           <div className="up-extra-box" style={{ padding: '16px', display: 'flex', justifyContent: 'center' }}>
             <span style={{ color: '#64748b', fontSize: '14px' }}>Loading interviews...</span>
           </div>
-        ) : extrasData.length > 0 ? (
+        ) : displayExtras.length > 0 ? (
           <>
             <p className="up-extra-label">
               The candidate has appeared in other interview as well
             </p>
             <div className="up-extra-box">
-              {extrasData.map((ex) => (
+              {displayExtras.map((ex) => (
                 <div 
                   key={ex.interview_id} 
                   className="up-extra-row"
@@ -143,7 +161,10 @@ export default function UnlockProfileModal({ candidate, onClose, onUnlock, isUnl
           <button 
             className="up-btn" 
             onClick={() => {
-              if (onUnlock) onUnlock(candidate.id, selectedExtras, totalCredits);
+              if (onUnlock) {
+                const finalInterviews = [primaryInterviewId, ...validSelectedExtras].filter(Boolean);
+                onUnlock(candidate.id, finalInterviews, totalCredits);
+              }
               else onClose();
             }}
             disabled={isUnlocking}

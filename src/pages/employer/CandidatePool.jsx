@@ -107,14 +107,17 @@ export function CandidatePool() {
       },
       {
         onSuccess: (data) => {
-          showSuccess(data?.message || "Candidate Profile Unlocked successfully.");
+          showSuccess(
+            data?.message || "Candidate Profile Unlocked successfully.",
+          );
           setCandidateToUnlock(null);
-          navigate(`/employer/employee-score-card?candidate=${candidateId}`);
         },
         onError: (error) => {
-          showError(error?.response?.data?.message || "Failed to unlock profile.");
-        }
-      }
+          showError(
+            error?.response?.data?.message || "Failed to unlock profile.",
+          );
+        },
+      },
     );
   };
 
