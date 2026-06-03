@@ -11,35 +11,31 @@ export default function UnlockProfileModal({ candidate, onClose, onUnlock, isUnl
 
   // Filter out the primary interview (match by role and rounded score) and limit to max 2
   let primaryFound = false;
-  let primaryInterviewId = null;
+  let primaryInterviewData = null;
   
   const displayExtras = extrasData.filter((ex) => {
     if (!primaryFound && ex.role === primary.role && Math.round(ex.score) === primary.score) {
       primaryFound = true;
-      primaryInterviewId = ex.interview_id;
+      primaryInterviewData = ex;
       return false; // Exclude the one that matches primary
     }
     return true;
   }).slice(0, 2);
 
-  // Track which extra interviews are checked (stores interview_id)
-  const [selectedExtras, setSelectedExtras] = useState([]);
+  // Track which interviews are checked (stores interview_id)
+  const [selectedInterviews, setSelectedInterviews] = useState([]);
 
-  const handleExtraToggle = (interviewId) => {
-    setSelectedExtras((prev) =>
+  const handleToggle = (interviewId, isUnlocked) => {
+    if (!interviewId || isUnlocked) return; // Prevent checking if already unlocked or invalid
+    setSelectedInterviews((prev) =>
       prev.includes(interviewId)
         ? prev.filter((id) => id !== interviewId)
         : [...prev, interviewId],
     );
   };
 
-  // Only count selected extras that are currently displayed (handles edge cases with HMR or hidden items)
-  const validSelectedExtras = selectedExtras.filter((id) =>
-    displayExtras.some((ex) => ex.interview_id === id)
-  );
-
-  // Dynamically calculate credits: 1 for the main profile + 1 for each extra role checked
-  const totalCredits = 1 + validSelectedExtras.length;
+  // Dynamically calculate credits: 1 for each checked interview
+  const totalCredits = selectedInterviews.length;
 
   return (
     <div
@@ -72,7 +68,7 @@ export default function UnlockProfileModal({ candidate, onClose, onUnlock, isUnl
         <h2 className="up-title">Unlock Candidate Profile</h2>
         <p className="up-subtitle">
           Unlock {candidate.name}'s Scorecard for {totalCredits} Credit
-          {totalCredits > 1 ? "s" : ""}.
+          {totalCredits !== 1 ? "s" : ""}.
         </p>
 
         {/* Primary Role Box */}
@@ -106,13 +102,21 @@ export default function UnlockProfileModal({ candidate, onClose, onUnlock, isUnl
               </p>
             </div>
           </div>
-          {/* Primary checkbox is checked and disabled */}
-          <input
-            type="checkbox"
-            className="up-checkbox up-checkbox--disabled"
-            checked
-            readOnly
-          />
+          {/* Primary checkbox */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            {primaryInterviewData?.unlocked && (
+              <span style={{ fontSize: '11px', color: '#16a34a', fontWeight: '600', backgroundColor: '#dcfce7', padding: '3px 8px', borderRadius: '12px', letterSpacing: '0.02em' }}>
+                Unlocked
+              </span>
+            )}
+            <input
+              type="checkbox"
+              className={`up-checkbox ${(!primaryInterviewData || primaryInterviewData.unlocked) ? 'up-checkbox--disabled' : ''}`}
+              checked={!!primaryInterviewData?.interview_id && selectedInterviews.includes(primaryInterviewData.interview_id)}
+              disabled={!primaryInterviewData || primaryInterviewData.unlocked}
+              onChange={() => handleToggle(primaryInterviewData?.interview_id, primaryInterviewData?.unlocked)}
+            />
+          </div>
         </div>
 
         {/* Extra Roles Box (Only shows if candidate applied for multiple roles) */}
@@ -130,21 +134,29 @@ export default function UnlockProfileModal({ candidate, onClose, onUnlock, isUnl
                 <div 
                   key={ex.interview_id} 
                   className="up-extra-row"
-                  onClick={() => handleExtraToggle(ex.interview_id)}
-                  style={{ cursor: 'pointer' }}
+                  onClick={() => handleToggle(ex.interview_id, ex.unlocked)}
+                  style={{ cursor: ex.unlocked ? 'not-allowed' : 'pointer' }}
                 >
                   <p className="up-c-role">
                     <span className="ho-code-icon">&lt;/&gt;</span> {ex.role}
                     {/* Muted Sub-Score */}
                     <span className="up-score-badge-muted">{ex.score}%</span>
                   </p>
-                  <input
-                    type="checkbox"
-                    className="up-checkbox"
-                    checked={selectedExtras.includes(ex.interview_id)}
-                    onChange={() => handleExtraToggle(ex.interview_id)}
-                    onClick={(e) => e.stopPropagation()} // Prevent bubble to row so it doesn't toggle twice
-                  />
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    {ex.unlocked && (
+                      <span style={{ fontSize: '11px', color: '#16a34a', fontWeight: '600', backgroundColor: '#dcfce7', padding: '3px 8px', borderRadius: '12px', letterSpacing: '0.02em' }}>
+                        Unlocked
+                      </span>
+                    )}
+                    <input
+                      type="checkbox"
+                      className={`up-checkbox ${ex.unlocked ? 'up-checkbox--disabled' : ''}`}
+                      checked={selectedInterviews.includes(ex.interview_id)}
+                      disabled={ex.unlocked}
+                      onChange={() => handleToggle(ex.interview_id, ex.unlocked)}
+                      onClick={(e) => e.stopPropagation()} // Prevent bubble to row so it doesn't toggle twice
+                    />
+                  </div>
                 </div>
               ))}
             </div>
@@ -162,13 +174,13 @@ export default function UnlockProfileModal({ candidate, onClose, onUnlock, isUnl
             className="up-btn" 
             onClick={() => {
               if (onUnlock) {
-                const finalInterviews = [primaryInterviewId, ...validSelectedExtras].filter(Boolean);
-                onUnlock(candidate.id, finalInterviews, totalCredits);
+                // Pass the selected interviews array
+                onUnlock(candidate.id, selectedInterviews, totalCredits);
               }
               else onClose();
             }}
-            disabled={isUnlocking}
-            style={{ opacity: isUnlocking ? 0.7 : 1, cursor: isUnlocking ? 'not-allowed' : 'pointer' }}
+            disabled={isUnlocking || totalCredits === 0}
+            style={{ opacity: (isUnlocking || totalCredits === 0) ? 0.7 : 1, cursor: (isUnlocking || totalCredits === 0) ? 'not-allowed' : 'pointer' }}
           >
             {isUnlocking ? "Unlocking..." : `Unlock Profile for ${totalCredits}C`}
           </button>
