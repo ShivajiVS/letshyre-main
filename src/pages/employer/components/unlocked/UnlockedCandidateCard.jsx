@@ -94,7 +94,7 @@ export const UnlockedCandidateCard = ({ candidate }) => {
 
       <div className="uc-card-footer">
         <Link
-          to={`/employer/employee-profile?candidate=${candidate.candidate}`}
+          to={`/employer/employee-profile?id=${candidate.id}`}
           className="uc-btn-secondary"
         >
           View Profile

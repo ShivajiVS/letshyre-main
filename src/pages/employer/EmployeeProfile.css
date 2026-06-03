@@ -291,20 +291,9 @@
   padding-left: 60px;
 }
 
-.pp-timeline::before {
-  content: "";
-  position: absolute;
-  left: 25px;
-  top: 10%;
-  bottom: 19%;
-  width: 3px;
-  background: #5a8df6;
-  border-radius: 10px;
-}
-
 .pp-time-item {
   position: relative;
-  margin-bottom: 10px;
+  margin-bottom: 14px;
   background: #eef3fb;
   padding: 18px;
   border-radius: 14px;
@@ -320,6 +309,18 @@
   background: #5a8df6;
   border: 4px solid #dbe7ff;
   border-radius: 50%;
+  z-index: 2;
+}
+
+.pp-time-item:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: -34.5px; /* Center of the -46px left dot (26px total width with content-box) */
+  top: 35px;     /* Start at center of current dot (22px + 13px) */
+  bottom: -49px; /* Stretch to center of next dot (14px margin + 22px top + 13px half-height) */
+  width: 3px;
+  background: #5a8df6;
+  z-index: 1;
 }
 
 .pp-time-item:last-child::before {
@@ -327,14 +328,27 @@
   border: 3px solid #5a8df6;
 }
 
+/* h5 label inside timeline and edu blocks */
 .pp-time-item h5,
 .pp-edu h5 {
   color: #5a8df6;
   font-size: 15px;
   font-weight: 600;
-  margin-bottom: 4px;
+  margin-top: 0;
+  margin-bottom: 6px;
 }
 
+/* p value that follows an h5 — adds gap before the next label */
+.pp-time-item h5 + p,
+.pp-edu h5 + p {
+  margin-bottom: 12px;
+}
+
+/* Last p inside a block needs no extra bottom gap */
+.pp-time-item p:last-child,
+.pp-edu p:last-child {
+  margin-bottom: 0;
+}
 .pp-edu {
   background: #eef3fb;
   padding: 18px;
@@ -593,4 +607,145 @@
   .pp-personal-card {
     margin-top: 26%;
   }
+}
+
+/* =========================================================
+   SKELETON / SHIMMER LOADING
+======================================================== */
+@keyframes sk-shimmer {
+  0% {
+    background-position: -600px 0;
+  }
+  100% {
+    background-position: 600px 0;
+  }
+}
+
+.sk-bone {
+  background: linear-gradient(
+    90deg,
+    #e8eef7 25%,
+    #d5e0f0 50%,
+    #e8eef7 75%
+  );
+  background-size: 600px 100%;
+  animation: sk-shimmer 1.4s ease-in-out infinite;
+  display: block;
+}
+
+.sk-hero {
+  background: linear-gradient(180deg, #c4d8f8 0%, #d8e8fb 100%);
+  border-radius: 18px 18px 0 0;
+  height: 35vh;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 0;
+}
+
+.sk-avatar {
+  width: 170px;
+  height: 170px;
+  border-radius: 50%;
+  border: 4px solid #ffffff;
+  background: linear-gradient(90deg, #dce8f8 25%, #c8d9f2 50%, #dce8f8 75%);
+  background-size: 600px 100%;
+  animation: sk-shimmer 1.4s ease-in-out infinite;
+  position: absolute;
+  bottom: -85px;
+  left: 50%;
+  transform: translateX(-50%);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.sk-personal-card {
+  margin-top: 120px;
+}
+
+/* =========================================================
+   ERROR BANNER
+======================================================== */
+.ep-error-banner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 60px 20px;
+  text-align: center;
+  color: #5a6a80;
+}
+
+.ep-error-banner i {
+  font-size: 3rem;
+  color: #c0d0e8;
+}
+
+.ep-error-banner p {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.ep-retry-btn {
+  background: var(--secondary-sky-blue, #5a8df6);
+  color: #fff;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.ep-retry-btn:hover {
+  background: #4e7ee6;
+}
+
+/* =========================================================
+   EMPTY STATE
+======================================================== */
+.ep-empty {
+  background: #f4f8ff;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  color: #9aaac0;
+  font-size: 0.9rem;
+}
+
+/* =========================================================
+   DOCUMENT LINKS
+======================================================== */
+.pp-doc-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  border-radius: 8px;
+  border: 1.5px solid #c4d6f8;
+  background: #f4f8ff;
+  color: #5a8df6;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  margin-top: 10px;
+  transition: all 0.18s ease;
+}
+
+.pp-doc-link:hover {
+  background: #5a8df6;
+  color: #fff;
+  border-color: #5a8df6;
+}
+
+.pp-doc-link i {
+  font-size: 1rem;
+}
+
+.pp-docs-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
