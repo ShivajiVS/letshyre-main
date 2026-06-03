@@ -47,6 +47,13 @@ const MENU_ITEMS = [
     label: "Candidate Pool",
   },
   {
+    id: "tour-unlocked-candidates",
+    to: "/employer/unlocked-candidates",
+    icon: "bi-people-fill",
+    label: "Unlocked Candidates",
+  },
+
+  {
     id: "tour-team",
     to: "/employer/your-team",
     icon: "bi-people",

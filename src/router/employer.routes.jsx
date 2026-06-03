@@ -99,7 +99,6 @@ export const employerRoutes = [
               return { Component: Team };
             },
           },
-
           {
             path: "invoice",
             async lazy() {
@@ -115,6 +114,24 @@ export const employerRoutes = [
               return { Component: EmployerProfile };
             },
           },
+          {
+            path: "unlocked-candidates",
+            async lazy() {
+              const { UnlockedCandidatesList } =
+                await import("@/pages/employer/UnlockedCandidates");
+              return { Component: UnlockedCandidatesList };
+            },
+          },
+
+          {
+            path: "employee-score-card",
+            async lazy() {
+              const { EmployeeScoreCard } =
+                await import("@/pages/employer/EmployeeScoreCard");
+              return { Component: EmployeeScoreCard };
+            },
+          },
+
           {
             path: "employee-profile",
             async lazy() {
@@ -179,4 +196,4 @@ export const employerRoutes = [
   },
 ];
 
-// JobDetail
+// UnlockedCandidatesList
