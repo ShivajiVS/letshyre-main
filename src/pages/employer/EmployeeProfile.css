@@ -317,7 +317,7 @@
   position: absolute;
   left: -34.5px; /* Center of the -46px left dot (26px total width with content-box) */
   top: 35px;     /* Start at center of current dot (22px + 13px) */
-  bottom: -49px; /* Stretch to center of next dot (14px margin + 22px top + 13px half-height) */
+  height: calc(100% + 14px); /* Stretch to center of next dot (100% height + 14px margin) */
   width: 3px;
   background: #5a8df6;
   z-index: 1;
