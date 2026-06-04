@@ -133,7 +133,7 @@ export function EmployeeDashboardLayout() {
 
             <li className={!profileCompleted ? "locked" : ""}>
               <NavLink
-                to={profileCompleted ? "/employee/score-card" : "#"}
+                to={profileCompleted ? "/employee/score-cards-list" : "#"}
                 className={({ isActive }) => (isActive ? "active" : "")}
                 onClick={() => setMobileMenuOpen(false)}
               >

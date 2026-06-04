@@ -67,17 +67,21 @@ export const employeeRoutes = [
             async lazy() {
               const { MyApplications } =
                 await import("@/pages/employee/MyApplications");
-
-              // const { EmployeeErrorBoundary } =
-              //   await import("@/pages/employee/EmployeeCore");
               return {
                 Component: MyApplications,
-                // ErrorBoundary: EmployeeErrorBoundary,
               };
             },
           },
           {
-            path: "score-card",
+            path: "score-cards-list",
+            async lazy() {
+              const { ScoreCardsList } =
+                await import("@/pages/employee/ScoreCardsList");
+              return { Component: ScoreCardsList };
+            },
+          },
+          {
+            path: "scorecard",
             async lazy() {
               const { EmployeeScoreCard } =
                 await import("@/pages/employee/EmployeeScoreCard");
