@@ -1,288 +1,108 @@
-/* ==========================================================================
-   Letshyre Portal Root & Reset
-   ========================================================================== */
-.portal-root {
-  height: 100vh;
-  width: 100vw;
-  overflow: hidden;
-  background-color: #fafbfc;
-  color: #0f172a;
-  /* Enforces high-end system typography. Never falls back to Serif */
-  font-family:
-    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
-    sans-serif;
+/* src/pages/employee/download-app.css */
+/* Custom styles for DownloadApp that build on top of the EmployeeProfile base */
+
+.da-card {
+  max-width: 600px !important;
+  margin: 60px auto !important;
+  text-align: center;
+  padding: 48px 40px !important;
   display: flex;
   flex-direction: column;
-  position: relative;
-  justify-content: space-between;
-  box-sizing: border-box;
-}
-
-.portal-root *,
-.portal-root *::before,
-.portal-root *::after {
-  box-sizing: border-box;
-}
-
-/* Structural clean hairline split across the viewport center */
-.v-line {
-  position: absolute;
-  left: 50%;
-  top: 0;
-  bottom: 0;
-  width: 1px;
-  background: linear-gradient(to bottom, transparent, #e2e8f0, transparent);
-  z-index: 0;
-  pointer-events: none;
-}
-
-/* ==========================================================================
-   Layout Grid Core
-   ========================================================================== */
-.portal-content {
-  flex: 1;
-  max-width: 1100px;
-  width: 100%;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
   align-items: center;
-  gap: 64px;
-  padding: 0 40px;
-  position: relative;
-  z-index: 1;
 }
 
-/* ==========================================================================
-   Left Content Section (Typography & Info)
-   ========================================================================== */
-.copy-section {
+.da-icon-container {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: rgba(37, 99, 235, 0.08);
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
 }
 
-.status-indicator {
-  display: inline-flex;
+.da-icon {
+  font-size: 2.5rem;
+  color: #2563eb;
+}
+
+.da-heading {
+  font-size: 1.75rem;
+  margin-bottom: 12px;
+  color: #0f172a;
+}
+
+.da-description {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin-bottom: 32px;
+  max-width: 450px;
+}
+
+.da-feature-list {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 40px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.da-feature-item {
+  display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 0.9rem;
   color: #475569;
-  margin-bottom: 24px;
-  background: #f1f5f9;
-  padding: 6px 14px;
-  border-radius: 20px;
+  font-weight: 500;
 }
 
-.pulse {
-  width: 6px;
-  height: 6px;
-  background: #10b981;
-  border-radius: 50%;
-  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);
+.da-feature-icon {
+  color: #22c55e;
 }
 
-.title {
-  font-size: 52px;
-  font-weight: 800;
-  line-height: 1.15;
-  letter-spacing: -0.03em;
-  margin: 0 0 20px 0;
-  color: #0f172a;
-}
-
-.description {
-  font-size: 16px;
-  line-height: 1.6;
-  color: #475569;
-  max-width: 440px;
-  margin: 0;
-}
-
-/* ==========================================================================
-   Right Action Section (The Secure Setup Box)
-   ========================================================================== */
-.setup-box {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 20px;
-  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.03);
-  padding: 48px;
-  width: 100%;
-  max-width: 440px;
-  margin-left: auto;
-}
-
-.setup-header {
-  display: flex;
-  justify-content: space-between;
+.da-download-btn {
+  display: inline-flex;
   align-items: center;
-  margin-bottom: 36px;
-}
-
-.step-count {
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: #2563eb;
-  background: #eff6ff;
-  padding: 5px 12px;
-  border-radius: 6px;
-}
-
-.os-icons {
-  display: flex;
+  justify-content: center;
   gap: 12px;
-  color: #94a3b8;
-}
-
-.setup-body h2 {
-  font-size: 26px;
-  font-weight: 700;
-  margin: 0 0 10px 0;
-  letter-spacing: -0.02em;
-  color: #0f172a;
-}
-
-.setup-body p {
-  color: #64748b;
-  font-size: 14px;
-  margin-bottom: 36px;
-  line-height: 1.55;
-}
-
-/* ==========================================================================
-   Interactive Elements & Fixed Height Controls
-   ========================================================================== */
-.primary-download {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #0f172a;
-  color: #ffffff;
+  background: #2563eb;
+  color: white;
   text-decoration: none;
-  padding: 18px 22px;
+  padding: 16px 36px;
   border-radius: 12px;
   font-weight: 600;
-  font-size: 15px;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 1.1rem;
   width: 100%;
+  max-width: 400px;
+  box-shadow: 0 8px 16px -4px rgba(37, 99, 235, 0.25);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.primary-download:hover {
-  background: #2563eb;
-  transform: translateY(-1px);
-  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.2);
+.da-download-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 20px -4px rgba(37, 99, 235, 0.4);
+  background: #1d4ed8;
+  color: white;
 }
 
-/* Keeps the shortcuts completely uncompressed */
-.primary-download kbd {
-  background: rgba(255, 255, 255, 0.12);
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-size: 10px;
-  font-family: inherit;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  white-space: nowrap;
+.da-download-icon {
+  font-size: 1.2rem;
 }
 
-.support-hint {
-  margin-top: 18px;
+.da-os-support {
+  margin-top: 24px;
+  color: #94a3b8;
+  font-size: 0.85rem;
+  font-weight: 500;
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 12px;
-  font-weight: 500;
-  color: #94a3b8;
+  gap: 12px;
 }
 
-.secondary-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: none;
-  border: none;
-  color: #0f172a;
-  font-weight: 600;
-  margin-top: 36px;
-  padding-top: 24px;
-  border-top: 1px solid #f1f5f9;
-  width: 100%;
-  cursor: pointer;
-  font-size: 14px;
-  transition: color 0.15s ease;
-  text-align: left;
-}
-
-.secondary-link:hover {
-  color: #2563eb;
-}
-
-/* ==========================================================================
-   Footer Layout
-   ========================================================================== */
-.portal-footer {
-  padding: 24px 40px;
+.da-os-icons {
   display: flex;
-  font-size: 12px;
-  font-weight: 500;
-  color: #94a3b8;
-  border-top: 1px solid #f1f5f9;
-  background: #ffffff;
-  width: 100%;
-}
-
-.spacer {
-  flex: 1;
-}
-
-.terminal-id {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  letter-spacing: 0.5px;
-}
-
-/* ==========================================================================
-   Responsive Viewport Safe Adjustments
-   ========================================================================== */
-@media (max-width: 900px) {
-  .v-line {
-    display: none;
-  }
-  .portal-content {
-    grid-template-columns: 1fr;
-    padding: 60px 24px;
-    text-align: center;
-    gap: 40px;
-    overflow-y: auto; /* Fallback fallback for dynamic device heights */
-  }
-  .copy-section {
-    align-items: center;
-  }
-  .description {
-    margin: 0 auto;
-  }
-  .setup-box {
-    margin: 0 auto;
-    padding: 36px 28px;
-    max-width: 100%;
-  }
-  .title {
-    font-size: 38px;
-  }
-  .support-hint {
-    justify-content: center;
-  }
-  .secondary-link {
-    justify-content: center;
-    text-align: center;
-  }
-  .portal-footer {
-    justify-content: center;
-  }
-  .spacer {
-    display: none;
-  }
+  gap: 10px;
+  font-size: 1.1rem;
+  color: #64748b;
 }
