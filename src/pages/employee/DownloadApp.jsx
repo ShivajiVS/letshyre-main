@@ -18,21 +18,20 @@ export function DownloadApp() {
       <main className="portal-content">
         {/* LEFT PANE */}
         <section className="copy-section">
-          <div className="status-indicator">
-            <span className="pulse" />
-            System ready for session
+          <div className="status-indicator" style={{ background: "#dcfce7", color: "#166534" }}>
+            <span className="pulse" style={{ background: "#22c55e", boxShadow: "0 0 0 4px rgba(34, 197, 94, 0.15)" }} />
+            Secure Environment
           </div>
 
           <h1 className="title">
-            Secure Desktop
+            Download
             <br />
-            Environment
+            LetsHyre App
           </h1>
 
           <p className="description">
-            To start your assessment, you must use the Letshyre desktop shell.
-            This creates an isolated workspace that ensures a stable,
-            uninterrupted interview session across all platforms.
+            To start your interview, please download our secure desktop app.
+            It provides a stable and distraction-free environment for your assessment.
           </p>
         </section>
 
@@ -40,7 +39,7 @@ export function DownloadApp() {
         <section className="action-section">
           <div className="setup-box">
             <div className="setup-header">
-              <span className="step-count">Required Action</span>
+              <span className="step-count">Required Step</span>
               <div className="os-icons">
                 <svg
                   width="14"
@@ -62,17 +61,16 @@ export function DownloadApp() {
             </div>
 
             <div className="setup-body">
-              <h2>Initialize Session</h2>
+              <h2>Ready to start?</h2>
               <p>
-                Download the unified installer to proceed to your secure coding
-                workspace.
+                Download the app below to launch your secure interview space.
               </p>
 
               <a
                 href="/download/letsHyre-Interview.exe"
                 className="primary-download"
               >
-                <span>Download for Desktop</span>
+                <span>Download App</span>
                 <kbd>Win / Mac / Linux</kbd>
               </a>
 
@@ -113,11 +111,9 @@ export function DownloadApp() {
         </section>
       </main>
 
-      {/* FOOTER FIXED LOCK */}
+      {/* FOOTER */}
       <footer className="portal-footer">
-        <span>&copy; 2026 Letshyre Systems</span>
-        <span className="spacer" />
-        <span className="terminal-id">NODE_READY</span>
+        <span>&copy; {new Date().getFullYear()} Letshyre</span>
       </footer>
     </div>
   );
