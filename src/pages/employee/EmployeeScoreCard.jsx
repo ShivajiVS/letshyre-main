@@ -3,7 +3,6 @@ import { useScorecardDetail } from "@/hooks/employee/useScorecardDetail";
 import { useCandidateProfile } from "@/hooks/useCandidateProfile";
 
 import sc_bg from "@/assets/scorecard-bg.png";
-import Demo_video from "@/assets/Video_part_demo.png";
 
 import "./styles/employee-scorecard.css";
 
@@ -45,6 +44,9 @@ export function EmployeeScoreCard() {
 
   const commMetrics = category_scores?.comm_metrics || {};
   const questionBreakdown = category_scores?.question_breakdown || [];
+  const strengths = category_scores?.strengths || [];
+  const recommendations = category_scores?.recommendations || [];
+  const areasForImprovement = category_scores?.areas_for_improvement || [];
 
   const metricsArray = [
     { label: "Clarity", value: commMetrics.clarity || 0 },
@@ -159,14 +161,6 @@ export function EmployeeScoreCard() {
           )}
         </div>
 
-        {/* ================= INTERVIEW VIDEO ================= */}
-        <div className="sc-video-card">
-          <h3>Interview Video</h3>
-          <div className="sc-video-wrapper">
-            <video src={Demo_video} controls />
-            {/* poster={user_pic} */}
-          </div>
-        </div>
 
         {/* ================= QUESTIONS & ANSWERS (NEW DESIGN) ================= */}
         {questionBreakdown.length > 0 && (
@@ -181,9 +175,11 @@ export function EmployeeScoreCard() {
                     <span className={`esc-qa-badge ${badgeType}`}>
                       {qa.type || "Q"}
                     </span>
+                    {/* 
                     <span className="esc-qa-score">
                       Score: {qa.earned_points || 0} / {qa.max_points || 0}
                     </span>
+                    */}
                   </div>
 
                   <div className="esc-qa-question">
@@ -202,15 +198,68 @@ export function EmployeeScoreCard() {
                     )}
                   </div>
 
-                  {qa.feedback && (
+                  {/* qa.feedback && (
                     <div className="esc-qa-feedback">
                       <h5>AI Feedback</h5>
                       <p>{qa.feedback}</p>
                     </div>
-                  )}
+                  ) */}
                 </div>
               );
             })}
+          </div>
+        )}
+
+        {/* ================= FEEDBACK SECTIONS ================= */}
+        {(strengths.length > 0 || recommendations.length > 0 || areasForImprovement.length > 0) && (
+          <div className="esc-feedback-section">
+            {strengths.length > 0 && (
+              <div className="esc-feedback-card">
+                <h3>Key Strengths</h3>
+                <ul className="esc-feedback-list">
+                  {strengths.map((item, idx) => (
+                    <li key={idx} className="esc-feedback-item">
+                      <div className="esc-feedback-icon esc-feedback-icon--strength">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                      </div>
+                      <p>{item}</p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {areasForImprovement.length > 0 && (
+              <div className="esc-feedback-card">
+                <h3>Areas for Improvement</h3>
+                <ul className="esc-feedback-list">
+                  {areasForImprovement.map((item, idx) => (
+                    <li key={idx} className="esc-feedback-item">
+                      <div className="esc-feedback-icon esc-feedback-icon--improvement">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                      </div>
+                      <p>{item}</p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {recommendations.length > 0 && (
+              <div className="esc-feedback-card">
+                <h3>Recommendations</h3>
+                <ul className="esc-feedback-list">
+                  {recommendations.map((item, idx) => (
+                    <li key={idx} className="esc-feedback-item">
+                      <div className="esc-feedback-icon esc-feedback-icon--recommendation">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                      </div>
+                      <p>{item}</p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
         )}
       </div>
