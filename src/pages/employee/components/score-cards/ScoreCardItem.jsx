@@ -52,8 +52,8 @@ export function ScoreCardItem({ scorecard }) {
         <span className="sc-card-model">
           {ai_model_name ? `Model: ${ai_model_name}` : "AI Evaluated"}
         </span>
-        {/* Assuming the detail page route is /employee/score-cards/:id or similar */}
-        <Link to={`/employee/scorecard`} className="sc-card-btn">
+        {/* Redirect to detailed scorecard page with the specific ID */}
+        <Link to={`/employee/scorecard?id=${id}`} className="sc-card-btn">
           View Details
         </Link>
       </div>

@@ -1,4 +1,5 @@
-import { useCandidateScorecard } from "@/hooks/useCandidateScorecard";
+import { useSearchParams } from "react-router";
+import { useScorecardDetail } from "@/hooks/employee/useScorecardDetail";
 import { useCandidateProfile } from "@/hooks/useCandidateProfile";
 
 import sc_bg from "@/assets/scorecard-bg.png";
@@ -7,10 +8,11 @@ import Demo_video from "@/assets/Video_part_demo.png";
 import "./styles/employee-scorecard.css";
 
 export function EmployeeScoreCard() {
-  const { data, isLoading, isError } = useCandidateScorecard();
+  const [searchParams] = useSearchParams();
+  const id = searchParams.get("id");
 
-  const scorecards = data?.data || [];
-  const scorecard = scorecards[0];
+  const { data, isLoading, isError } = useScorecardDetail(id);
+  const scorecard = data?.data;
 
   const { data: userData, isLoading: isProfileLoading } = useCandidateProfile();
 
@@ -18,7 +20,7 @@ export function EmployeeScoreCard() {
     return <ScorecardSkeleton />;
   }
 
-  if (isError || !data?.success || scorecards.length === 0) {
+  if (isError || !data?.success || !scorecard) {
     return (
       <div className="esc-empty">
         <div className="esc-empty-card">
