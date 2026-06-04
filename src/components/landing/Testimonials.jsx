@@ -1,7 +1,7 @@
 import React from "react";
-import "./Testimonials.css";
+import "./styles/testimonials.css";
 
-const TestimonialsSection = () => {
+export function Testimonials() {
   return (
     <section className="ts-section">
       <div className="ts-header">
@@ -282,7 +282,7 @@ const TestimonialsSection = () => {
       </div>
     </section>
   );
-};
+}
 
 const TestimonialCard = ({ name, role, stars, quote }) => {
   return (
@@ -314,5 +314,3 @@ const TestimonialCard = ({ name, role, stars, quote }) => {
     </article>
   );
 };
-
-export default TestimonialsSection;

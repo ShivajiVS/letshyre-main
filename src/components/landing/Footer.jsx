@@ -2,9 +2,9 @@ import React, { useEffect, useRef } from "react";
 import bg_logo from "@/assets/bg-logo.png";
 import { useNavigate } from "react-router";
 
-import "./footer.css";
+import "./styles/footer.css";
 
-const Footer = () => {
+export function Footer() {
   const footerRef = useRef(null);
   const navigate = useNavigate();
   useEffect(() => {
@@ -111,6 +111,4 @@ const Footer = () => {
       </div>
     </footer>
   );
-};
-
-export default Footer;
+}

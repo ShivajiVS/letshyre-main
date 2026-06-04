@@ -1,8 +1,8 @@
 import hire01 from "@/assets/hire-img01.png";
 
-import "./HireCard.css";
+import "./styles/hire-card.css";
 
-const HireCard = () => {
+export function HireCard() {
   return (
     <>
       <section className="hire-card-section">
@@ -30,5 +30,4 @@ const HireCard = () => {
       </section>
     </>
   );
-};
-export default HireCard;
+}

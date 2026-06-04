@@ -1,21 +1,13 @@
-*{
+* {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  --primary-lite-blue: #F6FAFF;
-  --secondary-sky-blue: #6296EF;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  --primary-lite-blue: #f6faff;
+  --secondary-sky-blue: #6296ef;
   /* --secondary-sky-blue: #19ac6a; */
   --black: #000000;
   --font-primary: "Libre Baskerville", serif;
   --font-primary02: "Merriweather", serif;
   --font-secondary: "Times New Roman", serif;
-   /* background-color: #F6FAFF; */
-   
-/* localStorage.removeItem("profileCompleted"); to clear the browser cachy */
-
-/* localStorage.removeItem("emp-team-popup"); */
-
-/* localStorage.removeItem("emp-tour"); */
-   
 }

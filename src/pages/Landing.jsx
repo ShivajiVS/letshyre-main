@@ -1,17 +1,15 @@
 import { Helmet } from "react-helmet-async";
 
-import Navbar from "@/components/landing/navbar";
-import Candidate from "@/components/landing/Candidate";
-import Video_section from "@/components/landing/Video-part";
-import TestimonialsSection from "@/components/landing/Testimonials";
-import HireCard from "@/components/landing/hireCard";
-
+import { Navbar } from "@/components/landing/Navbar";
+import { Hero2 } from "@/components/landing/Hero2";
 import { Assistance } from "@/components/landing/Assistance";
+import { Candidate } from "@/components/landing/Candidate";
+import { VideoSection } from "@/components/landing/Video-part";
 import { ScoreCard } from "@/components/landing/ScoreCard";
-import { QuestionArea } from "@/components/landing/Question_Area";
-
-import Footer from "@/components/landing/Footer";
-import Hero2 from "@/components/landing/hero2";
+import { QuestionArea } from "@/components/landing/QuestionArea";
+import { Testimonials } from "@/components/landing/Testimonials";
+import { HireCard } from "@/components/landing/HireCard";
+import { Footer } from "@/components/landing/Footer";
 
 /* ─── JSON-LD Structured Data ─── */
 const organizationSchema = {
@@ -188,10 +186,10 @@ export function Landing() {
       <Hero2 />
       <Assistance />
       <Candidate />
-      <Video_section />
+      <VideoSection />
       <ScoreCard />
       <QuestionArea />
-      <TestimonialsSection />
+      <Testimonials />
       <HireCard />
       <Footer />
     </>

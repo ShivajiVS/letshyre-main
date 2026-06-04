@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "./Question_Area.css";
+import "./styles/question-area.css";
 
 export function QuestionArea() {
   const [activeIndex, setActiveIndex] = useState(null);

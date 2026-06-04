@@ -11,7 +11,7 @@ import { JobSelector } from "./components/candidate-pool/JobSelector";
 import { CandidateCard } from "./components/candidate-pool/CandidateCard";
 import { CandidatePoolSkeleton } from "./components/candidate-pool/CandidatePoolSkeleton";
 import { EmptyState } from "./components/candidate-pool/EmptyState";
-import UnlockProfileModal from "@/components/UnlockProfileModal";
+import UnlockProfileModal from "@/pages/employer/components/candidate-pool/UnlockProfileModal";
 
 import "@/pages/employer/styles/candidate-pool.css";
 

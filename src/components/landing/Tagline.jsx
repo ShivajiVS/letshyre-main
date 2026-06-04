@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import "./Tagline.css";
+import "./styles/tagline.css";
 
 const Tagline = () => {
   const startRef = useRef(null);

@@ -2,9 +2,9 @@ import { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router";
 import logo from "@/assets/logo2.png";
 
-import "./navbar.css";
+import "./styles/navbar.css";
 
-export default function Navbar() {
+export function Navbar() {
   const [open, setOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();

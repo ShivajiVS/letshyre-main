@@ -6,7 +6,7 @@ import Cand04 from "@/assets/Cand04.png";
 
 import "./Candidate.css";
 
-const Candidate = () => {
+export function Candidate() {
   const images = [Cand01, Cand02, Cand03, Cand04];
 
   const [activeIndex, setActiveIndex] = useState(0);
@@ -131,6 +131,4 @@ const Candidate = () => {
       </div>
     </>
   );
-};
-
-export default Candidate;
+}

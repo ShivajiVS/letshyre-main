@@ -7,7 +7,7 @@ import e_demo01 from "@/assets/emp-demo01.png";
 import e_demo02 from "@/assets/emp-demo02.png";
 import { logoutMe } from "@/services/auth.service";
 
-import "./EmployerOnboarding.css";
+import "./styles/employer-onboarding.css";
 
 export function EmployerOnboarding() {
   const [step, setStep] = useState(1);

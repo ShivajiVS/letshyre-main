@@ -3,7 +3,7 @@ import assit01 from "@/assets/assit01.png";
 import assit02 from "@/assets/assit02.png";
 import assit03 from "@/assets/assit03.png";
 import assit04 from "@/assets/assit04.png";
-import "./Assistance.css";
+import "./styles/assistance.css";
 
 const STEPS = [
   {

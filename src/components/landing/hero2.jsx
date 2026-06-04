@@ -4,9 +4,9 @@ import heroImg from "@/assets/hero1.jpeg";
 import first_part_bg from "@/assets/FP_bg.png";
 import Tagline from "./Tagline";
 
-import "./hero2.css";
+import "./styles/hero2.css";
 
-const Hero2 = () => {
+export function Hero2() {
   const navigate = useNavigate();
 
   return (
@@ -73,6 +73,4 @@ const Hero2 = () => {
       />
     </section>
   );
-};
-
-export default Hero2;
+}

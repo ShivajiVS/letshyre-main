@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import s_img01 from "@/assets/score01.png";
 import s_img02 from "@/assets/score02.png";
 
-import "./ScoreCard.css";
+import "./styles/score-card.css";
 
 const stats = [
   { percentage: true, num: "98%", label: "Accuracy" },

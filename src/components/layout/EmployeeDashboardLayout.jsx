@@ -8,8 +8,8 @@ import { logoutMe } from "@/services/auth.service";
 import LockedOverlay from "@/components/dashboard/LockedOverlay";
 import ProfileCompletion from "@/components/profile/ProfileCompletion";
 import { useCandidateProfile } from "@/hooks/useCandidateProfile";
-import "./EmployeeDashboardLayout.css";
 import EmployeeRightPanelForJobs from "./EmployeeRightPanelForJobs";
+import "./styles/employee-dashboard-layout.css";
 
 export function EmployeeDashboardLayout() {
   const [showProfileFlow, setShowProfileFlow] = useState(false);

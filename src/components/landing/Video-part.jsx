@@ -1,8 +1,8 @@
 import React from "react";
 import Demo_video from "@/assets/Video_part_demo.png";
-import "./Video-part.css";
+import "./styles/video-part.css";
 
-const Video_section = () => {
+export function VideoSection() {
   return (
     <>
       <div className="vs-heading-section01" id="ai-interview">
@@ -44,5 +44,4 @@ const Video_section = () => {
       </div>
     </>
   );
-};
-export default Video_section;
+}

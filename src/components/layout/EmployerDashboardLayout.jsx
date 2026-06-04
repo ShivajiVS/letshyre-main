@@ -11,14 +11,12 @@ import {
 import { logoutMe } from "@/services/auth.service";
 
 import team01 from "@/assets/team01.png";
-import check_mark from "@/assets/check-mark.png";
-import party from "@/assets/party.png";
 import logo from "@/assets/logo2.png";
 import logout from "@/assets/logout.png";
 import tour from "@/assets/Tour.png";
 import overlay_img from "@/assets/unlock-img02.png";
 
-import "./EmployerDashboardLayout.css";
+import "./styles/employer-dashboard-layout.css";
 import "@/components/dashboard/LockedOverlay";
 
 const MENU_ITEMS = [
