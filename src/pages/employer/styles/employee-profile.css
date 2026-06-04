@@ -1,12 +1,6 @@
 * {
   box-sizing: border-box;
 }
-
-/* C:\Users\shiva\OneDrive\Desktop\stepup\Refactored Code\letshyre-frontend\src\pages\employer\EmployeeProfile.css */
-
-/* =========================================================
-   WRAPPER & SCROLLING FIX
-========================================================= */
 .pp-wrapper {
   display: flex;
   flex-direction: column;
@@ -316,8 +310,10 @@
   content: "";
   position: absolute;
   left: -34.5px; /* Center of the -46px left dot (26px total width with content-box) */
-  top: 35px;     /* Start at center of current dot (22px + 13px) */
-  height: calc(100% + 14px); /* Stretch to center of next dot (100% height + 14px margin) */
+  top: 35px; /* Start at center of current dot (22px + 13px) */
+  height: calc(
+    100% + 14px
+  ); /* Stretch to center of next dot (100% height + 14px margin) */
   width: 3px;
   background: #5a8df6;
   z-index: 1;
@@ -622,12 +618,7 @@
 }
 
 .sk-bone {
-  background: linear-gradient(
-    90deg,
-    #e8eef7 25%,
-    #d5e0f0 50%,
-    #e8eef7 75%
-  );
+  background: linear-gradient(90deg, #e8eef7 25%, #d5e0f0 50%, #e8eef7 75%);
   background-size: 600px 100%;
   animation: sk-shimmer 1.4s ease-in-out infinite;
   display: block;

@@ -13,7 +13,7 @@ import {
 } from "@/hooks/employer/useEmployerJobs";
 
 import "./empSubSections.css";
-import "./PostJob.css";
+import "./styles/post-job.css";
 
 export function PostJob({ editJobId = null }) {
   const navigate = useNavigate();
@@ -21,7 +21,7 @@ export function PostJob({ editJobId = null }) {
 
   const [fileName, setFileName] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
-  
+
   // New state for Job Title input during JD upload
   const [jdJobTitle, setJdJobTitle] = useState("");
 
@@ -159,26 +159,48 @@ export function PostJob({ editJobId = null }) {
       const data = rawData.parse_response?.flat || rawData.parsed_fields || {};
 
       let expReq = "";
-      if (data.experience_min !== undefined && data.experience_min !== null && data.experience_max !== undefined && data.experience_max !== null) {
+      if (
+        data.experience_min !== undefined &&
+        data.experience_min !== null &&
+        data.experience_max !== undefined &&
+        data.experience_max !== null
+      ) {
         expReq = `${data.experience_min}-${data.experience_max} years`;
-      } else if (data.experience_min !== undefined && data.experience_min !== null) {
+      } else if (
+        data.experience_min !== undefined &&
+        data.experience_min !== null
+      ) {
         expReq = `${data.experience_min} years`;
-      } else if (data.experience_max !== undefined && data.experience_max !== null) {
+      } else if (
+        data.experience_max !== undefined &&
+        data.experience_max !== null
+      ) {
         expReq = `Up to ${data.experience_max} years`;
       }
 
       let salRange = "";
-      if (data.salary_min_lpa !== undefined && data.salary_min_lpa !== null && data.salary_max_lpa !== undefined && data.salary_max_lpa !== null) {
+      if (
+        data.salary_min_lpa !== undefined &&
+        data.salary_min_lpa !== null &&
+        data.salary_max_lpa !== undefined &&
+        data.salary_max_lpa !== null
+      ) {
         salRange = `${data.salary_min_lpa} - ${data.salary_max_lpa} LPA`;
-      } else if (data.salary_min_lpa !== undefined && data.salary_min_lpa !== null) {
+      } else if (
+        data.salary_min_lpa !== undefined &&
+        data.salary_min_lpa !== null
+      ) {
         salRange = `${data.salary_min_lpa} LPA`;
-      } else if (data.salary_max_lpa !== undefined && data.salary_max_lpa !== null) {
+      } else if (
+        data.salary_max_lpa !== undefined &&
+        data.salary_max_lpa !== null
+      ) {
         salRange = `Up to ${data.salary_max_lpa} LPA`;
       }
 
-      const skills = Array.isArray(data.required_skills) 
-        ? data.required_skills.join(", ") 
-        : (data.skills_text || "");
+      const skills = Array.isArray(data.required_skills)
+        ? data.required_skills.join(", ")
+        : data.skills_text || "";
 
       setJobData({
         title: data.job_title || jdJobTitle.trim(),
@@ -196,7 +218,9 @@ export function PostJob({ editJobId = null }) {
         education: data.minimum_education || "",
         specialization: data.specialization || "",
 
-        description: Array.isArray(data.responsibilities) ? data.responsibilities.join("\n") : (data.responsibilities || ""),
+        description: Array.isArray(data.responsibilities)
+          ? data.responsibilities.join("\n")
+          : data.responsibilities || "",
         job_description: data.job_description || "",
 
         experience_required: expReq,
@@ -208,8 +232,13 @@ export function PostJob({ editJobId = null }) {
       toast.success("JD Analyzed Successfully!");
     } catch (err) {
       console.error(err);
-      const apiError = err?.response?.data?.message || err?.response?.data?.error || "JD parsing failed";
-      toast.error(typeof apiError === "string" ? apiError : "JD parsing failed");
+      const apiError =
+        err?.response?.data?.message ||
+        err?.response?.data?.error ||
+        "JD parsing failed";
+      toast.error(
+        typeof apiError === "string" ? apiError : "JD parsing failed",
+      );
     }
   };
 
@@ -252,7 +281,7 @@ export function PostJob({ editJobId = null }) {
         deadline: jobData.application_deadline || null,
 
         skills_required: jobData.must_have_skills
-          ? jobData.must_have_skills.split(",").map(s => s.trim())
+          ? jobData.must_have_skills.split(",").map((s) => s.trim())
           : [],
 
         responsibilities: jobData.description
@@ -265,7 +294,7 @@ export function PostJob({ editJobId = null }) {
       const formData = new FormData();
       formData.append("title", jobData.title);
       formData.append("file", JSON.stringify(payload));
-      
+
       // Attach JD File
       if (selectedFile) {
         formData.append("jd_file", selectedFile);
@@ -284,7 +313,7 @@ export function PostJob({ editJobId = null }) {
 
       setShowJdPopup(false);
       setShowSuccess(true);
-      
+
       // Clear all states after successful posting
       setFileName("");
       setSelectedFile(null);
@@ -292,10 +321,10 @@ export function PostJob({ editJobId = null }) {
       setCustomIndustry("");
     } catch (error) {
       console.error(error.response?.data);
-      
+
       let errorMsg = "Error posting job";
       const resData = error.response?.data;
-      
+
       if (resData?.errors) {
         // Extract first error message from DRF errors object
         const firstKey = Object.keys(resData.errors)[0];
@@ -306,7 +335,7 @@ export function PostJob({ editJobId = null }) {
       } else if (resData?.message) {
         errorMsg = resData.message;
       }
-      
+
       toast.error(errorMsg);
     }
   };
@@ -344,9 +373,7 @@ export function PostJob({ editJobId = null }) {
         />
       )}
 
-      {showSuccess && (
-        <SuccessPopup setShowSuccess={setShowSuccess} />
-      )}
+      {showSuccess && <SuccessPopup setShowSuccess={setShowSuccess} />}
     </div>
   );
 }

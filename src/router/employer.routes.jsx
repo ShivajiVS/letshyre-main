@@ -186,7 +186,7 @@ export const employerRoutes = [
             path: "payment-verification",
             async lazy() {
               const { PaymentVerification } =
-                await import("@/pages/employer/payments/PaymentVerification");
+                await import("@/pages/employer/components/payments/PaymentVerification");
               return { Component: PaymentVerification };
             },
           },

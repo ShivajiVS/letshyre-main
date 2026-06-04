@@ -1,10 +1,10 @@
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { useSearchParams, useNavigate } from "react-router";
-import "./view-jobs.css";
 import { useJobs } from "@/hooks/employer/useEmployerJobs";
-import { JobList } from "@/components/employer/view-jobs/JobList";
-import { Pagination } from "@/components/employer/view-jobs/Pagination";
-import { LoadingSkeleton } from "@/components/employer/view-jobs/LoadingSkeleton";
+import { JobList } from "@/pages/employer/components/view-jobs/JobList";
+import { Pagination } from "@/pages/employer/components/view-jobs/Pagination";
+import { LoadingSkeleton } from "@/pages/employer/components/view-jobs/LoadingSkeleton";
+import "./styles/view-jobs.css";
 
 export function ViewJobs() {
   const navigate = useNavigate();
@@ -69,7 +69,9 @@ export function ViewJobs() {
       <div className="ho-header">
         <div className="ho-header-text">
           <h1>All Jobs</h1>
-          <p className="ho-header-subtitle">View and manage all jobs you’ve posted.</p>
+          <p className="ho-header-subtitle">
+            View and manage all jobs you’ve posted.
+          </p>
         </div>
       </div>
       <div className="cd-job-tabs">

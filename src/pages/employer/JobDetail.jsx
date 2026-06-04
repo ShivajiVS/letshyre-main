@@ -5,8 +5,8 @@ import {
   useDeleteJob,
   usePatchJobStatus,
 } from "@/hooks/employer/useEmployerJobs";
-import { EditJobModal } from "@/components/employer/view-jobs/EditJobModal";
-import "./job-detail.css";
+import { EditJobModal } from "@pages/employer/components/view-jobs/EditJobModal";
+import "./styles/job-detail.css";
 
 const JobDetailSkeleton = () => (
   <div className="job-detail-container">
@@ -113,7 +113,10 @@ export function JobDetail() {
 
   return (
     <div className="job-detail-container">
-      <button className="jd-back-nav" onClick={() => navigate("/employer/view-jobs")}>
+      <button
+        className="jd-back-nav"
+        onClick={() => navigate("/employer/view-jobs")}
+      >
         <i className="bi bi-arrow-left"></i> Back to Jobs
       </button>
 

@@ -6,8 +6,8 @@ import {
   useCreateOrder,
 } from "../../hooks/payments/useCreditPurchase";
 import { useLoadRazorpay } from "../../hooks/payments/useLoadRazorpay";
-import { TokenSelector } from "./payments/TokenSelector";
-import { OrderSummary } from "./payments/OrderSummary";
+import { TokenSelector } from "./components/payments/TokenSelector";
+import { OrderSummary } from "./components/payments/OrderSummary";
 import "./styles/subscriptions.css";
 
 export function Subscriptions() {
@@ -22,7 +22,8 @@ export function Subscriptions() {
     error: costError,
   } = useCalculateCost(tokens);
 
-  const { mutateAsync: createOrder, isPending: isCreatingOrder } = useCreateOrder();
+  const { mutateAsync: createOrder, isPending: isCreatingOrder } =
+    useCreateOrder();
 
   const handlePayment = async () => {
     if (!isRazorpayLoaded) {
@@ -50,7 +51,8 @@ export function Subscriptions() {
         throw new Error(orderRes.message || "Failed to create order");
       }
 
-      const { razorpay_key, order_id, amount, currency, purchase_id } = orderRes.data;
+      const { razorpay_key, order_id, amount, currency, purchase_id } =
+        orderRes.data;
 
       // 2. Setup Razorpay options
       const options = {
@@ -65,7 +67,7 @@ export function Subscriptions() {
         },
         handler: function (response) {
           navigate(
-            `/employer/payment-verification?razorpay_order_id=${response.razorpay_order_id}&razorpay_payment_id=${response.razorpay_payment_id}&razorpay_signature=${response.razorpay_signature}&purchase_id=${purchase_id}`
+            `/employer/payment-verification?razorpay_order_id=${response.razorpay_order_id}&razorpay_payment_id=${response.razorpay_payment_id}&razorpay_signature=${response.razorpay_signature}&purchase_id=${purchase_id}`,
           );
         },
         prefill: {
@@ -77,15 +79,19 @@ export function Subscriptions() {
       };
 
       const rzp = new window.Razorpay(options);
-      
+
       rzp.on("payment.failed", function (response) {
-        navigate(`/employer/payment-verification?error=true&description=${encodeURIComponent(response.error.description || 'Payment Failed')}`);
+        navigate(
+          `/employer/payment-verification?error=true&description=${encodeURIComponent(response.error.description || "Payment Failed")}`,
+        );
       });
 
       rzp.open();
     } catch (err) {
       console.error("Payment flow error:", err);
-      toast.error(err.message || "Something went wrong during payment initialization.");
+      toast.error(
+        err.message || "Something went wrong during payment initialization.",
+      );
     }
   };
 
@@ -94,27 +100,35 @@ export function Subscriptions() {
       <div className="subscriptions-header">
         <h1>Premium Credits</h1>
         <p>
-          Unlock the full potential of LetsHyre. Purchase tokens to access premium 
-          candidate profiles and seamlessly schedule AI-driven interviews.
+          Unlock the full potential of LetsHyre. Purchase tokens to access
+          premium candidate profiles and seamlessly schedule AI-driven
+          interviews.
         </p>
       </div>
 
       {isCostError && (
-        <div className="alert alert-error mb-4" style={{ color: "var(--danger)", textAlign: "center", marginBottom: "2rem" }}>
+        <div
+          className="alert alert-error mb-4"
+          style={{
+            color: "var(--danger)",
+            textAlign: "center",
+            marginBottom: "2rem",
+          }}
+        >
           Failed to load pricing: {costError?.message}
         </div>
       )}
 
       <div className="subscriptions-grid">
         {/* Token Selector Column */}
-        <TokenSelector 
-          selectedTokens={tokens} 
+        <TokenSelector
+          selectedTokens={tokens}
           onChange={(newVal) => setTokens(newVal)}
-          isPending={isCreatingOrder} 
+          isPending={isCreatingOrder}
         />
 
         {/* Order Summary Column */}
-        <OrderSummary 
+        <OrderSummary
           costData={costData}
           isPending={isCostPending}
           isPaying={isCreatingOrder}

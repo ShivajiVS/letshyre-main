@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useSearchParams, useNavigate } from "react-router";
 import { motion } from "framer-motion";
-import { useVerifyOrder } from "../../../hooks/payments/useCreditPurchase";
+import { useVerifyOrder } from "../../../../hooks/payments/useCreditPurchase";
 import "../styles/payment-verification.css";
 
 export function PaymentVerification() {
@@ -9,7 +9,7 @@ export function PaymentVerification() {
   const navigate = useNavigate();
   const { mutateAsync: verifyOrder } = useVerifyOrder();
 
-  const [status, setStatus] = useState("loading"); 
+  const [status, setStatus] = useState("loading");
   const [errorMessage, setErrorMessage] = useState("");
   const [orderDetails, setOrderDetails] = useState(null);
   const verifyAttempted = useRef(false);
@@ -33,9 +33,16 @@ export function PaymentVerification() {
       const razorpay_signature = searchParams.get("razorpay_signature");
       const purchase_id = searchParams.get("purchase_id");
 
-      if (!razorpay_payment_id || !razorpay_order_id || !razorpay_signature || !purchase_id) {
+      if (
+        !razorpay_payment_id ||
+        !razorpay_order_id ||
+        !razorpay_signature ||
+        !purchase_id
+      ) {
         setStatus("error");
-        setErrorMessage("Invalid payment verification request. Missing required tokens.");
+        setErrorMessage(
+          "Invalid payment verification request. Missing required tokens.",
+        );
         return;
       }
 
@@ -53,11 +60,15 @@ export function PaymentVerification() {
           setOrderDetails(res.data);
         } else {
           setStatus("error");
-          setErrorMessage(res.message || "Payment signature verification failed.");
+          setErrorMessage(
+            res.message || "Payment signature verification failed.",
+          );
         }
       } catch (err) {
         setStatus("error");
-        setErrorMessage(err.message || "An unexpected error occurred during verification.");
+        setErrorMessage(
+          err.message || "An unexpected error occurred during verification.",
+        );
       }
     };
 
@@ -96,10 +107,7 @@ export function PaymentVerification() {
         variants={containerVariants}
       >
         {status === "loading" && (
-          <motion.div
-            className="pv-content"
-            variants={itemVariants}
-          >
+          <motion.div className="pv-content" variants={itemVariants}>
             <div
               style={{
                 position: "relative",

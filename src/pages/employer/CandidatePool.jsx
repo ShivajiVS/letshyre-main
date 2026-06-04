@@ -7,10 +7,10 @@ import {
   useUnlockCandidateProfile,
 } from "@/hooks/employer/useCandidatePool";
 import { showSuccess, showError } from "@/utils/toast";
-import { JobSelector } from "./candidate-pool/JobSelector";
-import { CandidateCard } from "./candidate-pool/CandidateCard";
-import { CandidatePoolSkeleton } from "./candidate-pool/CandidatePoolSkeleton";
-import { EmptyState } from "./candidate-pool/EmptyState";
+import { JobSelector } from "./components/candidate-pool/JobSelector";
+import { CandidateCard } from "./components/candidate-pool/CandidateCard";
+import { CandidatePoolSkeleton } from "./components/candidate-pool/CandidatePoolSkeleton";
+import { EmptyState } from "./components/candidate-pool/EmptyState";
 import UnlockProfileModal from "@/components/UnlockProfileModal";
 
 import "@/pages/employer/styles/candidate-pool.css";

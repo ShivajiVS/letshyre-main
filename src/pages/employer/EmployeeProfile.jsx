@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router";
-import "./EmployeeProfile.css";
 import { useUnlockedCandidateProfile } from "@/hooks/employer/useUnlockedCandidateProfile";
 import {
   HeroSkeleton,
@@ -9,6 +8,9 @@ import {
   ScoreCardSkeleton,
   SkillsSkeleton,
 } from "@/pages/employee/ProfileSkeleton";
+
+import "./styles/employee-profile.css";
+
 
 const CX = 120,
   CY = 128,
