@@ -3,8 +3,8 @@ import { Helmet } from "react-helmet-async";
 import { Link } from "react-router";
 import { motion } from "framer-motion";
 
-import "./EmployeeProfile.css";
-import "./download-app.css";
+import "./styles/employee-profile.css";
+import "./styles/download-app.css";
 
 export function DownloadApp() {
   const [os, setOs] = useState("Windows");
@@ -86,7 +86,8 @@ export function DownloadApp() {
         </motion.div>
 
         <motion.h4 className="pp-heading da-heading" variants={itemVariants}>
-          Download <span className="da-text-gradient">LetsHyre</span> Application
+          Download <span className="da-text-gradient">LetsHyre</span>{" "}
+          Application
         </motion.h4>
 
         <motion.p

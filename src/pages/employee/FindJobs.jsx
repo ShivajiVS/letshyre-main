@@ -1,5 +1,9 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { useFindJobs, useIndustries, useApplyForJob } from "@/hooks/useFindJobs";
+import {
+  useFindJobs,
+  useIndustries,
+  useApplyForJob,
+} from "@/hooks/useFindJobs";
 
 /* ── Components ── */
 import JobCard from "./components/findJobs/JobCard";
@@ -14,7 +18,7 @@ import slide2 from "@/assets/Carousel-2.jpg";
 import slide3 from "@/assets/Carousel-3.jpg";
 
 /* ── Styles ── */
-import "./FindJobs.css";
+import "./styles/find-jobs.css";
 
 /* ══════════════════════════════════════════════════
    CONSTANTS
@@ -86,10 +90,8 @@ export function FindJobs() {
     refetch,
   } = useFindJobs(queryFilters);
 
-  const {
-    data: industries = [],
-    isLoading: industriesLoading,
-  } = useIndustries();
+  const { data: industries = [], isLoading: industriesLoading } =
+    useIndustries();
 
   const applyMutation = useApplyForJob();
 
@@ -125,7 +127,9 @@ export function FindJobs() {
         onSuccess: () => {
           // Update selected job in modal to reflect applied state
           setSelectedJob((prev) =>
-            prev?.id === jobId ? { ...prev, status: "Applied", application_id: "temp" } : prev
+            prev?.id === jobId
+              ? { ...prev, status: "Applied", application_id: "temp" }
+              : prev,
           );
         },
         onError: () => {
@@ -133,7 +137,7 @@ export function FindJobs() {
         },
       });
     },
-    [applyMutation]
+    [applyMutation],
   );
 
   const handlePageChange = useCallback((page) => {

@@ -4,7 +4,7 @@ import { useCandidateProfile } from "@/hooks/useCandidateProfile";
 import sc_bg from "@/assets/scorecard-bg.png";
 import Demo_video from "@/assets/Video_part_demo.png";
 
-import "./EmployeeScoreCard.css";
+import "./styles/employee-scorecard.css";
 
 export function EmployeeScoreCard() {
   const { data, isLoading, isError } = useCandidateScorecard();

@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
-import "./EmployeeProfile.css";
 import { useCandidateProfile } from "@/hooks/useCandidateProfile";
 import {
   HeroSkeleton,
@@ -9,6 +8,8 @@ import {
   ScoreCardSkeleton,
   SkillsSkeleton,
 } from "./ProfileSkeleton";
+
+import "./styles/employee-profile.css";
 
 const CX = 120,
   CY = 128,
