@@ -161,7 +161,6 @@ export function EmployeeScoreCard() {
           )}
         </div>
 
-
         {/* ================= QUESTIONS & ANSWERS (NEW DESIGN) ================= */}
         {questionBreakdown.length > 0 && (
           <div className="esc-qa-section">
@@ -211,7 +210,9 @@ export function EmployeeScoreCard() {
         )}
 
         {/* ================= FEEDBACK SECTIONS ================= */}
-        {(strengths.length > 0 || recommendations.length > 0 || areasForImprovement.length > 0) && (
+        {(strengths.length > 0 ||
+          recommendations.length > 0 ||
+          areasForImprovement.length > 0) && (
           <div className="esc-feedback-section">
             {strengths.length > 0 && (
               <div className="esc-feedback-card">
@@ -220,7 +221,18 @@ export function EmployeeScoreCard() {
                   {strengths.map((item, idx) => (
                     <li key={idx} className="esc-feedback-item">
                       <div className="esc-feedback-icon esc-feedback-icon--strength">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        <svg
+                          width="12"
+                          height="12"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="3"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
                       </div>
                       <p>{item}</p>
                     </li>
@@ -236,7 +248,20 @@ export function EmployeeScoreCard() {
                   {areasForImprovement.map((item, idx) => (
                     <li key={idx} className="esc-feedback-item">
                       <div className="esc-feedback-icon esc-feedback-icon--improvement">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                        <svg
+                          width="12"
+                          height="12"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="3"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <circle cx="12" cy="12" r="10"></circle>
+                          <line x1="12" y1="8" x2="12" y2="12"></line>
+                          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                        </svg>
                       </div>
                       <p>{item}</p>
                     </li>
@@ -252,7 +277,19 @@ export function EmployeeScoreCard() {
                   {recommendations.map((item, idx) => (
                     <li key={idx} className="esc-feedback-item">
                       <div className="esc-feedback-icon esc-feedback-icon--recommendation">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                        <svg
+                          width="12"
+                          height="12"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="3"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="M5 12h14"></path>
+                          <path d="m12 5 7 7-7 7"></path>
+                        </svg>
                       </div>
                       <p>{item}</p>
                     </li>
