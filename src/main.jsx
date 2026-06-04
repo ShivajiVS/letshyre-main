@@ -5,8 +5,6 @@ import { HelmetProvider } from "react-helmet-async";
 import App from "./App.jsx";
 import "./index.css";
 
-
-
 // Single QueryClient instance — created outside the component tree so it is
 // never re-instantiated on re-renders.
 const queryClient = new QueryClient({
@@ -26,7 +24,7 @@ createRoot(document.getElementById("root")).render(
   <StrictMode>
     <HelmetProvider>
       <QueryClientProvider client={queryClient}>
-        <App /> 
+        <App />
       </QueryClientProvider>
     </HelmetProvider>
   </StrictMode>,

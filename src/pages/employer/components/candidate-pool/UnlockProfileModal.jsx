@@ -1,26 +1,39 @@
 import { useState } from "react";
 import { useCandidateInterviews } from "@/hooks/employer/useCandidatePool";
-import "./styles/unlock-profile-modal.css";
+import "../../styles/unlock-profile-modal.css";
 
-export default function UnlockProfileModal({ candidate, onClose, onUnlock, isUnlocking }) {
+export default function UnlockProfileModal({
+  candidate,
+  onClose,
+  onUnlock,
+  isUnlocking,
+}) {
   // Extract primary role from the candidate data
   const primary = candidate.roles[0];
-  
+
   // Fetch candidate's past interview scores dynamically
-  const { data: extrasData = [], isLoading } = useCandidateInterviews(candidate.id);
+  const { data: extrasData = [], isLoading } = useCandidateInterviews(
+    candidate.id,
+  );
 
   // Filter out the primary interview (match by role and rounded score) and limit to max 2
   let primaryFound = false;
   let primaryInterviewData = null;
-  
-  const displayExtras = extrasData.filter((ex) => {
-    if (!primaryFound && ex.role === primary.role && Math.round(ex.score) === primary.score) {
-      primaryFound = true;
-      primaryInterviewData = ex;
-      return false; // Exclude the one that matches primary
-    }
-    return true;
-  }).slice(0, 2);
+
+  const displayExtras = extrasData
+    .filter((ex) => {
+      if (
+        !primaryFound &&
+        ex.role === primary.role &&
+        Math.round(ex.score) === primary.score
+      ) {
+        primaryFound = true;
+        primaryInterviewData = ex;
+        return false; // Exclude the one that matches primary
+      }
+      return true;
+    })
+    .slice(0, 2);
 
   // Track which interviews are checked (stores interview_id)
   const [selectedInterviews, setSelectedInterviews] = useState([]);
@@ -76,20 +89,35 @@ export default function UnlockProfileModal({ candidate, onClose, onUnlock, isUnl
           <div className="up-primary-info">
             <div
               className="ho-avatar"
-              style={{ background: candidate.profile_photo_url ? 'transparent' : candidate.avatarBg || '#1e293b', width: 42, height: 42, overflow: 'hidden' }}
+              style={{
+                background: candidate.profile_photo_url
+                  ? "transparent"
+                  : candidate.avatarBg || "#1e293b",
+                width: 42,
+                height: 42,
+                overflow: "hidden",
+              }}
             >
               {candidate.profile_photo_url ? (
-                <img 
-                  src={candidate.profile_photo_url} 
-                  alt={candidate.name} 
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                <img
+                  src={candidate.profile_photo_url}
+                  alt={candidate.name}
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
                   onError={(e) => {
                     e.target.style.display = "none";
                     e.target.nextElementSibling.style.display = "flex";
                   }}
                 />
               ) : null}
-              <div style={{ display: candidate.profile_photo_url ? "none" : "flex", alignItems: "center", justifyContent: "center", width: "100%", height: "100%" }}>
+              <div
+                style={{
+                  display: candidate.profile_photo_url ? "none" : "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "100%",
+                  height: "100%",
+                }}
+              >
                 {candidate.avatar}
               </div>
             </div>
@@ -103,26 +131,53 @@ export default function UnlockProfileModal({ candidate, onClose, onUnlock, isUnl
             </div>
           </div>
           {/* Primary checkbox */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
             {primaryInterviewData?.unlocked && (
-              <span style={{ fontSize: '11px', color: '#16a34a', fontWeight: '600', backgroundColor: '#dcfce7', padding: '3px 8px', borderRadius: '12px', letterSpacing: '0.02em' }}>
+              <span
+                style={{
+                  fontSize: "11px",
+                  color: "#16a34a",
+                  fontWeight: "600",
+                  backgroundColor: "#dcfce7",
+                  padding: "3px 8px",
+                  borderRadius: "12px",
+                  letterSpacing: "0.02em",
+                }}
+              >
                 Unlocked
               </span>
             )}
             <input
               type="checkbox"
-              className={`up-checkbox ${(!primaryInterviewData || primaryInterviewData.unlocked) ? 'up-checkbox--disabled' : ''}`}
-              checked={!!primaryInterviewData?.interview_id && selectedInterviews.includes(primaryInterviewData.interview_id)}
+              className={`up-checkbox ${!primaryInterviewData || primaryInterviewData.unlocked ? "up-checkbox--disabled" : ""}`}
+              checked={
+                !!primaryInterviewData?.interview_id &&
+                selectedInterviews.includes(primaryInterviewData.interview_id)
+              }
               disabled={!primaryInterviewData || primaryInterviewData.unlocked}
-              onChange={() => handleToggle(primaryInterviewData?.interview_id, primaryInterviewData?.unlocked)}
+              onChange={() =>
+                handleToggle(
+                  primaryInterviewData?.interview_id,
+                  primaryInterviewData?.unlocked,
+                )
+              }
             />
           </div>
         </div>
 
         {/* Extra Roles Box (Only shows if candidate applied for multiple roles) */}
         {isLoading ? (
-          <div className="up-extra-box" style={{ padding: '16px', display: 'flex', justifyContent: 'center' }}>
-            <span style={{ color: '#64748b', fontSize: '14px' }}>Loading interviews...</span>
+          <div
+            className="up-extra-box"
+            style={{
+              padding: "16px",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <span style={{ color: "#64748b", fontSize: "14px" }}>
+              Loading interviews...
+            </span>
           </div>
         ) : displayExtras.length > 0 ? (
           <>
@@ -131,29 +186,47 @@ export default function UnlockProfileModal({ candidate, onClose, onUnlock, isUnl
             </p>
             <div className="up-extra-box">
               {displayExtras.map((ex) => (
-                <div 
-                  key={ex.interview_id} 
+                <div
+                  key={ex.interview_id}
                   className="up-extra-row"
                   onClick={() => handleToggle(ex.interview_id, ex.unlocked)}
-                  style={{ cursor: ex.unlocked ? 'not-allowed' : 'pointer' }}
+                  style={{ cursor: ex.unlocked ? "not-allowed" : "pointer" }}
                 >
                   <p className="up-c-role">
                     <span className="ho-code-icon">&lt;/&gt;</span> {ex.role}
                     {/* Muted Sub-Score */}
                     <span className="up-score-badge-muted">{ex.score}%</span>
                   </p>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "8px",
+                    }}
+                  >
                     {ex.unlocked && (
-                      <span style={{ fontSize: '11px', color: '#16a34a', fontWeight: '600', backgroundColor: '#dcfce7', padding: '3px 8px', borderRadius: '12px', letterSpacing: '0.02em' }}>
+                      <span
+                        style={{
+                          fontSize: "11px",
+                          color: "#16a34a",
+                          fontWeight: "600",
+                          backgroundColor: "#dcfce7",
+                          padding: "3px 8px",
+                          borderRadius: "12px",
+                          letterSpacing: "0.02em",
+                        }}
+                      >
                         Unlocked
                       </span>
                     )}
                     <input
                       type="checkbox"
-                      className={`up-checkbox ${ex.unlocked ? 'up-checkbox--disabled' : ''}`}
+                      className={`up-checkbox ${ex.unlocked ? "up-checkbox--disabled" : ""}`}
                       checked={selectedInterviews.includes(ex.interview_id)}
                       disabled={ex.unlocked}
-                      onChange={() => handleToggle(ex.interview_id, ex.unlocked)}
+                      onChange={() =>
+                        handleToggle(ex.interview_id, ex.unlocked)
+                      }
                       onClick={(e) => e.stopPropagation()} // Prevent bubble to row so it doesn't toggle twice
                     />
                   </div>
@@ -170,19 +243,24 @@ export default function UnlockProfileModal({ candidate, onClose, onUnlock, isUnl
             <br />
             Interview Recording, and Resume.
           </p>
-          <button 
-            className="up-btn" 
+          <button
+            className="up-btn"
             onClick={() => {
               if (onUnlock) {
                 // Pass the selected interviews array
                 onUnlock(candidate.id, selectedInterviews, totalCredits);
-              }
-              else onClose();
+              } else onClose();
             }}
             disabled={isUnlocking || totalCredits === 0}
-            style={{ opacity: (isUnlocking || totalCredits === 0) ? 0.7 : 1, cursor: (isUnlocking || totalCredits === 0) ? 'not-allowed' : 'pointer' }}
+            style={{
+              opacity: isUnlocking || totalCredits === 0 ? 0.7 : 1,
+              cursor:
+                isUnlocking || totalCredits === 0 ? "not-allowed" : "pointer",
+            }}
           >
-            {isUnlocking ? "Unlocking..." : `Unlock Profile for ${totalCredits}C`}
+            {isUnlocking
+              ? "Unlocking..."
+              : `Unlock Profile for ${totalCredits}C`}
           </button>
         </div>
       </div>

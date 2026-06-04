@@ -1,8 +1,8 @@
 import { useEffect, useState, useRef } from "react";
 import { useSearchParams, useNavigate } from "react-router";
 import { motion } from "framer-motion";
-import { useVerifyOrder } from "../../../../hooks/payments/useCreditPurchase";
-import "../styles/payment-verification.css";
+import { useVerifyOrder } from "@/hooks/payments/useCreditPurchase";
+import "../../styles/payment-verification.css";
 
 export function PaymentVerification() {
   const [searchParams] = useSearchParams();
