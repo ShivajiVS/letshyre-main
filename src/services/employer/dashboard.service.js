@@ -24,4 +24,10 @@ export const dashboardService = {
     const res = await api.post("/user/v1/employer_team_members/", payload);
     return res.data;
   },
+
+  // Fetch employer dashboard stats (top cards & credits)
+  fetchDashboardStats: async () => {
+    const res = await api.get("/user/v1/employer_dashboard_cards/");
+    return res.data?.data || res.data;
+  },
 };

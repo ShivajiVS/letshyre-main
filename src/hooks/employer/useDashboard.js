@@ -14,7 +14,7 @@ export const useEmployerCredits = () => {
   return useQuery({
     queryKey: ["employerCredits"],
     queryFn: dashboardService.getEmployerCredits,
-    staleTime: 5 * 60 * 1000,
+    staleTime: 2 * 60 * 1000,
     retry: 2,
   });
 };
@@ -37,5 +37,14 @@ export const useInviteTeamMember = () => {
       // Invalidate the team members query so it refetches and updates the count
       queryClient.invalidateQueries({ queryKey: ["employerTeamMembers"] });
     },
+  });
+};
+
+export const useEmployerDashboardStats = () => {
+  return useQuery({
+    queryKey: ["employerDashboardStats"],
+    queryFn: dashboardService.fetchDashboardStats,
+    staleTime: 2 * 60 * 1000,
+    retry: 2,
   });
 };

@@ -1,17 +1,18 @@
 import { useEffect, useState } from "react";
 import api from "@/services/api";
 
-import ds01 from "@/assets/emp-ds01.png";
-import ds02 from "@/assets/emp-ds02.png";
-import ds03 from "@/assets/emp-ds03.png";
+import { useEmployerDashboardStats } from "@/hooks/employer/useDashboard";
+import DashboardTopCards from "./components/dashboard/DashboardTopCards";
+import CreditUsageCard from "./components/dashboard/CreditUsageCard";
+
 import robo from "@/assets/emp-robo.png";
 
 import "./empSubSections.css";
 
 export function EmployerDashboard() {
   const [jobs, setJobs] = useState([]);
-  const [credits, setCredits] = useState({ used: 0, total: 100 });
-  const [applicants, setApplicants] = useState(0);
+  
+  const { data: stats, isLoading } = useEmployerDashboardStats();
 
   // ================= FETCH DATA =================
   useEffect(() => {
@@ -24,35 +25,12 @@ export function EmployerDashboard() {
       const jobRes = await api.get("/user/v1/employer_jobs/");
       const jobsData = jobRes.data?.data.results || [];
       setJobs(jobsData);
-
-      // ✅ Applicants (sum from jobs if no direct API)
-      let totalApplicants = 0;
-      jobsData.forEach((j) => {
-        totalApplicants += j.applicants_count || 0;
-      });
-      setApplicants(totalApplicants);
-
-      // ✅ Credits
-      const creditRes = await api.get("/payment/v1/employer_credits/");
-      const creditData = creditRes.data || {};
-
-      setCredits({
-        used: creditData.used_credits || 0,
-        total: creditData.total_credits || 100,
-      });
     } catch (err) {
       console.error("Dashboard API error:", err);
     }
   };
 
   // ================= CALCULATIONS =================
-  const activeJobs = jobs.length;
-  const postedThisMonth = jobs.length; // you can refine later with date filter
-
-  const creditPercentage = credits.total
-    ? Math.round((credits.used / credits.total) * 100)
-    : 0;
-
   const metrics = jobs.slice(0, 5).map((job) => ({
     label: job.title?.slice(0, 6) || "Job",
     value: job.applicants_count || 20,
@@ -62,101 +40,7 @@ export function EmployerDashboard() {
   return (
     <div className="ds-main">
       <div className="ds-sub-box01">
-        {/* ================= ACTIVE JOBS ================= */}
-        <div className="ds-sub-inner01">
-          <div className="ds-card-header">Active Jobs</div>
-
-          <div className="ds-card-body">
-            <div className="ds-card-left">
-              <div className="ds-icon">
-                <i className="bi bi-suitcase"></i>
-              </div>
-            </div>
-
-            <div className="ds-card-center">
-              <h2>{activeJobs}</h2>
-              <p>/{postedThisMonth} posted this month</p>
-            </div>
-
-            <div className="ds-card-right">
-              <div className="ds-bars">
-                <img src={ds01} alt="Chart" />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* ================= APPLICANTS ================= */}
-        <div className="ds-sub-inner01">
-          <div className="ds-card-header">Total Applicants</div>
-
-          <div className="ds-card-body">
-            <div className="ds-card-left">
-              <div className="ds-icon">
-                <i className="bi bi-people"></i>
-              </div>
-            </div>
-
-            <div className="ds-card-center">
-              <h2>{applicants}</h2>
-              <p>/this month</p>
-            </div>
-
-            <div className="ds-card-right">
-              <div className="ds-bars">
-                <img src={ds02} alt="Chart" />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* ================= MATCHES ================= */}
-        <div className="ds-sub-inner01">
-          <div className="ds-card-header">New Matches Today</div>
-
-          <div className="ds-card-body">
-            <div className="ds-card-left">
-              <div className="ds-icon">
-                <i className="bi bi-basket"></i>
-              </div>
-            </div>
-
-            <div className="ds-card-center">
-              <h2>{Math.floor(applicants * 0.4)}</h2>
-              <p>/AI matches</p>
-            </div>
-
-            <div className="ds-card-right">
-              <div className="ds-bars">
-                <img src={ds03} alt="Chart" />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* ================= MATCHES ================= */}
-        <div className="ds-sub-inner01">
-          <div className="ds-card-header">New Matches Today</div>
-
-          <div className="ds-card-body">
-            <div className="ds-card-left">
-              <div className="ds-icon">
-                <i className="bi bi-basket"></i>
-              </div>
-            </div>
-
-            <div className="ds-card-center">
-              <h2>{Math.floor(applicants * 0.4)}</h2>
-              <p>/AI matches</p>
-            </div>
-
-            <div className="ds-card-right">
-              <div className="ds-bars">
-                <img src={ds03} alt="Chart" />
-              </div>
-            </div>
-          </div>
-        </div>
+        <DashboardTopCards stats={stats} isLoading={isLoading} />
       </div>
 
       {/* ================= METRICS ================= */}
@@ -205,21 +89,7 @@ export function EmployerDashboard() {
         </div>
 
         {/* ================= CREDITS ================= */}
-        <div className="ds-sub-inner02">
-          <div className="ds-credit-card">
-            <h3>Team Credit Usage</h3>
-
-            <div className="ds-circle-wrapper">
-              <div className="ds-credits-text">
-                <h1>{creditPercentage}%</h1>
-                <p>
-                  of your credits <br />
-                  is used
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
+        <CreditUsageCard credits={stats?.credits} isLoading={isLoading} />
         {/*
         <div className="ds-sub-inner02">
           <div className="ds-credit-card">

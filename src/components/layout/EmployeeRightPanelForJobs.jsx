@@ -1,4 +1,5 @@
 export default function EmployeeRightPanelForJobs({ profile }) {
+  console.log("data:prpfile", profile);
   const userName = profile?.name;
 
   const handleTakeInterview = () => {
@@ -15,6 +16,7 @@ export default function EmployeeRightPanelForJobs({ profile }) {
 
     console.log("Stored User:", storedUser);
 
+    /* electron start ======
     // ✅ Validate access token
     if (!accessToken) {
       alert("Access token missing");
@@ -52,6 +54,18 @@ export default function EmployeeRightPanelForJobs({ profile }) {
         window.location.href = "http://localhost:5173/download";
       }
     }, 2000);
+
+
+   // http://localhost:3002/download?accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3NDY1NzcyMjgsInRva2VuX2lkIjoiN2FhYjExYzUtNmQ2OC00NDk1LWFhNzgtZGJjNzk5YzQxZmM3IiwidHlwZSI6InJlZnJlc2giLCJleHAiOjE3NDcxODIwMjgsInN1YiI6IjIifQ.fHkI6w8Uu_831lR3C6Jb7-e69w1sH6613Q3o16N5R4c
+
+    // electron code end...*/
+
+    // const interview_attempts_remaining =
+    //   profile?.interview_attempts_remaining || 0;
+
+    const InterviewUrl = `https://interview.letshyre.com?ac=${accessToken}&rc=${refreshToken}`;
+
+    window.open(InterviewUrl, "_blank");
   };
 
   return (
@@ -59,15 +73,24 @@ export default function EmployeeRightPanelForJobs({ profile }) {
       <h4>Take your AI Interview</h4>
 
       <div className="cd-profile-card">
-        <img src={profile?.profile_photo} alt="user" />
+        <img src={profile?.profile_photo} alt="Your Profile" />
         <h5>{userName}</h5>
         <p>
           You have {profile?.interview_attempts_remaining || 0} more attempts
           left to improve your results and boost your profile ranking.
         </p>
 
-        <button className="cd-ai-btn" onClick={handleTakeInterview}>
-          Take AI Interview
+        <button
+          className="cd-ai-btn"
+          onClick={handleTakeInterview}
+          disabled={
+            !profile?.interview_attempts_remaining ||
+            profile?.interview_attempts_remaining === 0
+          }
+        >
+          {profile?.interview_attempts_remaining > 0
+            ? "Take AI Interview"
+            : `You have ${profile?.interview_attempts_remaining || 0} interviews left`}
         </button>
       </div>
     </aside>
