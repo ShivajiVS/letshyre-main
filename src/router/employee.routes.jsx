@@ -1,5 +1,6 @@
 import { requireAuth, requireGuest } from "@/loaders/requireAuth";
 import { ROLES } from "@/constants";
+import { Outlet } from "react-router";
 
 export const employeeRoutes = [
   {
@@ -94,6 +95,32 @@ export const employeeRoutes = [
               const { EmployeeProfile } =
                 await import("@/pages/employee/EmployeeProfile");
               return { Component: EmployeeProfile };
+            },
+          },
+        ],
+      },
+
+      //interview
+      {
+        path: "interview",
+        loader: requireAuth({
+          allowedRoles: [ROLES.EMPLOYEE],
+        }),
+        async lazy() {
+          const { EmployeeErrorBoundary } =
+            await import("@/pages/employee/EmployeeCore");
+          return {
+            Component: Outlet,
+            ErrorBoundary: EmployeeErrorBoundary,
+          };
+        },
+        children: [
+          {
+            path: "launch",
+            async lazy() {
+              const { InterviewLaunch } =
+                await import("@/pages/employee/InterviewLaunch");
+              return { Component: InterviewLaunch };
             },
           },
         ],
