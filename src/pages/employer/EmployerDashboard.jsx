@@ -11,10 +11,9 @@ import "./empSubSections.css";
 
 export function EmployerDashboard() {
   const [jobs, setJobs] = useState([]);
-  
+
   const { data: stats, isLoading } = useEmployerDashboardStats();
 
-  // ================= FETCH DATA =================
   useEffect(() => {
     fetchDashboard();
   }, []);
@@ -140,7 +139,6 @@ export function EmployerDashboard() {
 
                 <div className="ds-hpm-right">
                   <p>Applicants</p>
-
                   <div className="ds-progress">
                     <div
                       className="ds-progress-bar"

@@ -1,0 +1,96 @@
+.custom-dash-card {
+  height: 140px;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 18px 24px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+.custom-dash-card-header {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111;
+}
+
+.custom-dash-card-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  margin-top: 10px;
+}
+
+.custom-dash-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.custom-dash-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(160deg, #8cb5fa 0%, #e1ebff 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  color: white;
+}
+
+.custom-dash-center {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.custom-dash-center h2 {
+  margin: 0;
+  font-size: 38px;
+  font-weight: 700;
+  color: #5587f0;
+  line-height: 1;
+}
+
+.custom-dash-center p {
+  margin: 0;
+  font-size: 12px;
+  color: #777;
+  line-height: 1.2;
+  font-weight: 500;
+}
+
+.custom-dash-center p span {
+  display: block;
+}
+
+/* Custom mini bar chart */
+.custom-dash-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  height: 50px;
+}
+
+.custom-bar-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+}
+
+.custom-bar {
+  width: 10px;
+  background-color: #a4c2f4;
+  border-radius: 10px;
+}
+
+.custom-bar-label {
+  font-size: 10px;
+  color: #888;
+}
