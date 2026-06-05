@@ -30,9 +30,10 @@ export function EmployerDashboard() {
   };
 
   // ================= CALCULATIONS =================
-  const metrics = jobs.slice(0, 5).map((job) => ({
+  const fallbackValues = [65, 30, 85, 45, 75];
+  const metrics = jobs.slice(0, 5).map((job, index) => ({
     label: job.title?.slice(0, 6) || "Job",
-    value: job.applicants_count || 20,
+    value: job.applicants_count || fallbackValues[index % fallbackValues.length],
     job: job.title,
   }));
 
@@ -65,12 +66,11 @@ export function EmployerDashboard() {
               <div className="sc-bar-chart">
                 {metrics.map((item, i) => (
                   <div className="sc-bar-item" key={i}>
-                    <div className="sc-tooltip">{item.job}</div>
-                    <div
-                      className="sc-bar-container"
-                      style={{ height: `${item.value}%` }}
-                    >
-                      <div className="sc-bar" />
+                    <div className="sc-bar-wrapper" style={{ height: `${item.value}%` }}>
+                      <div className="sc-tooltip">{item.job}</div>
+                      <div className="sc-bar-container">
+                        <div className="sc-bar" />
+                      </div>
                     </div>
                   </div>
                 ))}

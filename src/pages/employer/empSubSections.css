@@ -1525,6 +1525,7 @@ padding:10px 0 0;
   display: flex;
   flex-direction: column;
   gap: 8px;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 .sc-chart-area {
@@ -1536,7 +1537,7 @@ padding:10px 0 0;
 /* Y-AXIS */
 .sc-y-axis {
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
   justify-content: space-between;
   padding-bottom: 2px;
   padding-right: 8px;
@@ -1553,7 +1554,6 @@ padding:10px 0 0;
   justify-content: space-around;
   gap: 10px;
   flex: 1;
-  height: 180px;
   border-left: 2px solid #e0e7ff;
   border-bottom: 2px solid #e0e7ff;
   padding: 0 10px;
@@ -1565,13 +1565,8 @@ padding:10px 0 0;
   content: "";
   position: absolute;
   inset: 0;
-  background-image: repeating-linear-gradient(
-    to top,
-    #e8f0fe 0px,
-    #e8f0fe 1px,
-    transparent 1px,
-    transparent 36px
-  );
+  background-image: linear-gradient(to bottom, #e8f0fe 1px, transparent 1px);
+  background-size: 100% 20%;
   pointer-events: none;
   z-index: 0;
 }
@@ -1591,12 +1586,12 @@ padding:10px 0 0;
 /* TOOLTIP */
 .sc-bar-item:hover .sc-tooltip {
   opacity: 1;
-  transform: translateY(-4px);
+  transform: translateX(-50%) translateY(-6px);
 }
 
 .sc-tooltip {
   position: absolute;
-  top: -38px;
+  bottom: 100%;
   left: 50%;
   transform: translateX(-50%) translateY(0);
   background: white;
@@ -1613,12 +1608,21 @@ padding:10px 0 0;
   text-align: center;
   box-shadow: 0 2px 8px rgba(74, 130, 228, 0.15);
   z-index: 10;
+  margin-bottom: 6px;
 }
 
-/* BAR WRAPPER (hatching + solid overlay) */
-.sc-bar-container {
+/* NEW WRAPPER TO ANCHOR TOOLTIP */
+.sc-bar-wrapper {
   width: 70%;
-  height: 85%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+/* BAR CONTAINER (hatching + solid overlay) */
+.sc-bar-container {
+  width: 100%;
+  height: 100%;
   border-radius: 6px 6px 0 0;
   position: relative;
   overflow: hidden;
