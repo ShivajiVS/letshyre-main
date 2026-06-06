@@ -5,7 +5,6 @@ export default function EmployeeRightPanelForJobs({ profile }) {
   const navigate = useNavigate();
 
   const handleTakeInterview = () => {
-    // Simply route the user to your dedicated, public launch page
     navigate("/employee/interview/launch");
   };
 

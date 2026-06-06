@@ -2,12 +2,16 @@ import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router";
 import { motion } from "framer-motion";
+import { useDesktopAppReleases } from "../../hooks/employee/useDesktopAppReleases";
+import { downloadDesktopAppFile } from "../../services/employee/desktopApp.service";
 
 import "./styles/employee-profile.css";
 import "./styles/download-app.css";
 
 export function DownloadApp() {
   const [os, setOs] = useState("Windows");
+  const [isDownloading, setIsDownloading] = useState(false);
+  const { data: releases, isLoading } = useDesktopAppReleases();
 
   useEffect(() => {
     const userAgent = window.navigator.userAgent.toLowerCase();
@@ -20,13 +24,42 @@ export function DownloadApp() {
     }
   }, []);
 
-  const getDownloadLink = () => {
-    if (os === "Mac") return "/download/letsHyre-Interview.dmg";
-    if (os === "Linux") return "/download/letsHyre-Interview.AppImage";
-    return "/download/letsHyre-Interview.exe";
+  const activeRelease = releases?.find(
+    (r) => r.platform.toLowerCase() === os.toLowerCase()
+  );
+
+  const isAvailable = activeRelease?.available ?? false;
+
+  const handleDownload = async (e) => {
+    e.preventDefault();
+    if (!isAvailable || isDownloading) return;
+
+    try {
+      setIsDownloading(true);
+      const blob = await downloadDesktopAppFile(os.toLowerCase());
+      
+      const url = window.URL.createObjectURL(new Blob([blob]));
+      const link = document.createElement("a");
+      link.href = url;
+      
+      const filename = activeRelease?.original_filename || `LetsHyre-${os}.exe`;
+      link.setAttribute("download", filename);
+      
+      document.body.appendChild(link);
+      link.click();
+      
+      link.parentNode.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Failed to download file", error);
+    } finally {
+      setIsDownloading(false);
+    }
   };
 
   const getDownloadText = () => {
+    if (isDownloading) return "Downloading...";
+    if (!isAvailable) return "Coming Soon";
     if (os === "Mac") return "Download for Mac";
     if (os === "Linux") return "Download for Linux";
     return "Download for Windows";
@@ -115,14 +148,26 @@ export function DownloadApp() {
           </div>
         </motion.div>
 
-        <motion.a
-          href={getDownloadLink()}
-          className="da-download-btn"
-          variants={itemVariants}
-        >
-          <i className="bi bi-download da-download-icon" />
-          {getDownloadText()}
-        </motion.a>
+        {isLoading || isDownloading ? (
+          <motion.div
+            className="da-download-btn"
+            style={{ opacity: 0.7, cursor: "not-allowed" }}
+            variants={itemVariants}
+          >
+            <i className="bi bi-arrow-repeat da-download-icon da-spin-icon" />
+            {isDownloading ? "Downloading..." : "Loading releases..."}
+          </motion.div>
+        ) : (
+          <motion.button
+            onClick={isAvailable ? handleDownload : undefined}
+            className="da-download-btn"
+            style={!isAvailable ? { opacity: 0.6, cursor: "not-allowed", backgroundImage: "none", backgroundColor: "#6c757d", color: "#fff", border: "none" } : { border: "none" }}
+            variants={itemVariants}
+          >
+            <i className={`bi ${isAvailable ? "bi-download" : "bi-hourglass-split"} da-download-icon`} />
+            {getDownloadText()}
+          </motion.button>
+        )}
 
         <motion.div className="da-os-support" variants={itemVariants}>
           <span>Supported OS:</span>

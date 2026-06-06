@@ -88,6 +88,7 @@
   font-size: 1.05rem;
   width: 100%;
   max-width: 380px;
+  cursor: pointer;
   box-shadow: 0 8px 16px -4px rgba(37, 99, 235, 0.25);
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -195,8 +196,13 @@
 
 /* Floating Animation for Shield */
 @keyframes shieldFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
 }
 
 .da-icon-container {
@@ -209,4 +215,17 @@
   justify-content: center;
   margin-bottom: 24px;
   animation: shieldFloat 3s ease-in-out infinite;
+}
+
+.da-spin-icon {
+  animation: da-spin 1s linear infinite;
+}
+
+@keyframes da-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
