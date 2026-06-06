@@ -29,10 +29,15 @@ export function Hero2() {
           </p>
 
           <div className="hero-actions">
-            <button className="btn-primary">I'm Hiring &rarr;</button>
+            <button
+              className="btn-primary"
+              onClick={() => navigate("/employer/sign-in")}
+            >
+              I'm Hiring &rarr;
+            </button>
             <button
               className="btn-secondary"
-              onClick={() => navigate("/get-started")}
+              onClick={() => navigate("/employee/sign-in")}
             >
               I'm looking for a job
             </button>

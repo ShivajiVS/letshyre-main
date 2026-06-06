@@ -1,8 +1,12 @@
+import { useNavigate } from "react-router";
+
 import hire01 from "@/assets/hire-img01.png";
 
 import "./styles/hire-card.css";
 
 export function HireCard() {
+  const navigate = useNavigate();
+
   return (
     <>
       <section className="hire-card-section">
@@ -15,8 +19,18 @@ export function HireCard() {
               journey, backed by cutting-edge intelligence
             </p>
             <div className="buttons-section02">
-              <button className="job-button02">Start Hiring →</button>
-              <button className="hiring-button02">Apply for Job →</button>
+              <button
+                className="job-button02"
+                onClick={() => navigate("/employer/sign-in")}
+              >
+                Start Hiring →
+              </button>
+              <button
+                className="hiring-button02"
+                onClick={() => navigate("/employee/sign-in")}
+              >
+                Apply for Job →
+              </button>
             </div>
           </div>
           <div className="hire-card-img-part">
