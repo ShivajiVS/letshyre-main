@@ -4,13 +4,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useFinalRegisterMutation } from "@/hooks/useRegisterMutations";
 
-const passwordSchema = z.object({
-  password: z.string().min(8, "Password must be at least 8 characters"),
-  confirmPassword: z.string(),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords do not match",
-  path: ["confirmPassword"],
-});
+const passwordSchema = z
+  .object({
+    password: z.string().min(8, "Password must be at least 8 characters"),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
 
 export function SharedSetPassword({ registerData, onNext, role }) {
   const [showPassword, setShowPassword] = useState(false);
@@ -32,11 +34,13 @@ export function SharedSetPassword({ registerData, onNext, role }) {
     const finalPayload = {
       ...registerData,
       password: data.password,
+      confirm_password: data.confirmPassword,
+      role,
     };
-    
+
     // Add role_id if backend expects it (2 = employee, 3 = employer based on typical setups)
     // I will pass registerData as is + password.
-    
+
     mutation.mutate(finalPayload, {
       onSuccess: () => {
         onNext();
@@ -68,7 +72,14 @@ export function SharedSetPassword({ registerData, onNext, role }) {
             ></i>
           </div>
           {errors.password && (
-            <p style={{ color: "red", fontSize: "13px", marginTop: "4px", textAlign: "left" }}>
+            <p
+              style={{
+                color: "red",
+                fontSize: "13px",
+                marginTop: "4px",
+                textAlign: "left",
+              }}
+            >
               {errors.password.message}
             </p>
           )}
@@ -90,13 +101,24 @@ export function SharedSetPassword({ registerData, onNext, role }) {
             ></i>
           </div>
           {errors.confirmPassword && (
-            <p style={{ color: "red", fontSize: "13px", marginTop: "4px", textAlign: "left" }}>
+            <p
+              style={{
+                color: "red",
+                fontSize: "13px",
+                marginTop: "4px",
+                textAlign: "left",
+              }}
+            >
               {errors.confirmPassword.message}
             </p>
           )}
         </div>
 
-        <button className="cl-btn button01" type="submit" disabled={mutation.isPending}>
+        <button
+          className="cl-btn button01"
+          type="submit"
+          disabled={mutation.isPending}
+        >
           {mutation.isPending ? "Creating Account..." : "Complete Registration"}
         </button>
       </form>

@@ -1,5 +1,5 @@
 import { SharedRegisterFlow } from "@/components/auth/register/SharedRegisterFlow";
 
 export function EmployeeRegister() {
-  return <SharedRegisterFlow role="employee" />;
+  return <SharedRegisterFlow role="Candidate" />;
 }

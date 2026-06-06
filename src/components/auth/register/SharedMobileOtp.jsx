@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { useVerifyMobileOtpMutation, useSendMobileOtpMutation } from "@/hooks/useRegisterMutations";
+import {
+  useVerifyMobileOtpMutation,
+  useSendMobileOtpMutation,
+} from "@/hooks/useRegisterMutations";
 
 export function SharedMobileOtp({ mobile, otpSessionKey, onNext, role }) {
   const [otp, setOtp] = useState("");
@@ -60,12 +63,16 @@ export function SharedMobileOtp({ mobile, otpSessionKey, onNext, role }) {
     }
 
     verifyMutation.mutate(
-      { phone_number: mobile, otpSessionKey: currentSessionKey, otpCode: otp },
+      {
+        phone_number: mobile,
+        otpSessionKey: currentSessionKey,
+        otp: otp,
+      },
       {
         onSuccess: () => {
           onNext();
         },
-      }
+      },
     );
   };
 
@@ -94,14 +101,16 @@ export function SharedMobileOtp({ mobile, otpSessionKey, onNext, role }) {
           setInfo("OTP resent successfully");
           inputRefs.current[0]?.focus();
         },
-      }
+      },
     );
   };
 
   return (
     <div className="register-box">
       <h1 className="cl-title">
-        {role === "employer" ? "Employer Verification" : "Employee Verification"}
+        {role === "employer"
+          ? "Employer Verification"
+          : "Employee Verification"}
       </h1>
       <p className="cl-sub-para">Enter the OTP we sent to your mobile</p>
 
@@ -124,7 +133,11 @@ export function SharedMobileOtp({ mobile, otpSessionKey, onNext, role }) {
         {error && <p style={{ color: "red", fontSize: 14 }}>{error}</p>}
         {info && <p style={{ color: "green", fontSize: 14 }}>{info}</p>}
 
-        <button className="cl-btn button01" type="submit" disabled={verifyMutation.isPending}>
+        <button
+          className="cl-btn button01"
+          type="submit"
+          disabled={verifyMutation.isPending}
+        >
           {verifyMutation.isPending ? "Verifying..." : "Verify & Continue"}
         </button>
       </form>
