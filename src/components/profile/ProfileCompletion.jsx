@@ -14,7 +14,6 @@ import "./ProfileCompletion.css";
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function ProfileCompletion({ onComplete }) {
-
   const [profileData, setProfileData] = useState({
     /* STEP 1 */
     gender: "",
@@ -89,20 +88,13 @@ function ProfileCompletion({ onComplete }) {
     },
   };
 
-
-  /*
-  IMPORTANT:
-  Children must send plain object
-  */
   const updateProfileData = (updates) => {
     console.log("MERGING UPDATE:", updates);
 
     setProfileData((prev) => {
       // ✅ HANDLE FUNCTION UPDATES
       const resolvedUpdates =
-        typeof updates === "function"
-          ? updates(prev)
-          : updates;
+        typeof updates === "function" ? updates(prev) : updates;
 
       const finalData = {
         ...prev,
@@ -115,196 +107,131 @@ function ProfileCompletion({ onComplete }) {
     });
   };
 
-
   const saveDraft = async () => {
     try {
       console.log("draft saved");
-    } catch(e){
+    } catch (e) {
       console.log(e);
     }
   };
 
-
   const handleNext = async () => {
+    console.log("CURRENT PROFILE", profileData);
 
-    console.log("CURRENT PROFILE",profileData);
-
-    if(step===1 || step===2){
+    if (step === 1 || step === 2) {
       await saveDraft();
     }
 
-    if(step<totalSteps){
-      setStep(prev=>prev+1);
+    if (step < totalSteps) {
+      setStep((prev) => prev + 1);
       return;
     }
 
-    localStorage.setItem(
-      "profileCompleted",
-      "true"
-    );
+    localStorage.setItem("profileCompleted", "true");
 
     onComplete?.();
-
   };
 
-
-  const handleBack=()=>{
-    if(step>1){
-      setStep(prev=>prev-1);
+  const handleBack = () => {
+    if (step > 1) {
+      setStep((prev) => prev - 1);
     }
   };
 
-
-  const handleFinalSubmit=async()=>{
-
-    try{
-
+  const handleFinalSubmit = async () => {
+    try {
       setLoading(true);
 
-      const fd=new FormData();
+      const fd = new FormData();
 
-      fd.append(
-        "gender",
-        profileData.gender
-      );
+      fd.append("gender", profileData.gender);
 
-      fd.append(
-        "dob",
-        profileData.dob
-      );
+      fd.append("dob", profileData.dob);
 
-      fd.append(
-        "aadhar_number",
-        profileData.aadhar_number
-      );
+      fd.append("aadhar_number", profileData.aadhar_number);
 
-      fd.append(
-        "location",
-        profileData.location
-      );
+      fd.append("location", profileData.location);
 
-      fd.append(
-        "address",
-        profileData.address
-      );
+      fd.append("address", profileData.address);
 
-      if(profileData.profile_photo){
+      if (profileData.profile_photo) {
         fd.append(
           "profile_photo",
-          profileData.profile_photo
+          profileData.profile_photo,
+          profileData.profile_photo.name || "profile_photo.png"
         );
       }
 
       fd.append(
         "present_or_last_working_company",
-        profileData.present_or_last_working_company
+        profileData.present_or_last_working_company,
       );
 
-      fd.append(
-        "last_day_of_working",
-        profileData.last_day_of_working
-      );
+      fd.append("last_day_of_working", profileData.last_day_of_working);
 
-      fd.append(
-        "current_ctc",
-        profileData.current_ctc
-      );
+      fd.append("current_ctc", profileData.current_ctc);
 
-      fd.append(
-        "expected_ctc",
-        profileData.expected_ctc
-      );
+      fd.append("expected_ctc", profileData.expected_ctc);
 
-      fd.append(
-        "preferred_industry",
-        profileData.preferred_industry
-      );
+      fd.append("preferred_industry", profileData.preferred_industry);
 
       fd.append(
         "preferred_locations",
-        JSON.stringify(
-          profileData.preferred_locations
-        )
+        JSON.stringify(profileData.preferred_locations),
       );
 
-      if(profileData.resignation_letter){
-        fd.append(
-          "resignation_letter",
-          profileData.resignation_letter
-        );
+      if (profileData.resignation_letter) {
+        fd.append("resignation_letter", profileData.resignation_letter);
       }
 
-      if(profileData.experience_letter){
-        fd.append(
-          "experience_letter",
-          profileData.experience_letter
-        );
+      if (profileData.experience_letter) {
+        fd.append("experience_letter", profileData.experience_letter);
       }
 
-      if(profileData.present_offer){
-        fd.append(
-          "present_offer",
-          profileData.present_offer
-        );
+      if (profileData.present_offer) {
+        fd.append("present_offer", profileData.present_offer);
       }
 
-      if(profileData.resume){
-        fd.append(
-          "resume",
-          profileData.resume
-        );
+      if (profileData.resume) {
+        fd.append("resume", profileData.resume);
       }
 
-      fd.append(
-        "role",
-        profileData.selected_role
-      );
+      fd.append("role", profileData.selected_role);
 
-      fd.append(
-        "resume_id",
-        profileData.resume_id
-      );
+      fd.append("resume_id", profileData.resume_id);
 
       fd.append(
         "parsed_resume_data",
-        JSON.stringify(
-          profileData.parsed_resume_data
-        )
+        JSON.stringify(profileData.parsed_resume_data),
       );
 
-      fd.append(
-        "profile_completion_score",
-        100
-      );
+      fd.append("profile_completion_score", 100);
 
-      fd.append(
-        "is_profile_complete",
-        true
-      );
-      
+      fd.append("is_profile_complete", true);
+
       fd.append(
         "education",
-        JSON.stringify(profileData.parsed_resume_data.education || [])
+        JSON.stringify(profileData.parsed_resume_data.education || []),
       );
 
       fd.append(
         "experience",
-        JSON.stringify(profileData.parsed_resume_data.experience || [])
+        JSON.stringify(profileData.parsed_resume_data.experience || []),
       );
 
       fd.append(
         "projects",
-        JSON.stringify(profileData.parsed_resume_data.projects || [])
+        JSON.stringify(profileData.parsed_resume_data.projects || []),
       );
 
       fd.append(
         "skills",
-        JSON.stringify(profileData.parsed_resume_data.skills || [])
+        JSON.stringify(profileData.parsed_resume_data.skills || []),
       );
 
       fd.append(
         "certifications",
-        JSON.stringify(profileData.parsed_resume_data.certifications || [])
+        JSON.stringify(profileData.parsed_resume_data.certifications || []),
       );
 
       const user = JSON.parse(localStorage.getItem("user")) || {};
@@ -326,74 +253,40 @@ function ProfileCompletion({ onComplete }) {
       const data = await res.json();
       console.log("API SUCCESS:", data);
 
-      console.log(
-        "FINAL PROFILE SUBMIT",
-        profileData
-      );
+      console.log("FINAL PROFILE SUBMIT", profileData);
 
-      localStorage.setItem(
-        "profileCompleted",
-        "true"
-      );
+      localStorage.setItem("profileCompleted", "true");
 
       onComplete?.();
-
-    }catch(e){
+    } catch (e) {
       console.log(e);
       alert("Submission failed");
-    }
-    finally{
+    } finally {
       setLoading(false);
     }
-
   };
 
-
-  return(
+  return (
     <div className="pc-card">
+      <h2 className="pc-title">Profile Progress!</h2>
 
-      <h2 className="pc-title">
-        Profile Progress!
-      </h2>
-
-      <div
-        className={`pc-card-inner ${
-          step===4
-          ? "pc-full-width"
-          : ""
-        }`}
-      >
-
-        {step!==4 && (
+      <div className={`pc-card-inner ${step === 4 ? "pc-full-width" : ""}`}>
+        {step !== 4 && (
           <div className="pc-left">
-
             <div className="pc-left-part-img">
-              <img
-                src={stepMeta[step].image}
-                alt=""
-              />
+              <img src={stepMeta[step].image} alt="" />
             </div>
 
-            <h3 className="pc-left-header">
-              {stepMeta[step].title}
-            </h3>
+            <h3 className="pc-left-header">{stepMeta[step].title}</h3>
 
-            <p>
-              {stepMeta[step].description}
-            </p>
-
+            <p>{stepMeta[step].description}</p>
           </div>
         )}
 
-
         <div className="pc-right-box">
+          <ProfileStepper step={step} />
 
-          <ProfileStepper
-            step={step}
-          />
-
-
-          {step===1 && (
+          {step === 1 && (
             <StepIdentity
               profileData={profileData}
               setProfileData={updateProfileData}
@@ -401,8 +294,7 @@ function ProfileCompletion({ onComplete }) {
             />
           )}
 
-
-          {step===2 && (
+          {step === 2 && (
             <StepJobPreferences
               profileData={profileData}
               setProfileData={updateProfileData}
@@ -411,8 +303,7 @@ function ProfileCompletion({ onComplete }) {
             />
           )}
 
-
-          {step===3 && (
+          {step === 3 && (
             <StepResume
               profileData={profileData}
               setProfileData={updateProfileData}
@@ -421,8 +312,7 @@ function ProfileCompletion({ onComplete }) {
             />
           )}
 
-
-          {step===4 && (
+          {step === 4 && (
             <StepReview
               profileData={profileData}
               onBack={handleBack}
@@ -430,12 +320,10 @@ function ProfileCompletion({ onComplete }) {
               loading={loading}
             />
           )}
-
         </div>
       </div>
     </div>
   );
-
 }
 
 export default ProfileCompletion;

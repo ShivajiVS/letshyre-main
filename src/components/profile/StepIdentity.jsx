@@ -261,7 +261,8 @@ function StepIdentity({ onNext, setProfileData, profileData = {} }) {
     canvas.getContext("2d").drawImage(video, 0, 0);
 
     canvas.toBlob((blob) => {
-      setCapturedImage(blob);
+      const file = new File([blob], "profile_photo.png", { type: "image/png" });
+      setCapturedImage(file);
     }, "image/png");
 
     stopCamera();

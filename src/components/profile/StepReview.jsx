@@ -137,7 +137,11 @@ Submit
       fd.append("address", profileData.address || "");
 
       if (profileData.profile_photo) {
-        fd.append("profile_photo", profileData.profile_photo);
+        fd.append(
+          "profile_photo",
+          profileData.profile_photo,
+          profileData.profile_photo.name || "profile_photo.png"
+        );
       }
 
       /* =========================
