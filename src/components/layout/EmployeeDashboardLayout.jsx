@@ -6,7 +6,7 @@ import logoutImg from "@/assets/logout.png";
 
 import { logoutMe } from "@/services/auth.service";
 import LockedOverlay from "@/components/dashboard/LockedOverlay";
-import ProfileCompletion from "@/components/profile/ProfileCompletion";
+import ProfileCompletion from "@/pages/employee/components/profile/ProfileCompletion";
 import { useCandidateProfile } from "@/hooks/useCandidateProfile";
 import EmployeeRightPanelForJobs from "./EmployeeRightPanelForJobs";
 import "./styles/employee-dashboard-layout.css";
@@ -269,6 +269,7 @@ export function EmployeeDashboardLayout() {
           </div>
         </div>
       )}
+      
     </div>
   );
 }
