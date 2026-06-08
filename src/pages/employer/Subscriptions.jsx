@@ -41,10 +41,10 @@ export function Subscriptions() {
     try {
       // 1. Create order on our backend
       const orderRes = await createOrder({
-        amount: amout_to_be_paid,
+        // amount: amout_to_be_paid,
         tokens: tokens,
-        gst_amount: 0, // Sending 0 as we don't have GST from calculate cost API
-        discount_amount: 0,
+        // gst_amount: 0, // Sending 0 as we don't have GST from calculate cost API
+        // discount_amount: 0,
       });
 
       if (!orderRes.success) {

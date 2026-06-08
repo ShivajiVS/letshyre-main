@@ -15,7 +15,7 @@ export const useLoadRazorpay = () => {
     document.body.appendChild(script);
 
     return () => {
-      // document.body.removeChild(script); // Optional: keeps it loaded to avoid multiple loads
+      document.body.removeChild(script); // Optional: keeps it loaded to avoid multiple loads
     };
   }, []);
 
