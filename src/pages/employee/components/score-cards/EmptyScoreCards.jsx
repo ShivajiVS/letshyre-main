@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 
 export function EmptyScoreCards() {
   return (
@@ -24,7 +24,8 @@ export function EmptyScoreCards() {
       </div>
       <h3 className="sc-empty-title">No Score Cards Found</h3>
       <p className="sc-empty-desc">
-        It looks like you haven't completed any interviews yet, or your scorecard is still being generated.
+        It looks like you haven't completed any interviews yet, or your
+        scorecard is still being generated.
       </p>
       <Link to="/employee/find-jobs" className="sc-empty-btn">
         Find Jobs to Apply
