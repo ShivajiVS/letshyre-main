@@ -15,6 +15,7 @@ function StepJobPreferences({ onNext, onBack }) {
   const resignationRef = useRef(null);
   const experienceRef = useRef(null);
   const offerRef = useRef(null);
+  const noticeProofRef = useRef(null);
 
   const { data: industryData, isLoading: loadingIndustries } = useGetIndustries();
   const industries = Array.isArray(industryData?.data)
@@ -46,6 +47,8 @@ function StepJobPreferences({ onNext, onBack }) {
   const resignationLetter = watch("resignation_letter");
   const experienceLetter = watch("experience_letter");
   const presentOffer = watch("present_offer");
+  const noticePeriodProofType = watch("notice_period_proof_type");
+  const noticePeriodProof = watch("notice_period_proof");
   const currentCtc = watch("current_ctc");
 
   const filteredIndustries = allIndustries.filter((item) =>
@@ -84,9 +87,27 @@ function StepJobPreferences({ onNext, onBack }) {
       "expected_ctc",
       "preferred_industry",
       "preferred_locations_string", // We will use a string field and convert to array
+      "notice_period_proof_type"
     ]);
 
     if (!isValid) return;
+    
+    const resignation = watch("resignation_letter");
+    const experience = watch("experience_letter");
+    const noticeProof = watch("notice_period_proof");
+
+    if (!resignation) {
+      setFileError("Resignation Letter is mandatory.");
+      return;
+    }
+    if (!experience) {
+      setFileError("Experience Letter is mandatory.");
+      return;
+    }
+    if (!noticeProof) {
+      setFileError("Notice Period Proof file is mandatory.");
+      return;
+    }
     
     // Ensure industry is set if typed manually
     if (industrySearch && !allIndustries.includes(industrySearch)) {
@@ -169,8 +190,13 @@ function StepJobPreferences({ onNext, onBack }) {
           border-radius: var(--pc-radius-sm);
           font-size: 14px;
           border: 1px solid #e2e8f0;
-          margin-bottom: 8px;
           box-shadow: var(--pc-shadow-soft);
+          max-width: 250px;
+        }
+        .doc-chip span {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
         .doc-chip button {
           background: none;
@@ -178,14 +204,25 @@ function StepJobPreferences({ onNext, onBack }) {
           color: #94a3b8;
           cursor: pointer;
           font-size: 16px;
+          margin-left: 12px;
         }
         .doc-chip button:hover { color: var(--pc-error); }
-        .optional-badge {
-          font-size: 12px;
-          color: #94a3b8;
-          font-weight: normal;
-          margin-left: 8px;
+        
+        .doc-upload-item {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 16px;
+          background: #ffffff;
+          border: 1px solid var(--pc-border);
+          border-radius: var(--pc-radius-md);
+          margin-bottom: 12px;
         }
+        .doc-upload-item:last-child { margin-bottom: 0; }
+        .doc-info { text-align: left; }
+        .doc-title { font-size: 14px; font-weight: 700; color: var(--pc-text-dark); margin: 0 0 4px 0; }
+        .doc-desc { font-size: 12px; color: #64748b; margin: 0; }
+        .req { color: var(--pc-error); margin-left: 4px; }
       `}</style>
 
       <div className="form-grid">
@@ -318,56 +355,136 @@ function StepJobPreferences({ onNext, onBack }) {
 
       <div className="form-group">
         <label>
-          Upload Documents <span className="optional-badge">(Optional)</span>
+          Upload Mandatory Documents
         </label>
         <div className="upload-card-job">
-          <div className="upload-buttons">
-            <button type="button" className="upload-btn-job" onClick={() => resignationRef.current.click()}>
-              📄 Resignation Letter
-            </button>
-            <input hidden ref={resignationRef} type="file" onChange={(e) => handleFile(e, "resignation_letter")} />
-
-            <button type="button" className="upload-btn-job" onClick={() => experienceRef.current.click()}>
-              📄 Experience Letter
-            </button>
-            <input hidden ref={experienceRef} type="file" onChange={(e) => handleFile(e, "experience_letter")} />
-
-            <button type="button" className="upload-btn-job" onClick={() => offerRef.current.click()}>
-              📄 Offer Letter
-            </button>
-            <input hidden ref={offerRef} type="file" onChange={(e) => handleFile(e, "present_offer")} />
+          
+          {/* Resignation Letter */}
+          <div className="doc-upload-item">
+            <div className="doc-info">
+              <h4 className="doc-title">Resignation Letter <span className="req">*</span></h4>
+              <p className="doc-desc">Official resignation acceptance or email.</p>
+            </div>
+            <div className="doc-action">
+              {resignationLetter ? (
+                <div className="doc-chip">
+                  <span><i className="bi bi-file-earmark-check text-green-600 mr-2"></i> {resignationLetter.name}</span>
+                  <button type="button" onClick={() => setValue("resignation_letter", null)}>✕</button>
+                </div>
+              ) : (
+                <button type="button" className="upload-btn-job" onClick={() => resignationRef.current.click()}>
+                  <i className="bi bi-upload"></i> Upload
+                </button>
+              )}
+              <input hidden ref={resignationRef} type="file" onChange={(e) => handleFile(e, "resignation_letter")} />
+            </div>
           </div>
 
-          <div className="file-preview">
-            {resignationLetter && (
-              <div className="doc-chip">
-                <span><i className="bi bi-file-earmark-check text-green-600 mr-2"></i> {resignationLetter.name}</span>
-                <button type="button" onClick={() => setValue("resignation_letter", null)}>✕</button>
-              </div>
-            )}
-            {experienceLetter && (
-              <div className="doc-chip">
-                <span><i className="bi bi-file-earmark-check text-green-600 mr-2"></i> {experienceLetter.name}</span>
-                <button type="button" onClick={() => setValue("experience_letter", null)}>✕</button>
-              </div>
-            )}
-            {presentOffer && (
-              <div className="doc-chip">
-                <span><i className="bi bi-file-earmark-check text-green-600 mr-2"></i> {presentOffer.name}</span>
-                <button type="button" onClick={() => setValue("present_offer", null)}>✕</button>
-              </div>
-            )}
+          {/* Experience Letter */}
+          <div className="doc-upload-item">
+            <div className="doc-info">
+              <h4 className="doc-title">Experience Letter <span className="req">*</span></h4>
+              <p className="doc-desc">Experience or relieving letter from past company.</p>
+            </div>
+            <div className="doc-action">
+              {experienceLetter ? (
+                <div className="doc-chip">
+                  <span><i className="bi bi-file-earmark-check text-green-600 mr-2"></i> {experienceLetter.name}</span>
+                  <button type="button" onClick={() => setValue("experience_letter", null)}>✕</button>
+                </div>
+              ) : (
+                <button type="button" className="upload-btn-job" onClick={() => experienceRef.current.click()}>
+                  <i className="bi bi-upload"></i> Upload
+                </button>
+              )}
+              <input hidden ref={experienceRef} type="file" onChange={(e) => handleFile(e, "experience_letter")} />
+            </div>
           </div>
+
+          {/* Notice Period Proof */}
+          <div className="doc-upload-item" style={{ flexDirection: "column", alignItems: "flex-start", gap: "16px" }}>
+            <div className="doc-info" style={{ width: "100%" }}>
+              <h4 className="doc-title">Notice Period Proof <span className="req">*</span></h4>
+              <p className="doc-desc">Select the type of proof you have, then upload the corresponding document.</p>
+            </div>
+            
+            <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: "16px", width: "100%", alignItems: "start" }}>
+              <div style={{ width: "100%" }}>
+                <label style={{ fontSize: "12px", fontWeight: "600", color: "#475569", marginBottom: "8px", display: "block", textAlign: "left" }}>
+                  Select Proof Type *
+                </label>
+                <select
+                  className="pc-select"
+                  style={{ margin: 0 }}
+                  {...register("notice_period_proof_type", { required: "Notice period proof type is required" })}
+                >
+                  <option value="">Select Proof Type</option>
+                  <option value="Relieving Letter">Relieving Letter</option>
+                  <option value="Offer Letter">Offer Letter</option>
+                </select>
+                {errors.notice_period_proof_type && (
+                  <p className="field-error" style={{ marginTop: "4px", textAlign: "left" }}>{errors.notice_period_proof_type.message}</p>
+                )}
+              </div>
+
+              <div className="doc-action" style={{ display: "flex", flexDirection: "column", justifyContent: "flex-end", height: "100%" }}>
+                <label style={{ fontSize: "12px", fontWeight: "600", color: "#475569", marginBottom: "8px", display: "block", visibility: "hidden" }}>
+                  Upload
+                </label>
+                {noticePeriodProof ? (
+                  <div className="doc-chip" style={{ margin: 0 }}>
+                    <span><i className="bi bi-file-earmark-check text-green-600 mr-2"></i> {noticePeriodProof.name}</span>
+                    <button type="button" onClick={() => setValue("notice_period_proof", null)}>✕</button>
+                  </div>
+                ) : (
+                  <button type="button" className="upload-btn-job" style={{ margin: 0 }} onClick={() => noticeProofRef.current.click()}>
+                    <i className="bi bi-upload"></i> Upload Proof
+                  </button>
+                )}
+                <input hidden ref={noticeProofRef} type="file" onChange={(e) => handleFile(e, "notice_period_proof")} />
+              </div>
+            </div>
+          </div>
+
         </div>
+
+        <label style={{ marginTop: "24px", display: "block" }}>
+          Optional Documents
+        </label>
+        <div className="upload-card-job" style={{ marginTop: "8px" }}>
+          
+          {/* Present Offer Letter */}
+          <div className="doc-upload-item" style={{ marginBottom: 0 }}>
+            <div className="doc-info">
+              <h4 className="doc-title">Present Offer Letter</h4>
+              <p className="doc-desc">Do you have an existing offer? Upload it here.</p>
+            </div>
+            <div className="doc-action">
+              {presentOffer ? (
+                <div className="doc-chip">
+                  <span><i className="bi bi-file-earmark-check text-green-600 mr-2"></i> {presentOffer.name}</span>
+                  <button type="button" onClick={() => setValue("present_offer", null)}>✕</button>
+                </div>
+              ) : (
+                <button type="button" className="upload-btn-job" onClick={() => offerRef.current.click()}>
+                  <i className="bi bi-upload"></i> Upload
+                </button>
+              )}
+              <input hidden ref={offerRef} type="file" onChange={(e) => handleFile(e, "present_offer")} />
+            </div>
+          </div>
+
+        </div>
+        
         {fileError && <div className="error-msg" style={{ marginTop: 16 }}>{fileError}</div>}
       </div>
 
       <div className="pc-actions">
         <button type="button" className="btn-secondary" onClick={onBack}>
-          ← Back
+          <i className="bi bi-arrow-left"></i> Back
         </button>
         <button type="button" className="btn-primary" onClick={handleNextClick}>
-          Continue →
+          Continue <i className="bi bi-arrow-right"></i>
         </button>
       </div>
     </motion.div>

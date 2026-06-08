@@ -69,7 +69,9 @@ function StepReview({ onBack, onFinish }) {
       // IDENTITY
       fd.append("gender", profileData.gender || "");
       fd.append("dob", profileData.dob || "");
-      fd.append("aadhar_number", profileData.aadhar_number || "");
+      
+      const cleanAadhaar = (profileData.aadhar_number || "").replace(/\D/g, "");
+      fd.append("aadhar_number", cleanAadhaar);
       fd.append("location", profileData.location || "");
       fd.append("address", profileData.address || "");
 
@@ -88,6 +90,8 @@ function StepReview({ onBack, onFinish }) {
       if (profileData.resignation_letter) fd.append("resignation_letter", profileData.resignation_letter);
       if (profileData.experience_letter) fd.append("experience_letter", profileData.experience_letter);
       if (profileData.present_offer) fd.append("present_offer", profileData.present_offer);
+      fd.append("notice_period_proof_type", profileData.notice_period_proof_type || "");
+      if (profileData.notice_period_proof) fd.append("notice_period_proof", profileData.notice_period_proof);
 
       // RESUME & ROLE
       if (profileData.resume) fd.append("resume", profileData.resume);
@@ -155,6 +159,7 @@ function StepReview({ onBack, onFinish }) {
           display: grid;
           grid-template-columns: 280px 1fr;
           gap: 24px;
+          align-items: start;
         }
         .review-left {
           background: #ffffff;
@@ -422,10 +427,10 @@ function StepReview({ onBack, onFinish }) {
 
           <div className="pc-actions">
             <button className="btn-secondary" onClick={onBack} disabled={isPending}>
-              ← Back to Edit
+              <i className="bi bi-arrow-left"></i> Back to Edit
             </button>
             <button className="btn-primary" onClick={handleSubmit} disabled={isPending}>
-              Confirm & Submit
+              Confirm & Submit <i className="bi bi-check-circle"></i>
             </button>
           </div>
         </div>

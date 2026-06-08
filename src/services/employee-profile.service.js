@@ -6,4 +6,4 @@ export async function candidateProfile() {
 }
 
 export const getCandidateProfile = () =>
-  api.get("/user/v1/candidate_profile/").then((r) => r.data?.data ?? r.data);
+  api.post("/user/v1/candidate_profile/").then((r) => r.data?.data ?? r.data);

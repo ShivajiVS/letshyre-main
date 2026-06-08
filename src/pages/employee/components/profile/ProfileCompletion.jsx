@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import ProfileStepper from "./ProfileStepper";
 import StepIdentity from "./StepIdentity";
 import StepJobPreferences from "./StepJobPreferences";
+import StepPhoto from "./StepPhoto";
 import StepResume from "./StepResume";
 import StepReview from "./StepReview";
 
@@ -31,6 +32,8 @@ function ProfileCompletion({ onComplete }) {
       resignation_letter: null,
       experience_letter: null,
       present_offer: null,
+      notice_period_proof_type: "",
+      notice_period_proof: null,
       current_ctc: "",
       expected_ctc: "",
       preferred_industry: "",
@@ -48,7 +51,7 @@ function ProfileCompletion({ onComplete }) {
   });
 
   const [step, setStep] = useState(1);
-  const totalSteps = 4;
+  const totalSteps = 5;
 
   const stepMeta = {
     1: {
@@ -58,12 +61,17 @@ function ProfileCompletion({ onComplete }) {
         "Confirm your identity to ensure a secure and trusted interview process.",
     },
     2: {
+      image: pc_img01,
+      title: "Profile Photo",
+      description: "Upload a clear, professional photo for your profile.",
+    },
+    3: {
       image: pc_img02,
       title: "Job Preferences",
       description:
         "Provide company details, salary expectations and preferences.",
     },
-    3: {
+    4: {
       image: pc_img02, // Reusing as per original code
       title: "Upload Resume & Role",
       description:
@@ -91,8 +99,8 @@ function ProfileCompletion({ onComplete }) {
   return (
     <FormProvider {...methods}>
       <div className="pc-card">
-        <div className={`pc-card-inner ${step === 4 ? "pc-full-width" : ""}`}>
-          {step !== 4 && (
+        <div className={`pc-card-inner ${step === 5 ? "pc-full-width" : ""}`}>
+          {step !== 5 && (
             <div className="pc-left">
               <div className="pc-left-part-img">
                 <img src={stepMeta[step].image} alt="Step Illustration" />
@@ -103,30 +111,39 @@ function ProfileCompletion({ onComplete }) {
           )}
 
           <div className="pc-right-box">
-            <h2 className="pc-title" style={{ marginBottom: "0px" }}>
-              Profile Progress
-            </h2>
-            <ProfileStepper step={step} />
+            <div className={`stepper-container ${step === 5 ? "stepper-center-wrapper" : ""}`}>
+              <h2 className="pc-title" style={step === 5 ? { textAlign: "center" } : {}}>
+                Profile Progress
+              </h2>
+              <ProfileStepper step={step} />
+            </div>
 
             <AnimatePresence mode="wait">
               {step === 1 && <StepIdentity key="step1" onNext={handleNext} />}
               {step === 2 && (
-                <StepJobPreferences
+                <StepPhoto
                   key="step2"
                   onNext={handleNext}
                   onBack={handleBack}
                 />
               )}
               {step === 3 && (
-                <StepResume
+                <StepJobPreferences
                   key="step3"
                   onNext={handleNext}
                   onBack={handleBack}
                 />
               )}
               {step === 4 && (
-                <StepReview
+                <StepResume
                   key="step4"
+                  onNext={handleNext}
+                  onBack={handleBack}
+                />
+              )}
+              {step === 5 && (
+                <StepReview
+                  key="step5"
                   onBack={handleBack}
                   onFinish={handleFinish}
                 />

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { NavLink, Outlet, useNavigate, useLocation } from "react-router";
+import { useQueryClient } from "@tanstack/react-query";
 
 import logo from "@/assets/logo2.png";
 import logoutImg from "@/assets/logout.png";
@@ -7,7 +8,10 @@ import logoutImg from "@/assets/logout.png";
 import { logoutMe } from "@/services/auth.service";
 import LockedOverlay from "@/components/dashboard/LockedOverlay";
 import ProfileCompletion from "@/pages/employee/components/profile/ProfileCompletion";
-import { useCandidateProfile } from "@/hooks/useCandidateProfile";
+import {
+  useCandidateProfile,
+  CANDIDATE_PROFILE_KEY,
+} from "@/hooks/useCandidateProfile";
 import EmployeeRightPanelForJobs from "./EmployeeRightPanelForJobs";
 import "./styles/employee-dashboard-layout.css";
 
@@ -18,13 +22,14 @@ export function EmployeeDashboardLayout() {
 
   const navigate = useNavigate();
   const location = useLocation();
+  const queryClient = useQueryClient();
 
   const { data: userData, isLoading } = useCandidateProfile();
 
   const profileCompleted = userData?.is_profile_complete === true;
 
   const handleProfileComplete = () => {
-    localStorage.setItem("profileCompleted", "true");
+    queryClient.invalidateQueries({ queryKey: CANDIDATE_PROFILE_KEY });
     setShowProfileFlow(false);
   };
 
@@ -269,7 +274,6 @@ export function EmployeeDashboardLayout() {
           </div>
         </div>
       )}
-      
     </div>
   );
 }

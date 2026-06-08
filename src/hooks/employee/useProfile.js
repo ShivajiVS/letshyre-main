@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { profileService } from "../../services/employee/profile.service";
 
 export const useGetIndustries = () => {
@@ -29,9 +29,16 @@ export const useGetParsedResumeData = () => {
 };
 
 export const useGetSkillsForRole = () => {
-  return useMutation({
-    mutationFn: profileService.getSkillsForRole,
-  });
+  const queryClient = useQueryClient();
+  return {
+    mutateAsync: async (role) => {
+      return queryClient.fetchQuery({
+        queryKey: ["skillsForRole", role],
+        queryFn: () => profileService.getSkillsForRole(role),
+        staleTime: 1000 * 60 * 30, // 30 minutes cache
+      });
+    },
+  };
 };
 
 export const useSubmitProfile = () => {

@@ -45,9 +45,10 @@ export function ScoreCardsList() {
           </div>
         ) : (
           <div className="sc-list-grid">
-            {scoreCards.map((scorecard) => (
-              <ScoreCardItem key={scorecard.id} scorecard={scorecard} />
-            ))}
+            {scoreCards.length > 0 &&
+              scoreCards.map((scorecard) => (
+                <ScoreCardItem key={scorecard.id} scorecard={scorecard} />
+              ))}
           </div>
         )}
       </div>

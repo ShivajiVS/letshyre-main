@@ -3,9 +3,10 @@ import React from "react";
 function ProfileStepper({ step }) {
   const steps = [
     { number: 1, label: "Identity" },
-    { number: 2, label: "Job Preferences" },
-    { number: 3, label: "Resume & Role" },
-    { number: 4, label: "Review" },
+    { number: 2, label: "Profile Photo" },
+    { number: 3, label: "Job Preferences" },
+    { number: 4, label: "Resume & Role" },
+    { number: 5, label: "Review" },
   ];
 
   return (

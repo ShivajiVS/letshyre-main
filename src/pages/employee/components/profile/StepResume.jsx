@@ -196,12 +196,13 @@ function StepResume({ onNext, onBack }) {
           margin-bottom: 24px;
         }
         .upload-area-large h3 {
-          font-size: 24px;
+          font-size: 18px;
           color: var(--pc-text-dark);
           margin-bottom: 8px;
         }
         .upload-area-large p {
           color: #64748b;
+          font-size: 13px;
           margin-bottom: 24px;
         }
         .file-active-card {
@@ -219,6 +220,7 @@ function StepResume({ onNext, onBack }) {
           align-items: center;
           gap: 12px;
           font-weight: 600;
+          font-size: 13px;
           color: var(--pc-text-dark);
         }
         .role-grid {
@@ -228,12 +230,13 @@ function StepResume({ onNext, onBack }) {
           margin-top: 24px;
         }
         .role-card {
-          padding: 16px;
+          padding: 14px;
           border: 1px solid var(--pc-border);
           border-radius: var(--pc-radius-md);
           text-align: center;
           cursor: pointer;
           font-weight: 600;
+          font-size: 13px;
           transition: all 0.2s ease;
           background: #ffffff;
           color: var(--pc-text-dark);
@@ -248,28 +251,22 @@ function StepResume({ onNext, onBack }) {
           color: #ffffff;
           box-shadow: 0 4px 12px rgba(62, 126, 244, 0.3);
         }
-        .loading-animation {
-          margin: 40px 0;
-          text-align: center;
+
+        .skeleton {
+          background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+          background-size: 200% 100%;
+          animation: loading-skeleton 1.5s infinite;
         }
-        .loading-animation .spinner {
-          width: 48px;
-          height: 48px;
-          border: 4px solid #e2e8f0;
-          border-top-color: var(--pc-secondary);
-          border-radius: 50%;
-          animation: spin 1s linear infinite;
-          margin: 0 auto 16px;
-        }
-        @keyframes spin {
-          to { transform: rotate(360deg); }
+        @keyframes loading-skeleton {
+          0% { background-position: 200% 0; }
+          100% { background-position: -200% 0; }
         }
         .skill-badge {
           background: #e0e7ff;
           color: #3730a3;
-          padding: 8px 14px;
+          padding: 6px 12px;
           border-radius: 20px;
-          font-size: 13px;
+          font-size: 12px;
           font-weight: 600;
           display: inline-block;
         }
@@ -298,19 +295,35 @@ function StepResume({ onNext, onBack }) {
             </div>
 
             {loading ? (
-              <div className="loading-animation">
-                <div className="spinner"></div>
-                <h4 style={{ color: "var(--pc-text-dark)", marginBottom: 8 }}>AI is analyzing your resume...</h4>
-                <p style={{ color: "#64748b", fontSize: 14 }}>Extracting skills, experience, and suggesting the best roles.</p>
+              <div style={{ marginTop: 32 }} className="resume-skeleton-container">
+                <div className="skeleton" style={{ width: 160, height: 22, marginBottom: 12, borderRadius: 4 }}></div>
+                <div className="skeleton" style={{ width: "50%", height: 14, marginBottom: 28, borderRadius: 4 }}></div>
+
+                <div className="role-grid">
+                  <div className="skeleton" style={{ height: 48, borderRadius: 12 }}></div>
+                  <div className="skeleton" style={{ height: 48, borderRadius: 12 }}></div>
+                  <div className="skeleton" style={{ height: 48, borderRadius: 12 }}></div>
+                  <div className="skeleton" style={{ height: 48, borderRadius: 12 }}></div>
+                </div>
+
+                <div style={{ marginTop: 40 }}>
+                  <div className="skeleton" style={{ width: 220, height: 16, marginBottom: 16, borderRadius: 4 }}></div>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
+                    <div className="skeleton" style={{ width: 80, height: 28, borderRadius: 20 }}></div>
+                    <div className="skeleton" style={{ width: 120, height: 28, borderRadius: 20 }}></div>
+                    <div className="skeleton" style={{ width: 90, height: 28, borderRadius: 20 }}></div>
+                    <div className="skeleton" style={{ width: 110, height: 28, borderRadius: 20 }}></div>
+                  </div>
+                </div>
               </div>
             ) : (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                 {suggestedRoles.length > 0 ? (
                   <>
-                    <h3 style={{ color: "var(--pc-text-dark)", fontSize: 20, marginBottom: 8 }}>
+                    <h3 style={{ color: "var(--pc-text-dark)", fontSize: 18, marginBottom: 8 }}>
                       {error ? "Refined Role Suggestions" : "Select Your Role"}
                     </h3>
-                    <p style={{ color: "#64748b", fontSize: 14 }}>
+                    <p style={{ color: "#64748b", fontSize: 13 }}>
                       Based on your resume, our AI suggests these roles. Select one to proceed.
                     </p>
 
@@ -344,7 +357,7 @@ function StepResume({ onNext, onBack }) {
 
                 {(selectedRole === "Other" || suggestedRoles.length === 0) && !loading && (
                   <div style={{ marginTop: 24 }}>
-                    <label style={{ display: "block", marginBottom: 8, fontWeight: 600 }}>Enter Custom Role</label>
+                    <label style={{ display: "block", marginBottom: 8, fontWeight: 600, fontSize: 12 }}>Enter Custom Role</label>
                     <input
                       className="pc-input"
                       value={customRole}
@@ -366,17 +379,23 @@ function StepResume({ onNext, onBack }) {
                       placeholder="e.g. Frontend Developer"
                       disabled={roleLoading}
                     />
-                    {roleLoading && (
-                      <p style={{ fontSize: 13, color: "var(--pc-secondary)", marginTop: 8 }}>
-                        🔍 Finding best matching skills...
-                      </p>
-                    )}
                   </div>
                 )}
 
-                {roleSkills.length > 0 && (
+                {roleLoading ? (
                   <div style={{ marginTop: 32 }}>
-                    <h4 style={{ color: "var(--pc-text-dark)", marginBottom: 12 }}>Suggested Skills for {selectedRole}</h4>
+                    <div className="skeleton" style={{ width: 220, height: 16, marginBottom: 16, borderRadius: 4 }}></div>
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
+                      <div className="skeleton" style={{ width: 70, height: 28, borderRadius: 20 }}></div>
+                      <div className="skeleton" style={{ width: 110, height: 28, borderRadius: 20 }}></div>
+                      <div className="skeleton" style={{ width: 90, height: 28, borderRadius: 20 }}></div>
+                      <div className="skeleton" style={{ width: 130, height: 28, borderRadius: 20 }}></div>
+                      <div className="skeleton" style={{ width: 85, height: 28, borderRadius: 20 }}></div>
+                    </div>
+                  </div>
+                ) : roleSkills.length > 0 && (
+                  <div style={{ marginTop: 32 }}>
+                    <h4 style={{ color: "var(--pc-text-dark)", marginBottom: 12, fontSize: 14 }}>Suggested Skills for {selectedRole}</h4>
                     <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
                       {roleSkills.map((skill, i) => (
                         <span key={i} className="skill-badge">{skill}</span>
@@ -414,11 +433,11 @@ function StepResume({ onNext, onBack }) {
 
         <div className="pc-actions">
           <button type="button" className="btn-secondary" onClick={onBack}>
-            ← Back
+            <i className="bi bi-arrow-left"></i> Back
           </button>
           {file && !loading && selectedRole && !roleLoading && (
             <button type="button" className="btn-primary" onClick={onNext}>
-              Continue →
+              Continue <i className="bi bi-arrow-right"></i>
             </button>
           )}
         </div>
