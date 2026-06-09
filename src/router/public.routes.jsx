@@ -51,6 +51,13 @@ const publicRoutes = [
           return { Component: TermsAndConditions };
         },
       },
+      {
+        path: "refund-policy",
+        async lazy() {
+          const { RefundPolicy } = await import("@/pages/RefundPolicy");
+          return { Component: RefundPolicy };
+        },
+      },
     ],
   },
 ];

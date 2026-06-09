@@ -77,6 +77,13 @@ export function Footer() {
             >
               Privacy Policy
             </li>
+            <li
+              onClick={() => {
+                navigate("/refund-policy");
+              }}
+            >
+              Refund Policy
+            </li>
             {/* <li>Blog</li> */}
             <li
               onClick={() => {

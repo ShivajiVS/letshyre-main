@@ -133,7 +133,7 @@
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 1rem;
 }
 
 .tc-sidebar-link {
@@ -211,22 +211,8 @@
   color: #0f172a;
   font-family: var(--font-heading);
   position: relative;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
   margin: 0;
   transition: color 0.2s ease;
-}
-
-.tc-section-title::before {
-  content: "";
-  display: block;
-  width: 24px;
-  height: 24px;
-  background: radial-gradient(circle at top left, var(--color-main), #4a8deb);
-  border-radius: 6px;
-  opacity: 0.8;
-  flex-shrink: 0;
 }
 
 .tc-section-text {
@@ -559,7 +545,8 @@
 }
 
 /* Font Size Levels */
-.tc-font-level-0 .tc-section-text, .tc-font-level-0 .tc-list li {
+.tc-font-level-0 .tc-section-text,
+.tc-font-level-0 .tc-list li {
   font-size: 1rem;
   line-height: 1.6;
 }
@@ -567,12 +554,14 @@
   font-size: 1.6rem;
 }
 
-.tc-font-level-1 .tc-section-text, .tc-font-level-1 .tc-list li {
+.tc-font-level-1 .tc-section-text,
+.tc-font-level-1 .tc-list li {
   font-size: 1.1rem;
   line-height: 1.8;
 }
 
-.tc-font-level-2 .tc-section-text, .tc-font-level-2 .tc-list li {
+.tc-font-level-2 .tc-section-text,
+.tc-font-level-2 .tc-list li {
   font-size: 1.25rem;
   line-height: 1.9;
 }
@@ -607,7 +596,7 @@
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   font-size: 0.9rem;
   font-weight: 400;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
   pointer-events: none;
   line-height: 1.5;
 }
@@ -641,7 +630,8 @@
   margin-bottom: 0;
 }
 
-.tc-collapse-btn, .tc-expand-btn {
+.tc-collapse-btn,
+.tc-expand-btn {
   background: transparent;
   border: none;
   color: #94a3b8;
