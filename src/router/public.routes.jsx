@@ -58,6 +58,13 @@ const publicRoutes = [
           return { Component: RefundPolicy };
         },
       },
+      {
+        path: "Policy",
+        async lazy() {
+          const { PrivacyPolicy } = await import("@/pages/PrivacyPolicy");
+          return { Component: PrivacyPolicy };
+        },
+      },
     ],
   },
 ];
