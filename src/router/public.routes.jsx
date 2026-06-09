@@ -44,6 +44,13 @@ const publicRoutes = [
           return { Component: DownloadApp };
         },
       },
+      {
+        path: "T&C",
+        async lazy() {
+          const { TermsAndConditions } = await import("@/pages/TermsAndConditions");
+          return { Component: TermsAndConditions };
+        },
+      },
     ],
   },
 ];
