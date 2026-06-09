@@ -9,9 +9,14 @@ export const useLoginMutation = (role) => {
 
   return useMutation({
     mutationFn: authService.login,
-    onSuccess: () => {
+    onSuccess: (data) => {
       toast.success("Login successful");
-      const defaultRedirect = role === "employer" ? "/employer" : "/employee";
+      let defaultRedirect = role === "employer" ? "/employer" : "/employee";
+      
+      if (role === "employer" && data?.is_profile_completed === false) {
+        defaultRedirect = "/employer/onboarding";
+      }
+
       const redirectTo = location.state?.from?.pathname || defaultRedirect;
       navigate(redirectTo, { replace: true });
     },
