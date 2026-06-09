@@ -68,7 +68,7 @@ export function Footer() {
                 navigate("/T&C");
               }}
             >
-              Terms of services
+              Terms & Conditions
             </li>
             <li
               onClick={() => {
