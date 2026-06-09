@@ -5,6 +5,7 @@ import brand from "@/assets/LETSHYRE.png";
 import e_demo01 from "@/assets/emp-demo01.png";
 import e_demo02 from "@/assets/emp-demo02.png";
 import { logoutMe } from "@/services/auth.service";
+import { motion } from "framer-motion";
 
 import { OnboardingForm } from "./OnboardingForm";
 import "./EmployerOnboarding.css";
@@ -53,27 +54,44 @@ export function EmployerOnboarding() {
 
           {/* STEP 2 VIDEO */}
           {step === 2 && (
-            <div className="video-step">
-              <div className="video-box">
-                <iframe
-                  src="https://www.youtube.com/embed/hcNVG7JCxoE?si=pXZhZ-peiVIZ8PnS"
-                  title="Intro"
-                  allowFullScreen
-                />
-              </div>
+            <motion.div 
+              className="video-step"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+            >
+              <motion.div 
+                className="video-box"
+                initial={{ x: -30, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ delay: 0.2, duration: 0.6 }}
+              >
+                <div className="video-frame-glow">
+                  <iframe
+                    src="https://www.youtube.com/embed/hcNVG7JCxoE?si=pXZhZ-peiVIZ8PnS"
+                    title="Intro"
+                    allowFullScreen
+                  />
+                </div>
+              </motion.div>
 
-              <div className="video-content">
+              <motion.div 
+                className="video-content"
+                initial={{ x: 30, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ delay: 0.4, duration: 0.6 }}
+              >
                 <h3>
-                  See How The <br /> Pro-Recruiters Use LETSHYRE
+                  See How The <br /> <span className="gradient-text">Pro-Recruiters</span> Use LETSHYRE
                 </h3>
                 <p>
                   Watch our quick walkthrough to maximize your credits and find top talent faster.
                 </p>
                 <button className="skip-btn" onClick={handleSkip}>
-                  Skip For Now →
+                  Skip For Now <span className="arrow-icon">→</span>
                 </button>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
           )}
         </div>
       </div>

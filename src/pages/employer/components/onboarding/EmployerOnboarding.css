@@ -42,8 +42,8 @@
 
 .demo-image {
   position: absolute;
-  top: -23%;
-  left: -7%;
+  top: -12%;
+  left: -5%;
   width: 160px;
   opacity: 0;
   animation: showImages 4s infinite;
@@ -1147,4 +1147,96 @@
     top: -40px;
     right: 0px;
   }
+  
+  .video-step {
+    flex-direction: column;
+    padding: 20px;
+  }
+}
+
+/* Premium Video Step Design */
+
+.video-step {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+  justify-content: center;
+  max-width: 900px;
+  margin: auto;
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 24px;
+  backdrop-filter: blur(16px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05), inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+}
+
+.video-frame-glow {
+  position: relative;
+  border-radius: 16px;
+  padding: 4px;
+  background: linear-gradient(135deg, rgba(96, 165, 250, 0.5), rgba(167, 139, 250, 0.5));
+  box-shadow: 0 15px 35px rgba(96, 165, 250, 0.2);
+}
+
+.video-frame-glow iframe {
+  border-radius: 12px;
+  display: block;
+}
+
+.gradient-text {
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 800;
+}
+
+.arrow-icon {
+  display: inline-block;
+  transition: transform 0.3s ease;
+  margin-left: 8px;
+}
+
+.skip-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1.05rem;
+  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.skip-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 25px rgba(59, 130, 246, 0.4);
+}
+
+.skip-btn:hover .arrow-icon {
+  transform: translateX(4px);
+}
+
+.video-content h3 {
+  font-size: 2.2rem;
+  color: #1e293b;
+  margin-bottom: 16px;
+  line-height: 1.2;
+}
+
+.video-content p {
+  font-size: 1.1rem;
+  color: #64748b;
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+.onboard-page.step2 .onboard-card {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
 }
