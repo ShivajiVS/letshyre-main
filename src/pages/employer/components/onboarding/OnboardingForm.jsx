@@ -47,40 +47,74 @@ const FloatingInput = ({
 };
 
 const FileUpload = ({ label, name, control, error, required, tooltip }) => {
-  return (
-    <div className="file-upload-container" title={tooltip}>
-      <div className={`file-upload ${error ? "has-error" : ""}`}>
-        <Controller
-          name={name}
-          control={control}
-          render={({ field: { onChange, value } }) => (
-            <>
-              <span className="file-name-display">
-                {value && value.type
-                  ? value.type === "application/pdf"
-                    ? "📄 "
-                    : "🖼️ "
-                  : ""}
-                {value && value.name ? value.name : label}
-                {required && !value && (
-                  <span className="required-asterisk">*</span>
-                )}
-                {tooltip && !value && <span className="tooltip-icon"> ⓘ</span>}
-              </span>
+  // Helper to format file size
+  const formatBytes = (bytes, decimals = 2) => {
+    if (!+bytes) return '0 Bytes';
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
+  };
 
-              <div style={{ display: "flex", gap: "8px" }}>
+  return (
+    <div className="file-upload-container">
+      <Controller
+        name={name}
+        control={control}
+        render={({ field: { onChange, value } }) => {
+          // Object URL for image preview (cleanup handled by browser on unmount/re-render but better to do it properly in a real app, though for this simple form it's fine)
+          const previewUrl = value && value.type?.startsWith("image/") ? URL.createObjectURL(value) : null;
+
+          return (
+            <div className={`file-upload-box ${error ? "has-error" : ""} ${value ? "is-success" : ""}`}>
+              <div className="file-info-section">
+                {/* Visual Icon / Thumbnail */}
+                <div className="file-icon-area">
+                  {previewUrl ? (
+                    <img src={previewUrl} alt="preview" className="file-thumbnail" />
+                  ) : value && value.type === "application/pdf" ? (
+                    <span className="file-emoji-icon">📄</span>
+                  ) : (
+                    <span className="file-emoji-icon">📁</span>
+                  )}
+                </div>
+
+                <div className="file-details">
+                  <span className="file-name-display">
+                    {value ? (
+                      <span className="uploaded-name" title={value.name}>
+                        {value.name}
+                        <span className="file-size">({formatBytes(value.size)})</span>
+                        <span className="success-check">✅</span>
+                      </span>
+                    ) : (
+                      <span className="file-label-text">
+                        {label} {required && <span className="required-asterisk">*</span>}
+                      </span>
+                    )}
+                  </span>
+                  
+                  {/* Tooltip moved to subtext for mobile friendliness */}
+                  {!value && tooltip && (
+                    <span className="file-subtext">{tooltip}</span>
+                  )}
+                </div>
+              </div>
+
+              <div className="file-actions">
                 {value && (
                   <button
                     type="button"
-                    className="clear-file-btn"
+                    className="remove-file-btn"
                     onClick={() => onChange(null)}
                     title="Remove file"
                   >
-                    ✕
+                    🗑️ Remove
                   </button>
                 )}
-                <label className="e-upload-btn">
-                  <p>{value ? "Replace" : "Select File"}</p>
+                <label className={`file-btn ${value ? 'replace-btn' : 'upload-btn'}`}>
+                  {value ? "Replace" : "Select File"}
                   <input
                     type="file"
                     onChange={(e) => {
@@ -89,14 +123,15 @@ const FileUpload = ({ label, name, control, error, required, tooltip }) => {
                         onChange(file);
                       }
                     }}
+                    accept=".jpg,.jpeg,.png,.pdf,.webp"
                     hidden
                   />
                 </label>
               </div>
-            </>
-          )}
-        />
-      </div>
+            </div>
+          );
+        }}
+      />
       {error && <span className="error-message">{error.message}</span>}
     </div>
   );
@@ -401,7 +436,7 @@ export const OnboardingForm = ({ onNextStep }) => {
       )}
 
       {formStep === 2 && (
-        <div className="onboard-grid">
+        <div className="onboard-grid step-2">
           <div className="full" style={{ marginBottom: "10px" }}>
             <h4
               style={{ color: "#4a5568", fontSize: "15px", fontWeight: "600" }}
