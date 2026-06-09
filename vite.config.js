@@ -15,6 +15,7 @@ export default defineConfig({
       "@utils": path.resolve("src/utils"),
       "@services": path.resolve("src/services"),
       "@assets": path.resolve("src/assets"),
+      "@schemas": path.resolve("src/schemas"),
     },
   },
 

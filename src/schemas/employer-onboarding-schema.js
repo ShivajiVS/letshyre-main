@@ -34,8 +34,8 @@ export const employerOnboardingSchema = z.object({
   registration_certificate: documentSchema(),
   gst_certificate: documentSchema(),
   address_proof: documentSchema(),
-  authorized_id_proof: documentSchema(),
-  bank_proof: documentSchema(),
+  // authorized_id_proof: documentSchema(),
+  // bank_proof: documentSchema(),
 });
 
 export const defaultValues = {
