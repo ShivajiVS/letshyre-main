@@ -29,6 +29,33 @@ export const employerRoutes = [
         ],
       },
 
+      {
+        loader: requireAuth({
+          allowedRoles: [ROLES.EMPLOYER],
+        }),
+        async lazy() {
+          const { EmployerErrorBoundary } =
+            await import("@/pages/employer/EmployerCore");
+
+          return {
+            ErrorBoundary: EmployerErrorBoundary,
+          };
+        },
+        children: [
+          {
+            path: "employer",
+          },
+          {
+            path: "onboarding",
+            async lazy() {
+              const { onBoarding } =
+                await import("@/pages/employer/OnBoarding");
+              return { Component: onBoarding };
+            },
+          },
+        ],
+      },
+
       // 🔒 PRIVATE ROUTES (employer only)
       {
         loader: requireAuth({
@@ -160,6 +187,7 @@ export const employerRoutes = [
         ],
       },
 
+      // onBoarding
       //Subscriptions has no layout
       {
         loader: requireAuth({

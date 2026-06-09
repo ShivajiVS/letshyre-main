@@ -42,11 +42,12 @@
 
 .demo-image {
   position: absolute;
-  top: -12%;
-  left: -5%;
-  width: 160px;
+  top: -110px;
+  left: -80px;
+  width: 170px;
   opacity: 0;
   animation: showImages 4s infinite;
+  z-index: 10;
 }
 
 .demo-image01 {
@@ -78,6 +79,10 @@
 .video-layout {
   grid-template-columns: 1fr;
   justify-items: center;
+  width: fit-content;
+  margin: 60px auto 0 auto;
+  background: transparent;
+  box-shadow: none;
 }
 
 .onboard-left img {
@@ -90,10 +95,10 @@
   background-color: white;
   border-radius: 25px;
   border: 2px solid #8db1ec;
-  padding: 30px;
+  padding: 30px 16px;
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
   width: 100%;
-  max-height: min(680px, 85vh);
+  max-height: min(760px, 90vh);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -359,15 +364,15 @@
 /* Video Step */
 .video-step {
   display: flex;
-  gap: 30px;
+  gap: 40px;
   align-items: center;
   justify-content: center;
-  max-width: 850px;
   margin: auto;
+  /* background: red; */
 }
 
 .video-box iframe {
-  width: 560px;
+  width: 600px;
   height: 350px;
   border-radius: 12px;
   border: none;
@@ -396,7 +401,7 @@
   color: white;
   border: none;
   padding: 12px 24px;
-  border-radius: 10px;
+  /* border-radius: 10px; */
   cursor: pointer;
   font-weight: 600;
   transition: opacity 0.2s ease;
@@ -1041,14 +1046,27 @@
 /* UI/UX Improvements */
 
 .shake-animation {
-  animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+  animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
 }
 
 @keyframes shake {
-  10%, 90% { transform: translate3d(-1px, 0, 0); }
-  20%, 80% { transform: translate3d(2px, 0, 0); }
-  30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
-  40%, 60% { transform: translate3d(4px, 0, 0); }
+  10%,
+  90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  20%,
+  80% {
+    transform: translate3d(2px, 0, 0);
+  }
+  30%,
+  50%,
+  70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+  40%,
+  60% {
+    transform: translate3d(4px, 0, 0);
+  }
 }
 
 .valid-checkmark {
@@ -1061,8 +1079,14 @@
 }
 
 @keyframes popIn {
-  0% { transform: scale(0); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .draft-saved-text {
@@ -1073,10 +1097,22 @@
 }
 
 @keyframes fadeInOut {
-  0% { opacity: 0; transform: translateY(5px); }
-  15% { opacity: 1; transform: translateY(0); }
-  80% { opacity: 1; transform: translateY(0); }
-  100% { opacity: 0; transform: translateY(-5px); }
+  0% {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  15% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  80% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
 }
 
 .character-counter {
@@ -1116,7 +1152,7 @@
   max-width: 100%;
   max-height: 90vh;
   border-radius: 8px;
-  box-shadow: 0 15px 50px rgba(0,0,0,0.5);
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
   object-fit: contain;
 }
 
@@ -1147,96 +1183,85 @@
     top: -40px;
     right: 0px;
   }
-  
+
   .video-step {
     flex-direction: column;
     padding: 20px;
   }
 }
 
-/* Premium Video Step Design */
+/* Exact Screenshot Design for Step 2 */
 
 .video-step {
+  position: relative;
   display: flex;
   gap: 40px;
   align-items: center;
   justify-content: center;
-  max-width: 900px;
-  margin: auto;
+  width: max-content;
+  margin: 0 auto;
+  background: white;
+  border-radius: 20px;
   padding: 40px;
-  background: rgba(255, 255, 255, 0.6);
-  border-radius: 24px;
-  backdrop-filter: blur(16px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05), inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
 }
 
-.video-frame-glow {
+.clean-video-frame {
   position: relative;
-  border-radius: 16px;
-  padding: 4px;
-  background: linear-gradient(135deg, rgba(96, 165, 250, 0.5), rgba(167, 139, 250, 0.5));
-  box-shadow: 0 15px 35px rgba(96, 165, 250, 0.2);
+  border-radius: 12px;
 }
 
-.video-frame-glow iframe {
+.clean-video-frame iframe {
   border-radius: 12px;
   display: block;
 }
 
-.gradient-text {
-  background: linear-gradient(90deg, #3b82f6, #8b5cf6);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-weight: 800;
+.highlight-blue {
+  color: #60a5fa;
+  font-weight: 700;
 }
 
 .arrow-icon {
   display: inline-block;
   transition: transform 0.3s ease;
-  margin-left: 8px;
+  margin-left: 4px;
 }
 
 .skip-btn {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #1e3a8a, #3b82f6);
-  color: white;
+  background: linear-gradient(90deg, #a3c2f0, #dbeafe);
+  color: #1a202c;
   border: none;
-  padding: 14px 28px;
-  border-radius: 12px;
+  padding: 10px 24px;
+  border-radius: 10px;
   cursor: pointer;
-  font-weight: 600;
-  font-size: 1.05rem;
-  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+  font-weight: 700;
+  font-size: 0.95rem;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 10px rgba(163, 194, 240, 0.4);
 }
 
 .skip-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 25px rgba(59, 130, 246, 0.4);
+  background: linear-gradient(90deg, #93b2e0, #cbe0fe);
+  box-shadow: 0 6px 14px rgba(163, 194, 240, 0.6);
 }
 
 .skip-btn:hover .arrow-icon {
   transform: translateX(4px);
 }
 
-.video-content h3 {
-  font-size: 2.2rem;
-  color: #1e293b;
+.video-title {
+  font-size: 2rem;
+  color: #60a5fa;
   margin-bottom: 16px;
-  line-height: 1.2;
+  line-height: 1.25;
 }
 
 .video-content p {
-  font-size: 1.1rem;
-  color: #64748b;
+  font-size: 0.95rem;
+  color: #718096;
   margin-bottom: 24px;
-  line-height: 1.6;
-}
-
-.onboard-page.step2 .onboard-card {
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
+  line-height: 1.5;
 }

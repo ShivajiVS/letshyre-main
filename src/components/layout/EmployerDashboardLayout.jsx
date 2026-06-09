@@ -18,7 +18,6 @@ import overlay_img from "@/assets/unlock-img02.png";
 
 import "./styles/employer-dashboard-layout.css";
 import "@/components/dashboard/LockedOverlay";
-import { EmployerOnboarding } from "@/pages/employer/components/onboarding/EmployerOnboarding";
 
 const MENU_ITEMS = [
   {
@@ -349,8 +348,6 @@ export function EmployerDashboardLayout() {
       ls.set("letsHyreTourDone", "true");
     }
   };
-
-  return <EmployerOnboarding />;
 
   return (
     <div className="emp-dashboard">
