@@ -11,6 +11,7 @@ import {
 } from "@/hooks/employer/useEmployerOnboarding";
 import { useAuthStore } from "@/store/auth.store";
 import { toast } from "sonner";
+import { motion, AnimatePresence } from "framer-motion";
 
 // Subcomponents for Form
 const FloatingInput = ({
@@ -22,6 +23,8 @@ const FloatingInput = ({
   type = "text",
   tooltip,
   transformValue,
+  value,
+  onBlurModifier,
 }) => {
   return (
     <div className="floating-input" title={tooltip}>
@@ -33,6 +36,9 @@ const FloatingInput = ({
               e.target.value = transformValue(e.target.value);
             }
           },
+          onBlur: (e) => {
+            if (onBlurModifier) onBlurModifier(e.target.value);
+          }
         })}
         placeholder=" "
         className={error ? "has-error" : ""}
@@ -46,7 +52,7 @@ const FloatingInput = ({
   );
 };
 
-const FileUpload = ({ label, name, control, error, required, tooltip }) => {
+const FileUpload = ({ label, name, control, error, required, tooltip, onPreview }) => {
   // Helper to format file size
   const formatBytes = (bytes, decimals = 2) => {
     if (!+bytes) return '0 Bytes';
@@ -70,7 +76,12 @@ const FileUpload = ({ label, name, control, error, required, tooltip }) => {
             <div className={`file-upload-box ${error ? "has-error" : ""} ${value ? "is-success" : ""}`}>
               <div className="file-info-section">
                 {/* Visual Icon / Thumbnail */}
-                <div className="file-icon-area">
+                <div 
+                  className="file-icon-area" 
+                  onClick={() => previewUrl && onPreview && onPreview(previewUrl)}
+                  style={{ cursor: previewUrl ? 'pointer' : 'default' }}
+                  title={previewUrl ? "Click to view larger" : ""}
+                >
                   {previewUrl ? (
                     <img src={previewUrl} alt="preview" className="file-thumbnail" />
                   ) : value && value.type === "application/pdf" ? (
@@ -110,7 +121,7 @@ const FileUpload = ({ label, name, control, error, required, tooltip }) => {
                     onClick={() => onChange(null)}
                     title="Remove file"
                   >
-                    🗑️ Remove
+                    Remove
                   </button>
                 )}
                 <label className={`file-btn ${value ? 'replace-btn' : 'upload-btn'}`}>
@@ -146,6 +157,10 @@ export const OnboardingForm = ({ onNextStep }) => {
 
   const { user } = useAuthStore();
 
+  const [isShaking, setIsShaking] = useState(false);
+  const [saveStatus, setSaveStatus] = useState(null);
+  const [previewModalImage, setPreviewModalImage] = useState(null);
+
   const {
     register,
     handleSubmit,
@@ -153,7 +168,8 @@ export const OnboardingForm = ({ onNextStep }) => {
     trigger,
     watch,
     reset,
-    formState: { errors },
+    setValue,
+    formState: { errors, isDirty },
   } = useForm({
     resolver: zodResolver(employerOnboardingSchema),
     defaultValues,
@@ -162,6 +178,18 @@ export const OnboardingForm = ({ onNextStep }) => {
 
   // Watch all fields for draft saving
   const watchAllFields = watch();
+
+  // Unsaved changes browser warning
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      if (isDirty) {
+        e.preventDefault();
+        e.returnValue = "";
+      }
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [isDirty]);
 
   // Load draft & user data on mount
   useEffect(() => {
@@ -211,6 +239,9 @@ export const OnboardingForm = ({ onNextStep }) => {
         "employer_onboarding_draft",
         JSON.stringify(draftData),
       );
+      setSaveStatus("saved");
+      const timeout = setTimeout(() => setSaveStatus(null), 2000);
+      return () => clearTimeout(timeout);
     }
   }, [
     watchAllFields.company_name,
@@ -240,6 +271,9 @@ export const OnboardingForm = ({ onNextStep }) => {
 
     if (isStep1Valid) {
       setFormStep(2);
+    } else {
+      setIsShaking(true);
+      setTimeout(() => setIsShaking(false), 500);
     }
   };
 
@@ -295,10 +329,17 @@ export const OnboardingForm = ({ onNextStep }) => {
   }
 
   return (
-    <form className="form-scroll" onSubmit={handleSubmit(onSubmit)}>
+    <form className={`form-scroll ${isShaking ? "shake-animation" : ""}`} onSubmit={handleSubmit(onSubmit, () => {
+      setIsShaking(true);
+      setTimeout(() => setIsShaking(false), 500);
+    })}>
       {/* Progress Indicator */}
       <div className="progress-indicator">
-        <div className={`step ${formStep >= 1 ? "active" : ""}`}>
+        <div 
+          className={`step ${formStep >= 1 ? "active" : ""}`} 
+          onClick={() => formStep === 2 && handleBackStep()}
+          style={{ cursor: formStep === 2 ? 'pointer' : 'default' }}
+        >
           <div className="step-number">1</div>
           <span className="step-label">Company Details</span>
         </div>
@@ -309,13 +350,22 @@ export const OnboardingForm = ({ onNextStep }) => {
         </div>
       </div>
 
-      {formStep === 1 && (
-        <div className="onboard-grid">
+      <AnimatePresence mode="wait">
+        {formStep === 1 && (
+          <motion.div
+            key="step1"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.3 }}
+            className="onboard-grid"
+          >
           <FloatingInput
             label="Company Name"
             name="company_name"
             register={register}
             error={errors.company_name}
+            value={watchAllFields.company_name}
             required
           />
 
@@ -324,7 +374,13 @@ export const OnboardingForm = ({ onNextStep }) => {
             name="company_website"
             register={register}
             error={errors.company_website}
+            value={watchAllFields.company_website}
             required
+            onBlurModifier={(val) => {
+              if (val && !val.startsWith("http://") && !val.startsWith("https://")) {
+                setValue("company_website", "https://" + val, { shouldValidate: true });
+              }
+            }}
           />
 
           <FloatingInput
@@ -332,6 +388,7 @@ export const OnboardingForm = ({ onNextStep }) => {
             name="company_registration_number"
             register={register}
             error={errors.company_registration_number}
+            value={watchAllFields.company_registration_number}
             required
             tooltip="e.g. U72900TG2024PTC123456"
           />
@@ -368,6 +425,7 @@ export const OnboardingForm = ({ onNextStep }) => {
             name="gst_number"
             register={register}
             error={errors.gst_number}
+            value={watchAllFields.gst_number}
             required
             transformValue={(v) => v.toUpperCase()}
           />
@@ -377,6 +435,7 @@ export const OnboardingForm = ({ onNextStep }) => {
             name="pan_number"
             register={register}
             error={errors.pan_number}
+            value={watchAllFields.pan_number}
             required
             transformValue={(v) => v.toUpperCase()}
           />
@@ -386,10 +445,18 @@ export const OnboardingForm = ({ onNextStep }) => {
               {...register("company_description")}
               placeholder=" "
               className={errors.company_description ? "has-error" : ""}
+              onInput={(e) => {
+                e.target.style.height = 'auto';
+                e.target.style.height = e.target.scrollHeight + 'px';
+              }}
+              style={{ overflow: 'hidden', minHeight: '60px', resize: 'none' }}
             ></textarea>
             <label>
               Company Description <span className="required-asterisk">*</span>
             </label>
+            <span className="character-counter">
+              {watchAllFields.company_description?.length || 0} / 500
+            </span>
             {errors.company_description && (
               <span className="error-message">
                 {errors.company_description.message}
@@ -402,6 +469,7 @@ export const OnboardingForm = ({ onNextStep }) => {
             name="company_address"
             register={register}
             error={errors.company_address}
+            value={watchAllFields.company_address}
             required
           />
 
@@ -411,6 +479,7 @@ export const OnboardingForm = ({ onNextStep }) => {
             type="email"
             register={register}
             error={errors.official_email}
+            value={watchAllFields.official_email}
             required
           />
 
@@ -419,10 +488,15 @@ export const OnboardingForm = ({ onNextStep }) => {
             style={{
               display: "flex",
               justifyContent: "flex-end",
+              alignItems: "center",
               marginTop: "20px",
               marginBottom: "20px",
+              gap: "16px"
             }}
           >
+            {saveStatus === "saved" && (
+              <span className="draft-saved-text">Draft saved ✓</span>
+            )}
             <button
               type="button"
               className="continue-btn"
@@ -432,11 +506,18 @@ export const OnboardingForm = ({ onNextStep }) => {
               Next
             </button>
           </div>
-        </div>
-      )}
+          </motion.div>
+        )}
 
-      {formStep === 2 && (
-        <div className="onboard-grid step-2">
+        {formStep === 2 && (
+          <motion.div
+            key="step2"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 20 }}
+            transition={{ duration: 0.3 }}
+            className="onboard-grid step-2"
+          >
           <div className="full" style={{ marginBottom: "10px" }}>
             <h4
               style={{ color: "#4a5568", fontSize: "15px", fontWeight: "600" }}
@@ -455,6 +536,7 @@ export const OnboardingForm = ({ onNextStep }) => {
             error={errors.company_logo}
             required
             tooltip="Square image recommended (PNG/JPG)"
+            onPreview={setPreviewModalImage}
           />
 
           <FileUpload
@@ -501,10 +583,20 @@ export const OnboardingForm = ({ onNextStep }) => {
             error={errors.bank_proof}
             required
             tooltip="Cancelled cheque or bank statement"
+            onPreview={setPreviewModalImage}
           />
           */}
 
-          <div className="form-actions full">
+          <div
+            className="full"
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginTop: "20px",
+              gap: "16px",
+            }}
+          >
             <button
               type="button"
               className="skip-btn back-btn"
@@ -512,19 +604,36 @@ export const OnboardingForm = ({ onNextStep }) => {
             >
               Back
             </button>
-            <button
-              type="submit"
-              className="continue-btn submit-btn"
-              disabled={isPending}
-            >
-              {isPending ? (
-                <>
-                  <span className="spinner"></span> Processing...
-                </>
-              ) : (
-                "Submit"
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flex: 1 }}>
+              {saveStatus === "saved" && (
+                <span className="draft-saved-text" style={{ marginLeft: 'auto' }}>Draft saved ✓</span>
               )}
-            </button>
+              <button
+                type="submit"
+                className="continue-btn submit-btn"
+                disabled={isPending}
+                style={{ marginLeft: saveStatus !== "saved" ? 'auto' : '0' }}
+              >
+                {isPending ? (
+                  <>
+                    <span className="spinner"></span> Processing...
+                  </>
+                ) : (
+                  "Submit & Complete"
+                )}
+              </button>
+            </div>
+          </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Image Preview Modal */}
+      {previewModalImage && (
+        <div className="image-preview-modal" onClick={() => setPreviewModalImage(null)}>
+          <div className="preview-content" onClick={(e) => e.stopPropagation()}>
+            <button className="close-preview-btn" onClick={() => setPreviewModalImage(null)}>✕</button>
+            <img src={previewModalImage} alt="Large preview" />
           </div>
         </div>
       )}
