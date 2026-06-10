@@ -17,7 +17,7 @@ import tour from "@/assets/Tour.png";
 import overlay_img from "@/assets/unlock-img02.png";
 
 import "./styles/employer-dashboard-layout.css";
-import "@/components/dashboard/LockedOverlay";
+import "@/components/layout/EmployeeLockedOverlay";
 
 const MENU_ITEMS = [
   {

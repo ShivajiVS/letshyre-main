@@ -1,7 +1,7 @@
-import "./LockedOverlay.css";
+import "./styles/employee-locked-overlay.css";
 import overlay_img from "@/assets/unlock-img.png";
 
-function LockedOverlay({ onAction }) {
+function EmployeeLockedOverlay({ onAction }) {
   return (
     <div className="locked-overlay">
       <div className="locked-card">
@@ -20,4 +20,4 @@ function LockedOverlay({ onAction }) {
   );
 }
 
-export default LockedOverlay;
+export default EmployeeLockedOverlay;

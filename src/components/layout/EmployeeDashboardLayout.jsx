@@ -6,7 +6,7 @@ import logo from "@/assets/logo2.png";
 import logoutImg from "@/assets/logout.png";
 
 import { logoutMe } from "@/services/auth.service";
-import LockedOverlay from "@/components/dashboard/LockedOverlay";
+import EmployeeLockedOverlay from "@/components/layout/EmployeeLockedOverlay";
 import ProfileCompletion from "@/pages/employee/components/profile/ProfileCompletion";
 import {
   useCandidateProfile,
@@ -234,7 +234,7 @@ export function EmployeeDashboardLayout() {
 
       {/* OVERLAYS & MODALS */}
       {userData && !profileCompleted && !showProfileFlow && (
-        <LockedOverlay onAction={() => setShowProfileFlow(true)} />
+        <EmployeeLockedOverlay onAction={() => setShowProfileFlow(true)} />
       )}
 
       {userData && !profileCompleted && showProfileFlow && (
