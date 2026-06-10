@@ -6,7 +6,8 @@
   background: linear-gradient(180deg, #79a9ef 0%, #ffffff 100%);
   padding: 40px;
   position: relative;
-  overflow: hidden;
+  overflow-y: auto;
+  box-sizing: border-box;
 }
 
 .brand-name {
@@ -38,6 +39,7 @@
   border-radius: 20px;
   padding: 20px;
   position: relative;
+  box-sizing: border-box;
 }
 
 .demo-image {
@@ -80,7 +82,7 @@
   grid-template-columns: 1fr;
   justify-items: center;
   width: fit-content;
-  margin: 60px auto 0 auto;
+  margin: 0 auto;
   background: transparent;
   box-shadow: none;
 }
@@ -102,6 +104,7 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 .onboard-card h2 {
