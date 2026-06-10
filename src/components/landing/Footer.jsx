@@ -25,7 +25,7 @@ export function Footer() {
   }, []);
 
   return (
-    <footer className="ft-footer" ref={footerRef}>
+    <footer className="ft-footer hide-on-print" ref={footerRef}>
       <div className="ft-top">
         {/* Brand */}
         <div className="ft-column ft-brand">

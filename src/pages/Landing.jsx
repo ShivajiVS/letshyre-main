@@ -1,6 +1,5 @@
 import { Helmet } from "react-helmet-async";
 
-import { Navbar } from "@/components/landing/Navbar";
 import { Hero2 } from "@/components/landing/Hero2";
 import { Assistance } from "@/components/landing/Assistance";
 import { Candidate } from "@/components/landing/Candidate";
@@ -9,7 +8,6 @@ import { ScoreCard } from "@/components/landing/ScoreCard";
 import { QuestionArea } from "@/components/landing/QuestionArea";
 import { Testimonials } from "@/components/landing/Testimonials";
 import { HireCard } from "@/components/landing/HireCard";
-import { Footer } from "@/components/landing/Footer";
 
 /* ─── JSON-LD Structured Data ─── */
 const organizationSchema = {
@@ -182,7 +180,6 @@ export function Landing() {
         <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
       </Helmet>
 
-      <Navbar />
       <Hero2 />
       <Assistance />
       <Candidate />
@@ -191,7 +188,6 @@ export function Landing() {
       <QuestionArea />
       <Testimonials />
       <HireCard />
-      <Footer />
     </>
   );
 }

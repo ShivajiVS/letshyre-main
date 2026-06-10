@@ -40,7 +40,7 @@
 }
 
 .ls-navbar-scrolled .ls-navbar-inner {
-  padding: 12px 0px; /* Slightly tighter padding when scrolled for a sleeker profile */
+  padding: 16px 0px; /* Kept consistent with base state to prevent height jumping */
 }
 
 /* ================= Logo ================= */

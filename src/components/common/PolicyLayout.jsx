@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { Helmet } from "react-helmet-async";
 import { motion, useScroll, useSpring, AnimatePresence } from "framer-motion";
-import { Navbar } from "@/components/landing/Navbar";
-import { Footer } from "@/components/landing/Footer";
 import { toast } from "sonner";
 import "@/pages/styles/policy-layout.css";
 
@@ -140,9 +138,6 @@ export function PolicyLayout({ title, metaDescription, intro, sections }) {
         />
       </Helmet>
 
-      <div className="hide-on-print">
-        <Navbar />
-      </div>
 
       <main className={`tc-container tc-font-level-${fontSizeLevel}`}>
         <motion.div
@@ -333,9 +328,6 @@ export function PolicyLayout({ title, metaDescription, intro, sections }) {
         )}
       </main>
 
-      <div className="hide-on-print">
-        <Footer />
-      </div>
 
       <AnimatePresence>
         {showScrollTop && (

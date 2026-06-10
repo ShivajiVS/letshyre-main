@@ -42,7 +42,7 @@ export function Navbar() {
   };
 
   return (
-    <header className={`ls-navbar ${isScrolled ? "ls-navbar-scrolled" : ""}`}>
+    <header className={`ls-navbar hide-on-print ${isScrolled ? "ls-navbar-scrolled" : ""}`}>
       <div className="ls-navbar-inner">
         <div className="ls-logo-area">
           <NavLink to="/#home" className="ls-logo-text">
