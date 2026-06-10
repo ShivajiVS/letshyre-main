@@ -102,7 +102,13 @@ export function Footer() {
         <div className="ft-column">
           <h4 className="ft-title">Company</h4>
           <ul className="ft-links">
-            <li>About Us</li>
+            <li
+              onClick={() => {
+                navigate("/about");
+              }}
+            >
+              About Us
+            </li>
             <li>Careers</li>
             <li
               onClick={() => {

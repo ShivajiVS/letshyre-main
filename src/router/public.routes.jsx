@@ -49,10 +49,17 @@ const publicRoutes = [
             },
           },
           {
-            path: "/contact",
+            path: "contact",
             async lazy() {
               const { Contact } = await import("@/pages/Contact");
               return { Component: Contact };
+            },
+          },
+          {
+            path: "about",
+            async lazy() {
+              const { About } = await import("@/pages/About");
+              return { Component: About };
             },
           },
         ],
