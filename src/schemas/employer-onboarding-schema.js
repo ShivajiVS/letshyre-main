@@ -21,6 +21,7 @@ const documentSchema = () => fileSchema(ACCEPTED_DOCUMENT_TYPES);
 export const employerOnboardingSchema = z.object({
   company_name: z.string().min(2, "Company name must be at least 2 characters").max(100),
   company_website: z.string().url("Must be a valid URL (e.g. https://example.com)"),
+  linkedin_url: z.union([z.string().url("Must be a valid URL (e.g. https://linkedin.com)"), z.literal("")]).optional(),
   company_description: z.string().min(10, "Please provide a brief description").max(1000),
   company_industry: z.string().min(1, "Please select an industry"),
   company_registration_number: z.string().min(5, "Registration number is required").max(50),
@@ -41,6 +42,7 @@ export const employerOnboardingSchema = z.object({
 export const defaultValues = {
   company_name: "",
   company_website: "",
+  linkedin_url: "",
   company_description: "",
   company_industry: "",
   company_registration_number: "",

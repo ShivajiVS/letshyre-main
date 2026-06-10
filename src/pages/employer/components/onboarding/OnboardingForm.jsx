@@ -223,6 +223,7 @@ export const OnboardingForm = ({ onNextStep }) => {
     const draftData = {
       company_name: watchAllFields.company_name,
       company_website: watchAllFields.company_website,
+      linkedin_url: watchAllFields.linkedin_url,
       company_registration_number: watchAllFields.company_registration_number,
       company_industry: watchAllFields.company_industry,
       gst_number: watchAllFields.gst_number,
@@ -246,6 +247,7 @@ export const OnboardingForm = ({ onNextStep }) => {
   }, [
     watchAllFields.company_name,
     watchAllFields.company_website,
+    watchAllFields.linkedin_url,
     watchAllFields.company_registration_number,
     watchAllFields.company_industry,
     watchAllFields.gst_number,
@@ -260,6 +262,7 @@ export const OnboardingForm = ({ onNextStep }) => {
     const isStep1Valid = await trigger([
       "company_name",
       "company_website",
+      "linkedin_url",
       "company_registration_number",
       "company_industry",
       "gst_number",
@@ -400,6 +403,20 @@ export const OnboardingForm = ({ onNextStep }) => {
           />
 
           <FloatingInput
+            label="LinkedIn URL (Optional)"
+            name="linkedin_url"
+            register={register}
+            error={errors.linkedin_url}
+            value={watchAllFields.linkedin_url}
+            tooltip="e.g. https://linkedin.com/company/example"
+            onBlurModifier={(val) => {
+              if (val && !val.startsWith("http://") && !val.startsWith("https://")) {
+                setValue("linkedin_url", "https://" + val, { shouldValidate: true });
+              }
+            }}
+          />
+
+          <FloatingInput
             label="Registration Number"
             name="company_registration_number"
             register={register}
@@ -409,7 +426,46 @@ export const OnboardingForm = ({ onNextStep }) => {
             tooltip="e.g. U72900TG2024PTC123456"
           />
 
-          <div className="floating-input">
+          <FloatingInput
+            label="PAN Number"
+            name="pan_number"
+            register={register}
+            error={errors.pan_number}
+            value={watchAllFields.pan_number}
+            required
+            transformValue={(v) => v.toUpperCase()}
+          />
+
+          <FloatingInput
+            label="GST Number"
+            name="gst_number"
+            register={register}
+            error={errors.gst_number}
+            value={watchAllFields.gst_number}
+            required
+            transformValue={(v) => v.toUpperCase()}
+          />
+
+          <FloatingInput
+            label="Company Address"
+            name="company_address"
+            register={register}
+            error={errors.company_address}
+            value={watchAllFields.company_address}
+            required
+          />
+
+          <FloatingInput
+            label="Official Email"
+            name="official_email"
+            type="email"
+            register={register}
+            error={errors.official_email}
+            value={watchAllFields.official_email}
+            required
+          />
+
+          <div className="floating-input full">
             {isLoadingIndustries ? (
               <div className="skeleton" style={{ height: "50px" }} />
             ) : (
@@ -436,26 +492,6 @@ export const OnboardingForm = ({ onNextStep }) => {
             )}
           </div>
 
-          <FloatingInput
-            label="GST Number"
-            name="gst_number"
-            register={register}
-            error={errors.gst_number}
-            value={watchAllFields.gst_number}
-            required
-            transformValue={(v) => v.toUpperCase()}
-          />
-
-          <FloatingInput
-            label="PAN Number"
-            name="pan_number"
-            register={register}
-            error={errors.pan_number}
-            value={watchAllFields.pan_number}
-            required
-            transformValue={(v) => v.toUpperCase()}
-          />
-
           <div className="floating-input full">
             <textarea
               {...register("company_description")}
@@ -479,25 +515,6 @@ export const OnboardingForm = ({ onNextStep }) => {
               </span>
             )}
           </div>
-
-          <FloatingInput
-            label="Company Address"
-            name="company_address"
-            register={register}
-            error={errors.company_address}
-            value={watchAllFields.company_address}
-            required
-          />
-
-          <FloatingInput
-            label="Official Email"
-            name="official_email"
-            type="email"
-            register={register}
-            error={errors.official_email}
-            value={watchAllFields.official_email}
-            required
-          />
 
           <div
             className="full"
