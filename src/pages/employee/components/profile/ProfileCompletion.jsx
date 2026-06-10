@@ -45,6 +45,7 @@ function ProfileCompletion({ onComplete }) {
       resume_id: "",
       job_id: "",
       selected_role: "",
+      role_other_reason: "",
       suggested_roles: [],
       parsed_resume_data: null,
     },

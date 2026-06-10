@@ -29,6 +29,8 @@ function StepResume({ onNext, onBack }) {
   const suggestedRoles = watch("suggested_roles") || [];
   const selectedRole = watch("selected_role");
   const parsedData = watch("parsed_resume_data");
+  const roleOtherReason = watch("role_other_reason");
+  const isCustomRole = selectedRole === "Other" || suggestedRoles.length === 0 || (selectedRole && !suggestedRoles.includes(selectedRole));
 
   const processResume = async (selectedFile) => {
     setLoading(true);
@@ -355,9 +357,10 @@ function StepResume({ onNext, onBack }) {
                   </div>
                 )}
 
-                {(selectedRole === "Other" || suggestedRoles.length === 0) && !loading && (
-                  <div style={{ marginTop: 24 }}>
-                    <label style={{ display: "block", marginBottom: 8, fontWeight: 600, fontSize: 12 }}>Enter Custom Role</label>
+                {isCustomRole && !loading && (
+                  <div style={{ marginTop: 24, padding: "16px", background: "#f8fafc", borderRadius: "8px", border: "1px solid #e2e8f0" }}>
+                    <div style={{ marginBottom: 16 }}>
+                      <label style={{ display: "block", marginBottom: 8, fontWeight: 600, fontSize: 13, color: "var(--pc-text-dark)" }}>Enter Custom Role *</label>
                     <input
                       className="pc-input"
                       value={customRole}
@@ -379,6 +382,18 @@ function StepResume({ onNext, onBack }) {
                       placeholder="e.g. Frontend Developer"
                       disabled={roleLoading}
                     />
+                    </div>
+                    
+                    <div>
+                      <label style={{ display: "block", marginBottom: 8, fontWeight: 600, fontSize: 13, color: "var(--pc-text-dark)" }}>Reason for selecting another role *</label>
+                      <textarea
+                        className="pc-input"
+                        placeholder="Why is this custom role a better fit for you?"
+                        style={{ minHeight: "80px", resize: "vertical" }}
+                        value={roleOtherReason}
+                        onChange={(e) => setValue("role_other_reason", e.target.value)}
+                      />
+                    </div>
                   </div>
                 )}
 
@@ -436,7 +451,17 @@ function StepResume({ onNext, onBack }) {
             <i className="bi bi-arrow-left"></i> Back
           </button>
           {file && !loading && selectedRole && !roleLoading && (
-            <button type="button" className="btn-primary" onClick={onNext}>
+            <button 
+              type="button" 
+              className="btn-primary" 
+              onClick={() => {
+                if (isCustomRole && (!roleOtherReason || roleOtherReason.trim() === "")) {
+                  setError("Please provide a reason for selecting a custom role.");
+                  return;
+                }
+                onNext();
+              }}
+            >
               Continue <i className="bi bi-arrow-right"></i>
             </button>
           )}

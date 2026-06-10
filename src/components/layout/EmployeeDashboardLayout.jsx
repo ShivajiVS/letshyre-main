@@ -26,7 +26,7 @@ export function EmployeeDashboardLayout() {
 
   const { data: userData, isLoading } = useCandidateProfile();
 
-  const profileCompleted = userData?.is_profile_complete === true;
+  const profileCompleted = userData?.is_profile_complete === false;
 
   const handleProfileComplete = () => {
     queryClient.invalidateQueries({ queryKey: CANDIDATE_PROFILE_KEY });

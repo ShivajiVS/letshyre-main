@@ -98,6 +98,7 @@ function StepReview({ onBack, onFinish }) {
       fd.append("resume_id", profileData.resume_id || "");
       fd.append("role", profileData.selected_role || "");
       fd.append("selected_role", profileData.selected_role || "");
+      fd.append("role_other_reason", profileData.role_other_reason || "");
 
       // PARSED DATA
       fd.append("parsed_resume_data", JSON.stringify(resumeReview || {}));
