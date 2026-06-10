@@ -296,6 +296,22 @@ export const OnboardingForm = ({ onNextStep }) => {
         // Clear draft on success
         localStorage.removeItem("employer_onboarding_draft");
 
+        // Update localStorage user object so the route guard knows onboarding is complete
+        try {
+          const userStr = localStorage.getItem("user");
+          if (userStr) {
+            const userObj = JSON.parse(userStr);
+            if (userObj.user) {
+              userObj.user.is_profile_completed = true;
+            } else {
+              userObj.is_profile_completed = true;
+            }
+            localStorage.setItem("user", JSON.stringify(userObj));
+          }
+        } catch (e) {
+          console.error("Failed to update user local storage", e);
+        }
+
         // Show success animation
         setIsSuccess(true);
         setTimeout(() => {

@@ -1,6 +1,6 @@
 import { redirect } from "react-router";
 import { getUser } from "@/utils/getUser";
-import { ROLE_HOME } from "@/constants";
+import { ROLES, ROLE_HOME } from "@/constants";
 
 export const requireAuth =
   ({ allowedRoles = [] } = {}) =>
@@ -21,9 +21,10 @@ export const requireAuth =
     if (request && request.url) {
       const url = new URL(request.url);
       const isOnboardingPath = url.pathname.includes("/onboarding");
+
       const isProfileCompleted = authData.user?.is_profile_completed;
 
-      if (authData.role === "employer") {
+      if (authData.role === ROLES.EMPLOYER) {
         if (isProfileCompleted === false && !isOnboardingPath) {
           throw redirect("/employer/onboarding");
         }
@@ -40,7 +41,10 @@ export const requireGuest = async () => {
   const authData = getUser();
 
   if (authData?.isAuthenticated) {
-    if (authData.role === "employer" && authData.user?.is_profile_completed === false) {
+    if (
+      authData.role === ROLES.EMPLOYER &&
+      authData.user?.is_profile_completed === false
+    ) {
       throw redirect("/employer/onboarding");
     }
     throw redirect(ROLE_HOME[authData.role]);
