@@ -174,10 +174,10 @@ function StepResume({ onNext, onBack }) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -10 }}
-      transition={{ duration: 0.3 }}
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -20 }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
     >
       <style>{`
         .upload-area-large {
@@ -426,13 +426,25 @@ function StepResume({ onNext, onBack }) {
         {error && !loading && (
           <div className="error-msg" style={{ marginTop: 24 }}>
             {error}
-            <div style={{ marginTop: 12 }}>
+            <div style={{ marginTop: 12, display: "flex", gap: "12px", alignItems: "center" }}>
               <button
                 type="button"
                 className="btn-primary"
                 onClick={() => file && processResume(file)}
               >
                 Retry Processing
+              </button>
+              <button
+                type="button"
+                className="btn-secondary"
+                style={{ padding: "8px 16px", fontSize: "13px" }}
+                onClick={() => {
+                  setError("");
+                  setValue("suggested_roles", []);
+                  setValue("selected_role", "Other");
+                }}
+              >
+                Skip Auto-Fill
               </button>
             </div>
           </div>

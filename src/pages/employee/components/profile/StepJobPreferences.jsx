@@ -50,6 +50,9 @@ function StepJobPreferences({ onNext, onBack }) {
   const noticePeriodProofType = watch("notice_period_proof_type");
   const noticePeriodProof = watch("notice_period_proof");
   const currentCtc = watch("current_ctc");
+  const expectedCtc = watch("expected_ctc");
+  const company = watch("present_or_last_working_company");
+  const lwd = watch("last_day_of_working");
 
   const filteredIndustries = allIndustries.filter((item) =>
     item.toLowerCase().includes(industrySearch.toLowerCase())
@@ -119,10 +122,10 @@ function StepJobPreferences({ onNext, onBack }) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -10 }}
-      transition={{ duration: 0.3 }}
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -20 }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
     >
       <style>{`
         .industry-wrap { position: relative; }
@@ -227,7 +230,10 @@ function StepJobPreferences({ onNext, onBack }) {
 
       <div className="form-grid">
         <div className="form-group">
-          <label>Current / Last Company *</label>
+          <label>
+            Current / Last Company *
+            {company && !errors.present_or_last_working_company && <i className="bi bi-check-circle-fill" style={{ color: "var(--pc-success)", marginLeft: "6px" }}></i>}
+          </label>
           <input
             className="pc-input"
             placeholder="e.g. Google, Microsoft"
@@ -241,7 +247,10 @@ function StepJobPreferences({ onNext, onBack }) {
         </div>
 
         <div className="form-group">
-          <label>Last Working Day *</label>
+          <label>
+            Last Working Day *
+            {lwd && !errors.last_day_of_working && <i className="bi bi-check-circle-fill" style={{ color: "var(--pc-success)", marginLeft: "6px" }}></i>}
+          </label>
           <input
             type="date"
             className="pc-input"
@@ -253,7 +262,10 @@ function StepJobPreferences({ onNext, onBack }) {
         </div>
 
         <div className="form-group">
-          <label>Current CTC (LPA) *</label>
+          <label>
+            Current CTC (LPA) *
+            {currentCtc && !errors.current_ctc && <i className="bi bi-check-circle-fill" style={{ color: "var(--pc-success)", marginLeft: "6px" }}></i>}
+          </label>
           <input
             type="number"
             step="0.1"
@@ -265,7 +277,10 @@ function StepJobPreferences({ onNext, onBack }) {
         </div>
 
         <div className="form-group">
-          <label>Expected CTC (LPA) *</label>
+          <label>
+            Expected CTC (LPA) *
+            {expectedCtc && !errors.expected_ctc && <i className="bi bi-check-circle-fill" style={{ color: "var(--pc-success)", marginLeft: "6px" }}></i>}
+          </label>
           <input
             type="number"
             step="0.1"
@@ -286,7 +301,10 @@ function StepJobPreferences({ onNext, onBack }) {
       </div>
 
       <div className="form-group">
-        <label>Preferred Industry *</label>
+        <label>
+          Preferred Industry *
+          {preferred_industry && !errors.preferred_industry && <i className="bi bi-check-circle-fill" style={{ color: "var(--pc-success)", marginLeft: "6px" }}></i>}
+        </label>
         <div className="industry-wrap">
           <input
             className="pc-input"
@@ -337,7 +355,10 @@ function StepJobPreferences({ onNext, onBack }) {
       </div>
 
       <div className="form-group">
-        <label>Preferred Locations *</label>
+        <label>
+          Preferred Locations *
+          {preferred_locations && preferred_locations.length > 0 && !errors.preferred_locations_string && <i className="bi bi-check-circle-fill" style={{ color: "var(--pc-success)", marginLeft: "6px" }}></i>}
+        </label>
         <input
           className="pc-input"
           placeholder="e.g. Hyderabad, Bangalore, Pune (comma separated)"
@@ -410,8 +431,13 @@ function StepJobPreferences({ onNext, onBack }) {
             
             <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: "16px", width: "100%", alignItems: "start" }}>
               <div style={{ width: "100%" }}>
-                <label style={{ fontSize: "12px", fontWeight: "600", color: "#475569", marginBottom: "8px", display: "block", textAlign: "left" }}>
+                <label style={{ fontSize: "12px", fontWeight: "600", color: "#475569", marginBottom: "8px", display: "flex", alignItems: "center" }}>
                   Select Proof Type *
+                  <div className="pc-tooltip-container">
+                    <i className="bi bi-question-circle pc-tooltip-icon"></i>
+                    <span className="pc-tooltip-text">If serving notice, upload your new offer. If already relieved, upload your relieving letter.</span>
+                  </div>
+                  {noticePeriodProofType && !errors.notice_period_proof_type && <i className="bi bi-check-circle-fill" style={{ color: "var(--pc-success)", marginLeft: "6px", fontSize: "14px" }}></i>}
                 </label>
                 <select
                   className="pc-select"
