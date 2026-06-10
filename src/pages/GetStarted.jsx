@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet-async";
 import candidateImg from "@/assets/get-start01.png";
 import employerImg from "@/assets/get-start02.png";
 
-import "./GetStarted.css";
+import "./styles/get-started.css";
 
 import { useNavigate } from "react-router";
 
@@ -33,10 +33,7 @@ export function GetStarted() {
           content="Choose your path: start hiring AI-verified candidates or find your dream job with LetsHyre."
         />
         <meta property="og:url" content="https://letshyre.com/get-started" />
-        <meta
-          property="og:image"
-          content="https://letshyre.com/og-cover.png"
-        />
+        <meta property="og:image" content="https://letshyre.com/og-cover.png" />
 
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
@@ -89,4 +86,3 @@ export function GetStarted() {
     </div>
   );
 }
-

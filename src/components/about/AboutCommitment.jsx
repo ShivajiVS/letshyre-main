@@ -1,6 +1,9 @@
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router";
 
 export function AboutCommitment() {
+  const navigate = useNavigate();
+
   return (
     <motion.section
       className="about-commitment"
@@ -21,6 +24,14 @@ export function AboutCommitment() {
         The future of hiring is faster, smarter, and more accessible—and
         LetsHyre is building that future.
       </p>
+      
+      <button 
+        className="btn-white-cta" 
+        style={{ marginTop: "20px", position: "relative", zIndex: 1 }}
+        onClick={() => navigate("/contact")}
+      >
+        Get in Touch &rarr;
+      </button>
     </motion.section>
   );
 }

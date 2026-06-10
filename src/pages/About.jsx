@@ -1,6 +1,7 @@
 import { Helmet } from "react-helmet-async";
 import "./styles/about.css";
 import { AboutHero } from "@/components/about/AboutHero";
+import { AboutTrust } from "@/components/about/AboutTrust";
 import { AboutWhatWeDo } from "@/components/about/AboutWhatWeDo";
 import { AboutMissionVision } from "@/components/about/AboutMissionVision";
 import { AboutWhy } from "@/components/about/AboutWhy";
@@ -20,6 +21,7 @@ export function About() {
       <main className="about-page-container">
         <div className="about-content-wrapper">
           <AboutHero />
+          <AboutTrust />
           <AboutWhatWeDo />
           <AboutMissionVision />
           <AboutWhy />
