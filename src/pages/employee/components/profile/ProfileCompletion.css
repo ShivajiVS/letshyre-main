@@ -25,10 +25,11 @@
 }
 
 .pc-title {
-  color: var(--pc-text-dark);
-  font-family: "Inter", "Segoe UI", sans-serif;
+  color: var(--pc-secondary);
+  font-family: var(--font-heading, "Merriweather", serif);
+  font-style: italic;
   margin-bottom: 24px;
-  font-size: 18px;
+  font-size: 22px;
   font-weight: 700;
 }
 
@@ -65,13 +66,13 @@
   margin: 20px 0 10px;
   color: var(--pc-secondary);
   font-family: var(--font-heading, "Merriweather", serif);
-  font-size: 14px;
+  font-size: 18px;
   font-style: italic;
   font-weight: 700;
 }
 
 .pc-left p {
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1.6;
 }
 
@@ -97,7 +98,7 @@
 
 .pc-right-b.error-msg {
   color: var(--pc-error);
-  font-size: 13px;
+  font-size: 14px;
   padding: 12px;
   background: #fef2f2;
   border-left: 4px solid var(--pc-error);
@@ -132,7 +133,7 @@
   text-align: center;
   border-radius: 6px;
   padding: 8px 12px;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 400;
   position: absolute;
   z-index: 100;
@@ -186,8 +187,8 @@
   content: "";
   position: absolute;
   top: 17px;
-  left: 10%;
-  right: 10%;
+  left: 40px;
+  right: 40px;
   height: 2px;
   background: #e2e8f0;
   z-index: 0;
@@ -198,7 +199,7 @@
   content: "";
   position: absolute;
   top: 17px;
-  left: 10%;
+  left: 40px;
   height: 2px;
   background: var(--pc-secondary);
   z-index: 0;
@@ -207,10 +208,10 @@
 }
 
 .pc-stepper[data-step="1"]::after { width: 0; }
-.pc-stepper[data-step="2"]::after { width: 20%; }
-.pc-stepper[data-step="3"]::after { width: 40%; }
-.pc-stepper[data-step="4"]::after { width: 60%; }
-.pc-stepper[data-step="5"]::after { width: 80%; }
+.pc-stepper[data-step="2"]::after { width: calc((100% - 80px) * 0.25); }
+.pc-stepper[data-step="3"]::after { width: calc((100% - 80px) * 0.5); }
+.pc-stepper[data-step="4"]::after { width: calc((100% - 80px) * 0.75); }
+.pc-stepper[data-step="5"]::after { width: calc(100% - 80px); }
 
 .pc-step {
   display: flex;
@@ -223,16 +224,11 @@
 }
 
 .pc-step-number {
-  font-size: 10px;
-  text-transform: uppercase;
-  color: #94a3b8;
-  letter-spacing: 0.5px;
-  font-weight: 600;
-  margin-bottom: 4px;
+  display: none;
 }
 
 .pc-label-content {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   color: #64748b;
   margin-top: 8px;
@@ -296,7 +292,7 @@
 
 .form-group label {
   font-weight: 600;
-  font-size: 12px;
+  font-size: 13px;
   color: var(--pc-text-dark);
   margin-bottom: 8px;
 }
@@ -308,7 +304,7 @@
   padding: 10px 14px;
   border: 1px solid var(--pc-border);
   border-radius: var(--pc-radius-md);
-  font-size: 13px;
+  font-size: 14px;
   color: var(--pc-text-dark);
   background: #f8fafc;
   transition: all 0.2s ease;
@@ -331,7 +327,7 @@
 
 .field-error {
   color: var(--pc-error);
-  font-size: 11px;
+  font-size: 12px;
   margin-top: 6px;
   font-weight: 500;
 }
@@ -341,7 +337,7 @@
   color: var(--pc-error);
   padding: 10px 14px;
   border-radius: var(--pc-radius-md);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   margin-bottom: 20px;
   border: 1px solid #fecaca;
@@ -427,36 +423,41 @@
     padding: 20px;
   }
   .pc-stepper {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 16px;
-    background: #f8fafc;
-    border-radius: var(--pc-radius-md);
-    margin-bottom: 24px;
+    flex-direction: row;
+    align-items: center;
+    padding: 0;
+    background: transparent;
+    border-radius: 0;
+    margin-bottom: 40px;
   }
   .pc-stepper::before, .pc-stepper::after {
-    display: none;
+    display: block;
   }
   .pc-step {
-    display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 16px;
-    width: 100%;
-  }
-  .pc-step:last-child {
+    gap: 0;
     margin-bottom: 0;
+    width: auto;
   }
   .pc-circle {
     margin: 0;
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
   }
-  .pc-step-number {
-    display: none;
+  .pc-circle i {
+    font-size: 12px;
   }
   .pc-label-content {
-    margin: 0;
-    font-size: 15px;
+    display: none;
+  }
+  .pc-step.active .pc-label-content {
+    display: block;
+    position: absolute;
+    top: 40px;
+    font-size: 13px;
+    width: max-content;
+    color: var(--pc-text-dark);
   }
 }

@@ -223,9 +223,34 @@ function StepJobPreferences({ onNext, onBack }) {
         }
         .doc-upload-item:last-child { margin-bottom: 0; }
         .doc-info { text-align: left; }
-        .doc-title { font-size: 14px; font-weight: 700; color: var(--pc-text-dark); margin: 0 0 4px 0; }
-        .doc-desc { font-size: 12px; color: #64748b; margin: 0; }
+        .doc-title { font-size: 15px; font-weight: 700; color: var(--pc-text-dark); margin: 0 0 4px 0; }
+        .doc-desc { font-size: 13px; color: #64748b; margin: 0; }
         .req { color: var(--pc-error); margin-left: 4px; }
+        
+        .notice-proof-grid {
+          display: grid;
+          grid-template-columns: 1fr auto;
+          gap: 16px;
+        }
+
+        @media (max-width: 576px) {
+          .doc-upload-item {
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 12px;
+            gap: 12px;
+          }
+          .doc-action, .upload-btn-job, .doc-chip {
+            width: 100%;
+          }
+          .doc-chip {
+            max-width: none;
+            justify-content: space-between;
+          }
+          .notice-proof-grid {
+            grid-template-columns: 1fr;
+          }
+        }
       `}</style>
 
       <div className="form-grid">
@@ -429,9 +454,9 @@ function StepJobPreferences({ onNext, onBack }) {
               <p className="doc-desc">Select the type of proof you have, then upload the corresponding document.</p>
             </div>
             
-            <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: "16px", width: "100%", alignItems: "start" }}>
+            <div className="notice-proof-grid" style={{ width: "100%", alignItems: "start" }}>
               <div style={{ width: "100%" }}>
-                <label style={{ fontSize: "12px", fontWeight: "600", color: "#475569", marginBottom: "8px", display: "flex", alignItems: "center" }}>
+                <label style={{ fontSize: "13px", fontWeight: "600", color: "#475569", marginBottom: "8px", display: "flex", alignItems: "center" }}>
                   Select Proof Type *
                   <div className="pc-tooltip-container">
                     <i className="bi bi-question-circle pc-tooltip-icon"></i>

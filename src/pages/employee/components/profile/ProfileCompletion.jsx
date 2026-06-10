@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { motion, AnimatePresence } from "framer-motion";
+import { useEmployeeProfileStore } from "@/store/employeeProfileStore";
 
 import ProfileStepper from "./ProfileStepper";
 import StepIdentity from "./StepIdentity";
@@ -48,10 +49,22 @@ function ProfileCompletion({ onComplete }) {
       role_other_reason: "",
       suggested_roles: [],
       parsed_resume_data: null,
+      ...useEmployeeProfileStore.getState().formData,
     },
   });
 
-  const [step, setStep] = useState(1);
+  const step = useEmployeeProfileStore((state) => state.step);
+  const setStep = useEmployeeProfileStore((state) => state.setStep);
+  const setStoreData = useEmployeeProfileStore((state) => state.setFormData);
+  const clearStore = useEmployeeProfileStore((state) => state.clearStore);
+
+  useEffect(() => {
+    const subscription = methods.watch((value) => {
+      setStoreData(value);
+    });
+    return () => subscription.unsubscribe();
+  }, [methods.watch, setStoreData]);
+
   const totalSteps = 5;
 
   const stepMeta = {
@@ -82,18 +95,19 @@ function ProfileCompletion({ onComplete }) {
 
   const handleNext = () => {
     if (step < totalSteps) {
-      setStep((prev) => prev + 1);
+      setStep(step + 1);
     }
   };
 
   const handleBack = () => {
     if (step > 1) {
-      setStep((prev) => prev - 1);
+      setStep(step - 1);
     }
   };
 
   const handleFinish = () => {
     localStorage.setItem("profileCompleted", "true");
+    clearStore(); // Clear draft when fully completed
     onComplete?.();
   };
 
@@ -112,8 +126,13 @@ function ProfileCompletion({ onComplete }) {
           )}
 
           <div className="pc-right-box">
-            <div className={`stepper-container ${step === 5 ? "stepper-center-wrapper" : ""}`}>
-              <h2 className="pc-title" style={step === 5 ? { textAlign: "center" } : {}}>
+            <div
+              className={`stepper-container ${step === 5 ? "stepper-center-wrapper" : ""}`}
+            >
+              <h2
+                className="pc-title"
+                style={step === 5 ? { textAlign: "center" } : {}}
+              >
                 Profile Progress
               </h2>
               <ProfileStepper step={step} />

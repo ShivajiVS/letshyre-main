@@ -26,7 +26,7 @@ export function EmployeeDashboardLayout() {
 
   const { data: userData, isLoading } = useCandidateProfile();
 
-  const profileCompleted = userData?.is_profile_complete === false;
+  const profileCompleted = userData?.is_profile_complete === true;
 
   const handleProfileComplete = () => {
     queryClient.invalidateQueries({ queryKey: CANDIDATE_PROFILE_KEY });
@@ -80,27 +80,98 @@ export function EmployeeDashboardLayout() {
         <div className="cd-dashboard">
           <aside className="cd-sidebar">
             <div style={{ padding: "24px" }}>
-              <div style={{ ...shimmerStyle, width: "120px", height: "30px", borderRadius: "8px", marginBottom: "40px" }} />
+              <div
+                style={{
+                  ...shimmerStyle,
+                  width: "120px",
+                  height: "30px",
+                  borderRadius: "8px",
+                  marginBottom: "40px",
+                }}
+              />
               {[...Array(4)].map((_, i) => (
-                <div key={i} style={{ ...shimmerStyle, width: "100%", height: "48px", borderRadius: "12px", marginBottom: "16px" }} />
+                <div
+                  key={i}
+                  style={{
+                    ...shimmerStyle,
+                    width: "100%",
+                    height: "48px",
+                    borderRadius: "12px",
+                    marginBottom: "16px",
+                  }}
+                />
               ))}
             </div>
           </aside>
           <main className="cd-main">
-            <div className="cd-topbar" style={{ padding: "0 24px", display: "flex", justifyContent: "space-between", alignItems: "center", minHeight: "72px", borderBottom: "1px solid #e2e8f0" }}>
-              <div style={{ ...shimmerStyle, width: "200px", height: "24px", borderRadius: "6px" }} />
-              <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
-                <div style={{ ...shimmerStyle, width: "36px", height: "36px", borderRadius: "50%" }} />
-                <div style={{ ...shimmerStyle, width: "40px", height: "40px", borderRadius: "50%" }} />
+            <div
+              className="cd-topbar"
+              style={{
+                padding: "0 24px",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                minHeight: "72px",
+                borderBottom: "1px solid #e2e8f0",
+              }}
+            >
+              <div
+                style={{
+                  ...shimmerStyle,
+                  width: "200px",
+                  height: "24px",
+                  borderRadius: "6px",
+                }}
+              />
+              <div
+                style={{ display: "flex", gap: "16px", alignItems: "center" }}
+              >
+                <div
+                  style={{
+                    ...shimmerStyle,
+                    width: "36px",
+                    height: "36px",
+                    borderRadius: "50%",
+                  }}
+                />
+                <div
+                  style={{
+                    ...shimmerStyle,
+                    width: "40px",
+                    height: "40px",
+                    borderRadius: "50%",
+                  }}
+                />
               </div>
             </div>
             <div className="cd-content" style={{ padding: "24px" }}>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "24px", marginBottom: "24px" }}>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+                  gap: "24px",
+                  marginBottom: "24px",
+                }}
+              >
                 {[...Array(3)].map((_, i) => (
-                  <div key={i} style={{ ...shimmerStyle, height: "140px", borderRadius: "20px" }} />
+                  <div
+                    key={i}
+                    style={{
+                      ...shimmerStyle,
+                      height: "140px",
+                      borderRadius: "20px",
+                    }}
+                  />
                 ))}
               </div>
-              <div style={{ ...shimmerStyle, width: "100%", height: "300px", borderRadius: "24px" }} />
+              <div
+                style={{
+                  ...shimmerStyle,
+                  width: "100%",
+                  height: "300px",
+                  borderRadius: "24px",
+                }}
+              />
             </div>
           </main>
         </div>
