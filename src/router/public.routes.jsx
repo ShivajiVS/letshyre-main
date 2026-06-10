@@ -29,9 +29,8 @@ const publicRoutes = [
           {
             path: "T&C",
             async lazy() {
-              const { TermsAndConditions } = await import(
-                "@/pages/TermsAndConditions"
-              );
+              const { TermsAndConditions } =
+                await import("@/pages/TermsAndConditions");
               return { Component: TermsAndConditions };
             },
           },
@@ -43,7 +42,7 @@ const publicRoutes = [
             },
           },
           {
-            path: "Policy",
+            path: "policy",
             async lazy() {
               const { PrivacyPolicy } = await import("@/pages/PrivacyPolicy");
               return { Component: PrivacyPolicy };
@@ -68,9 +67,8 @@ const publicRoutes = [
       {
         path: "/forgot-password",
         async lazy() {
-          const { ForgotPassword } = await import(
-            "@/pages/forgot/ForgotPassword"
-          );
+          const { ForgotPassword } =
+            await import("@/pages/forgot/ForgotPassword");
           return { Component: ForgotPassword };
         },
       },

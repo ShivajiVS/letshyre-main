@@ -36,22 +36,52 @@ export function Footer() {
           </p>
 
           <div className="ft-socials">
-            <a href="https://wa.me/919346708639" target="_blank" rel="noopener noreferrer" className="ft-social-icon">
+            <a
+              href="https://wa.me/919346708639"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ft-social-icon"
+            >
               <i className="bi bi-whatsapp"></i>
             </a>
-            <a href="https://x.com/letshyreAi" target="_blank" rel="noopener noreferrer" className="ft-social-icon">
+            <a
+              href="https://x.com/letshyreAi"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ft-social-icon"
+            >
               <i className="bi bi-twitter-x"></i>
             </a>
-            <a href="https://www.linkedin.com/company/letshyre/" target="_blank" rel="noopener noreferrer" className="ft-social-icon">
+            <a
+              href="https://www.linkedin.com/company/letshyre/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ft-social-icon"
+            >
               <i className="bi bi-linkedin"></i>
             </a>
-            <a href="https://www.facebook.com/profile.php?id=61585708555581" target="_blank" rel="noopener noreferrer" className="ft-social-icon">
+            <a
+              href="https://www.facebook.com/profile.php?id=61585708555581"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ft-social-icon"
+            >
               <i className="bi bi-facebook"></i>
             </a>
-            <a href="https://www.instagram.com/letshyreofficial/" target="_blank" rel="noopener noreferrer" className="ft-social-icon">
+            <a
+              href="https://www.instagram.com/letshyreofficial/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ft-social-icon"
+            >
               <i className="bi bi-instagram"></i>
             </a>
-            <a href="https://www.youtube.com/@LetsHyre" target="_blank" rel="noopener noreferrer" className="ft-social-icon">
+            <a
+              href="https://www.youtube.com/@LetsHyre"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ft-social-icon"
+            >
               <i className="bi bi-youtube"></i>
             </a>
           </div>
@@ -83,7 +113,7 @@ export function Footer() {
             </li>
             <li
               onClick={() => {
-                navigate("/Policy");
+                navigate("/policy");
               }}
             >
               Privacy Policy
