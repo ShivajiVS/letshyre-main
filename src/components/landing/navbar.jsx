@@ -23,15 +23,21 @@ export function Navbar() {
   };
 
   // ✅ FIX: hash-based active logic
-  const getNavClass = (hash) => {
+  const getNavClass = (pathOrHash) => {
+    if (pathOrHash.startsWith("/")) {
+      return `ls-nav-link ${location.pathname === pathOrHash ? "ls-nav-link-active" : ""}`;
+    }
     const currentHash = location.hash || "#home";
-    return `ls-nav-link ${currentHash === hash ? "ls-nav-link-active" : ""}`;
+    return `ls-nav-link ${currentHash === pathOrHash && location.pathname === "/" ? "ls-nav-link-active" : ""}`;
   };
 
-  const getMobileClass = (hash) => {
+  const getMobileClass = (pathOrHash) => {
+    if (pathOrHash.startsWith("/")) {
+      return `ls-mobile-link ${location.pathname === pathOrHash ? "ls-mobile-link-active" : ""}`;
+    }
     const currentHash = location.hash || "#home";
     return `ls-mobile-link ${
-      currentHash === hash ? "ls-mobile-link-active" : ""
+      currentHash === pathOrHash && location.pathname === "/" ? "ls-mobile-link-active" : ""
     }`;
   };
 
@@ -67,7 +73,7 @@ export function Navbar() {
           >
             Scorecards
           </NavLink>
-          <NavLink to="/#contact" className={() => getNavClass("#contact")}>
+          <NavLink to="/contact" className={() => getNavClass("/contact")}>
             Contact
           </NavLink>
         </nav>
@@ -157,8 +163,8 @@ export function Navbar() {
           Scorecards
         </NavLink>
         <NavLink
-          to="/#contact"
-          className={() => getMobileClass("#contact")}
+          to="/contact"
+          className={() => getMobileClass("/contact")}
           onClick={handleNavClick}
         >
           Contact

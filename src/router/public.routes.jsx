@@ -65,6 +65,13 @@ const publicRoutes = [
           return { Component: PrivacyPolicy };
         },
       },
+      {
+        path: "/contact",
+        async lazy() {
+          const { Contact } = await import("@/pages/Contact");
+          return { Component: Contact };
+        },
+      },
     ],
   },
 ];
