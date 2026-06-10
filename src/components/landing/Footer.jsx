@@ -1,12 +1,14 @@
 import React, { useEffect, useRef } from "react";
 import bg_logo from "@/assets/bg-logo.png";
 import { useNavigate } from "react-router";
+import { StayUpdatedForm } from "@/components/common/StayUpdatedForm";
 
 import "./styles/footer.css";
 
 export function Footer() {
   const footerRef = useRef(null);
   const navigate = useNavigate();
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry], obs) => {
@@ -111,12 +113,7 @@ export function Footer() {
             Get the latest news and updates from LetsHyre
           </p>
 
-          <form className="ft-form" onSubmit={(e) => e.preventDefault()}>
-            <input type="email" placeholder="Your Email" className="ft-input" />
-            <button type="submit" className="ft-submit">
-              ✉
-            </button>
-          </form>
+          <StayUpdatedForm />
         </div>
       </div>
 

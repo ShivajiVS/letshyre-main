@@ -189,6 +189,34 @@
   background: linear-gradient(130deg, rgb(116, 142, 168), var(--color-main));
   border: none;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ft-input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.ft-submit:disabled {
+  opacity: 0.8;
+  cursor: not-allowed;
+}
+
+.ft-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: ft-spin 0.8s linear infinite;
+}
+
+@keyframes ft-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* BIG TEXT (NO TRIGGER) */
