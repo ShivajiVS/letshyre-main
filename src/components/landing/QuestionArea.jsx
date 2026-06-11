@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { motion } from "framer-motion";
 import "./styles/question-area.css";
 
 export function QuestionArea() {
@@ -39,7 +40,13 @@ export function QuestionArea() {
     },
   ];
   return (
-    <section className="faq-wrapper">
+    <motion.section
+      className="faq-wrapper"
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+    >
       <div className="faq-container">
         <header className="faq-header-group">
           <span className="faq-label">Support</span>
@@ -83,6 +90,6 @@ export function QuestionArea() {
           ))}
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }

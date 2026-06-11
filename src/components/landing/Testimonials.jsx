@@ -1,9 +1,16 @@
 import React from "react";
+import { motion } from "framer-motion";
 import "./styles/testimonials.css";
 
 export function Testimonials() {
   return (
-    <section className="ts-section">
+    <motion.section
+      className="ts-section"
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+    >
       <div className="ts-header">
         <h2>Trusted by Thousands</h2>
         <p>See what our users have to say about their experience</p>
@@ -280,7 +287,7 @@ export function Testimonials() {
           </div>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }
 

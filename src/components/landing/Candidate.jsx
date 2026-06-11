@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import Cand01 from "@/assets/Cand01.png";
 import Cand02 from "@/assets/Cand02.png";
 import Cand03 from "@/assets/Cand03.png";
@@ -63,70 +64,49 @@ export function Candidate() {
 
         {/* ================= RIGHT CARDS ================= */}
         <div className="Candidate-matter-section">
-          <div
-            className={`candidate-item ${activeIndex === 0 ? "active" : ""}`}
-            onClick={() => handleSelect(0)}
-          >
-            {/* <div className="cm-icon"> <i className="bi bi-person-workspace Cand-icon"></i> </div> */}
-            <>
-              <h3 className="candidate-item-text">
-                {" "}
-                <i className="bi bi-person-workspace Cand-icon"></i> Take AI
-                Interview
+          {[
+            {
+              icon: "bi-person-workspace",
+              title: "Take AI Interview",
+              desc: "Complete a conversational AI interview anytime, anywhere. Boost your opportunities with a seamless and flexible experience.",
+            },
+            {
+              icon: "bi-bookmark-star-fill",
+              title: "Instant Evaluation",
+              desc: "Experience truly instant evaluation. Gain quick, clear insights into your performance and capabilities.",
+            },
+            {
+              icon: "bi-journal-check",
+              title: "Smart Matching",
+              desc: "Smart matching that works for you. Our AI connects you to opportunities aligned with your skills and career goals.",
+            },
+            {
+              icon: "bi-people-fill",
+              title: "Get Hired Faster",
+              desc: "Experience intelligent matching that finds opportunities suited to your strengths and aspirations. Avoid lengthy screening and connect directly with the right recruiters.",
+            },
+          ].map((item, index) => (
+            <div
+              key={index}
+              className={`candidate-item ${activeIndex === index ? "active" : ""}`}
+              onClick={() => handleSelect(index)}
+            >
+              <h3>
+                <i className={`bi ${item.icon} Cand-icon`}></i> {item.title}
               </h3>
-              <p>
-                {" "}
-                Complete a conversational AI interview anytime, anywhere. Boost
-                your opportunities with a seamless and flexible experience.{" "}
-              </p>
-            </>
-
-            <div className="progress-line"></div>
-          </div>
-
-          <div
-            className={`candidate-item ${activeIndex === 1 ? "active" : ""}`}
-            onClick={() => handleSelect(1)}
-          >
-            <h3>
-              <i className="bi bi-bookmark-star-fill Cand-icon"></i> Instant
-              Evaluation
-            </h3>
-            <p>
-              Experience truly instant evaluation. Gain quick, clear insights
-              into your performance and capabilities
-            </p>
-            <div className="progress-line"></div>
-          </div>
-
-          <div
-            className={`candidate-item ${activeIndex === 2 ? "active" : ""}`}
-            onClick={() => handleSelect(2)}
-          >
-            <h3>
-              <i className="bi bi-journal-check Cand-icon"></i> Smart Matching
-            </h3>
-            <p>
-              Smart matching that works for you. Our AI connects you to
-              opportunities aligned with your skills and career goals.
-            </p>
-            <div className="progress-line"></div>
-          </div>
-
-          <div
-            className={`candidate-item ${activeIndex === 3 ? "active" : ""}`}
-            onClick={() => handleSelect(3)}
-          >
-            <h3>
-              <i className="bi bi-people-fill Cand-icon"></i> Get Hired Faster
-            </h3>
-            <p>
-              Experience intelligent matching that finds opportunities suited to
-              your strengths and aspirations.Avoid lengthy screening and connect
-              directly with the right recruiters
-            </p>
-            <div className="progress-line"></div>
-          </div>
+              <p>{item.desc}</p>
+              <div className="progress-line">
+                {activeIndex === index && (
+                  <motion.div
+                    className="progress-line-fill"
+                    initial={{ width: "0%" }}
+                    animate={{ width: "100%" }}
+                    transition={{ duration: AUTO_TIME / 1000, ease: "linear" }}
+                  />
+                )}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </>

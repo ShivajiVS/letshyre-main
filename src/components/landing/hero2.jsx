@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 
 import heroImg from "@/assets/hero1.jpeg";
 import first_part_bg from "@/assets/FP_bg.png";
@@ -8,6 +9,33 @@ import "./styles/hero2.css";
 
 export function Hero2() {
   const navigate = useNavigate();
+
+  // 3D Parallax Tilt Logic
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const mouseXSpring = useSpring(x, { stiffness: 300, damping: 30 });
+  const mouseYSpring = useSpring(y, { stiffness: 300, damping: 30 });
+
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["5deg", "-5deg"]);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-5deg", "5deg"]);
+
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    const xPct = mouseX / width - 0.5;
+    const yPct = mouseY / height - 0.5;
+    x.set(xPct);
+    y.set(yPct);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
 
   return (
     <section className="hero-container" id="home">
@@ -33,13 +61,13 @@ export function Hero2() {
               className="btn-primary"
               onClick={() => navigate("/employer/sign-in")}
             >
-              I'm Hiring &rarr;
+              I'm Hiring <span className="btn-arrow">&rarr;</span>
             </button>
             <button
               className="btn-secondary"
               onClick={() => navigate("/employee/sign-in")}
             >
-              I'm looking for a job
+              I'm looking for a job <span className="btn-arrow">&rarr;</span>
             </button>
           </div>
 
@@ -56,15 +84,26 @@ export function Hero2() {
           </div>
         </div>
 
-        <div className="hero-visual">
-          <div className="visual-wrapper">
+        <div className="hero-visual" style={{ perspective: 1200 }}>
+          <motion.div 
+            className="visual-wrapper"
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+            style={{ 
+              rotateX, 
+              rotateY, 
+              transformStyle: "preserve-3d",
+              transition: "box-shadow 0.3s ease" 
+            }}
+          >
             <img
               src={heroImg}
               alt="Letshyre Platform"
               className="hero-main-img"
+              style={{ transform: "translateZ(40px)" }}
             />
-            <div className="visual-glow"></div>
-          </div>
+            <div className="visual-glow" style={{ transform: "translateZ(-20px)" }}></div>
+          </motion.div>
         </div>
       </div>
       <Tagline />

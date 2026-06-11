@@ -170,19 +170,26 @@
 }
 
 .btn-primary {
-  background-color: #0f172a;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
   color: white;
-  box-shadow:
-    0 4px 6px -1px rgba(15, 23, 42, 0.1),
-    0 2px 4px -2px rgba(15, 23, 42, 0.1);
+  box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.1);
 }
 
 .btn-primary:hover {
-  background-color: #1e293b;
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
   transform: translateY(-2px);
-  box-shadow:
-    0 10px 15px -3px rgba(15, 23, 42, 0.1),
-    0 4px 6px -4px rgba(15, 23, 42, 0.1);
+  box-shadow: 0 10px 15px -3px rgba(15, 23, 42, 0.2);
+}
+
+.btn-arrow {
+  display: inline-block;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  margin-left: 4px;
+}
+
+.btn-primary:hover .btn-arrow,
+.btn-secondary:hover .btn-arrow {
+  transform: translateX(4px);
 }
 
 .btn-secondary {
@@ -365,24 +372,7 @@
   box-shadow:
     0 25px 50px -12px rgba(0, 0, 0, 0.15),
     0 0 0 1px rgba(0, 0, 0, 0.03);
-  /* The original transform is now applied at 0% in the animation */
-  animation: heroZoom linear both;
-  animation-timeline: scroll();
-  /* Animation completes as the user scrolls down 100vh */
-  animation-range: 0 100vh;
   transition: box-shadow 0.5s ease;
-}
-
-@keyframes heroZoom {
-  0% {
-    transform: perspective(1000px) rotateY(-5deg) rotateX(2deg) scale(1);
-  }
-  40% {
-    transform: perspective(1000px) rotateY(-2deg) rotateX(1deg) scale(1.05); /* Zoom In */
-  }
-  100% {
-    transform: perspective(1000px) rotateY(0deg) rotateX(0deg) scale(0.9); /* Zoom Out */
-  }
 }
 
 @media (min-width: 1024px) {
@@ -395,22 +385,7 @@
 
 @media (max-width: 768px) {
   .visual-wrapper {
-    /* Disable 3D tilt on smaller screens to maximize width, but keep the zoom effect */
-    animation: heroZoomMobile linear both;
-    animation-timeline: scroll();
-    animation-range: 0 100vh;
-  }
-}
-
-@keyframes heroZoomMobile {
-  0% {
-    transform: scale(1);
-  }
-  40% {
-    transform: scale(1.05); /* Zoom In */
-  }
-  100% {
-    transform: scale(0.9); /* Zoom Out */
+    /* Normal rendering for mobile */
   }
 }
 
@@ -436,6 +411,22 @@
   transform: translate(-50%, -50%);
   z-index: -1;
   pointer-events: none;
+  animation: pulseGlow 4s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.05);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.8;
+  }
 }
 
 /* ================== BACKGROUND SHAPE ================== */

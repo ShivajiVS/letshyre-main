@@ -1,4 +1,5 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
+import { motion } from "framer-motion";
 import s_img01 from "@/assets/score01.png";
 import s_img02 from "@/assets/score02.png";
 
@@ -23,23 +24,6 @@ const progressBars = [
 ];
 
 export function ScoreCard() {
-  const cardsRef = useRef([]);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries, obs) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("animate");
-            obs.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.2 },
-    );
-    cardsRef.current.forEach((el) => el && observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
 
   return (
     <section className="sc-main" id="scorecards">
@@ -65,9 +49,12 @@ export function ScoreCard() {
       {/* Cards grid */}
       <div className="sc-grid">
         {/* ── LEFT CARD ── */}
-        <div
-          className="sc-card sc-card--left from-left"
-          ref={(el) => (cardsRef.current[0] = el)}
+        <motion.div
+          className="sc-card sc-card--left"
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
         >
           <div className="sc-card__img-zone">
             <img src={s_img01} alt="Skill Matching illustration" />
@@ -102,12 +89,15 @@ export function ScoreCard() {
               ))}
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* ── CENTER CARD (two stacked mini-cards) ── */}
-        <div
-          className="sc-card sc-card--center from-center"
-          ref={(el) => (cardsRef.current[1] = el)}
+        <motion.div
+          className="sc-card sc-card--center"
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
         >
           {/* Top mini */}
           <div className="sc-mini-card">
@@ -161,12 +151,15 @@ export function ScoreCard() {
               </div>
             ))}
           </div>
-        </div>
+        </motion.div>
 
         {/* ── RIGHT CARD ── */}
-        <div
-          className="sc-card sc-card--right from-right"
-          ref={(el) => (cardsRef.current[2] = el)}
+        <motion.div
+          className="sc-card sc-card--right"
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
         >
           <div className="sc-card__body">
             <span className="sc-tag">📊 Analytics</span>
@@ -195,7 +188,7 @@ export function ScoreCard() {
           <div className="sc-card__img-zone sc-card__img-zone--bottom">
             <img src={s_img02} alt="Performance Analytics illustration" />
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

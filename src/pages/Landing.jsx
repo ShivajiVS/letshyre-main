@@ -8,6 +8,7 @@ import { ScoreCard } from "@/components/landing/ScoreCard";
 import { QuestionArea } from "@/components/landing/QuestionArea";
 import { Testimonials } from "@/components/landing/Testimonials";
 import { HireCard } from "@/components/landing/HireCard";
+import { ReactLenis } from "lenis/react";
 
 /* ─── JSON-LD Structured Data ─── */
 const organizationSchema = {
@@ -96,7 +97,7 @@ const faqSchema = {
 
 export function Landing() {
   return (
-    <>
+    <ReactLenis root options={{ lerp: 0.08, duration: 1.5, smoothTouch: true }}>
       <Helmet>
         <title>
           LetsHyre — AI Hiring Platform for Notice-Period Talent | Smart
@@ -188,6 +189,7 @@ export function Landing() {
       <QuestionArea />
       <Testimonials />
       <HireCard />
-    </>
+    </ReactLenis>
   );
 }
+
