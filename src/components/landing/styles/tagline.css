@@ -2,12 +2,6 @@
 .tagline-wrapper {
   width: 100%;
   text-align: center;
-  /* z-index: 10; */
-  
-  /* Scroll Zoom Effect */
-  animation: taglineScrollZoom linear both;
-  animation-timeline: scroll();
-  animation-range: 0 100vh;
 }
 
 @media (max-width: 767px) {
@@ -16,23 +10,17 @@
   }
 }
 
-@keyframes taglineScrollZoom {
-  0% {
-    transform: scale(1);
-  }
-  40% {
-    transform: scale(1.08); /* Zoom in slightly more than the image for text impact */
-  }
-  100% {
-    transform: scale(0.9); /* Zoom out as we scroll away */
-  }
-}
 
 @media (min-width: 768px) {
   .tagline-wrapper {
     padding-top: 5rem;
     margin-top: auto; /* Push to bottom on desktop */
   }
+}
+
+.tagline-text,
+.tagline-text * {
+  font-family: "DM Serif Display", serif !important;
 }
 
 .tagline-text {
@@ -42,46 +30,20 @@
   flex-direction: column;
   align-items: center;
   gap: 0.25rem;
-}
-
-.tagline-text .tag-light,
-.tagline-text .tag-bold {
-  opacity: 0;
-  transform: translateY(40px);
-}
-
-.tagline-text.animate .tag-light {
-  animation: textSlideUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  animation-delay: 0.2s;
-}
-
-.tagline-text.animate .tag-bold {
-  animation: textSlideUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  animation-delay: 0.4s;
-}
-
-@keyframes textSlideUp {
-  0% {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  margin: 0;
 }
 
 .tag-light {
+  font-style: italic;
   color: #64748b;
-  font-weight: 400; /* Slightly thicker than 300 for readability */
+  font-weight: 400;
 }
 
 .tag-bold {
-  background: linear-gradient(135deg, #2563eb 0%, #0284c7 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  font-weight: 800;
+  font-family: "DM Serif Display", serif !important;
+  font-style: italic;
+  color: #185fa5;
+  font-weight: 400;
 }
 
 @media (min-width: 640px) {
