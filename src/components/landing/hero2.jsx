@@ -37,24 +37,54 @@ export function Hero2() {
     y.set(0);
   };
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.1, delayChildren: 0.1 },
+    },
+  };
+  
+  const wordVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100 } },
+  };
+
   return (
     <section className="hero-container" id="home">
       <div className="hero-top-row">
         <div className="hero-content">
           <div className="hero-badge">
-            <span className="badge-highlight">New</span> Smart Interviewing Tech
+            <span className="badge-highlight">New</span> 100% AI-Screened Candidates
           </div>
 
-          <h1 className="hero-title">
-            AI Hiring Platform for <br />
-            <span className="text-gradient">Notice-Period Talent</span>
-          </h1>
+          <motion.h1 
+            className="hero-title"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            {"The AI Hiring Platform for".split(" ").map((word, i) => (
+              <motion.span key={`line1-${i}`} variants={wordVariants} style={{ display: "inline-block", marginRight: "12px" }}>
+                {word}
+              </motion.span>
+            ))}
+            <br />
+            {"Notice-Period Talent".split(" ").map((word, i) => (
+              <motion.span key={`line2-${i}`} variants={wordVariants} className="text-gradient" style={{ display: "inline-block", marginRight: "12px" }}>
+                {word}
+              </motion.span>
+            ))}
+          </motion.h1>
 
-          <p className="hero-description">
-            Letshyre automates resume evaluation, AI interviews, and candidate
-            verification for modern HR teams. Build your dream team faster,
-            without the screening overhead.
-          </p>
+          <motion.p 
+            className="hero-description"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
+          >
+            Letshyre automates resume evaluation, AI interviews, and candidate verification for modern HR teams. Build your dream team faster, without the screening overhead.
+          </motion.p>
 
           <div className="hero-actions">
             <button

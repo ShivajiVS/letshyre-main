@@ -112,28 +112,41 @@
   letter-spacing: 0.05em;
 }
 
+.hero-title,
+.hero-title * {
+  font-family: "DM Serif Display", serif !important;
+}
+
 .hero-title {
-  font-size: clamp(2rem, 4vw, 3.5rem); /* Reduced text size */
-  font-weight: 800;
-  line-height: 1.1;
-  color: #0f172a;
+  font-size: clamp(2rem, 4vw, 3.5rem); 
+  font-weight: 400;
+  line-height: 1.15;
+  color: #1a1a1a;
   margin-bottom: 0.5rem;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
 }
 
 .text-gradient {
-  background: linear-gradient(135deg, #2563eb 0%, #0284c7 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-style: italic;
+  color: #185fa5;
+  background: none;
+  -webkit-text-fill-color: initial;
+}
+
+.serif-italic-text {
+  font-family: "Libre Baskerville", serif !important;
+  font-style: italic;
+  font-weight: 400;
+  color: #2563eb;
 }
 
 .hero-description {
-  font-size: clamp(0.95rem, 1.5vw, 1.1rem); /* Reduced text size */
+  font-family: "Libre Baskerville", serif !important;
+  font-size: clamp(0.95rem, 1.5vw, 1.1rem); 
   color: #64748b;
   line-height: 1.6;
   margin-bottom: 2rem;
-  max-width: 540px;
+  max-width: 580px;
 }
 
 @media (min-width: 1536px) {
