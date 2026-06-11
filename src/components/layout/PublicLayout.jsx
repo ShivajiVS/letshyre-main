@@ -9,10 +9,11 @@ export function PublicLayout() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
+
   return (
     <>
       <Navbar />
-      <main>
+      <main style={{ minHeight: "calc(100vh - 360px)", display: "flex", flexDirection: "column" }}>
         <Outlet />
       </main>
       <Footer />

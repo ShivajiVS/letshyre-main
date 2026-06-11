@@ -44,12 +44,18 @@ export function ContactForm() {
     >
       <AnimatePresence mode="wait">
         {!isSuccess ? (
-          <motion.form
-            key="form"
-            initial={{ opacity: 1 }}
-            exit={{ opacity: 0, y: -20, transition: { duration: 0.3 } }}
-            onSubmit={handleSubmit(onSubmit)}
-          >
+            <motion.form
+              key="form"
+              initial={{ opacity: 1 }}
+              exit={{ opacity: 0, y: -20, transition: { duration: 0.3 } }}
+              onSubmit={handleSubmit(onSubmit)}
+            >
+              <div className="contact-form-header">
+                <h3 className="contact-form-title">Send a Message</h3>
+                <p className="contact-form-desc">
+                  Fill out the form below and our team will get back to you.
+                </p>
+              </div>
             <div className="contact-form-group">
               <input
                 type="text"
