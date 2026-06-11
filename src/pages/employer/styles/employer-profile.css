@@ -411,25 +411,59 @@
   margin-top: 0.25rem;
 }
 
+/* ── Modal Overlay ── */
+.ep-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+.ep-modal-content {
+  width: 100%;
+  max-width: 1250px;
+  background: transparent;
+  position: relative;
+  animation: modalFadeIn 0.3s ease-out;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 /* ── Edit Profile Form ── */
 .emp-edit-back {
-  background: none;
-  border: none;
-  color: var(--ep-text-muted);
-  font-size: 1rem;
-  display: flex;
+  background: white;
+  border: 1px solid var(--ep-border-color);
+  color: var(--ep-text-main);
+  border-radius: var(--ep-radius-md);
+  font-size: 0.95rem;
+  display: inline-flex;
   align-items: center;
   gap: 0.5rem;
   cursor: pointer;
-  padding: 0;
+  padding: 0.5rem 1rem;
   transition: var(--ep-transition);
-  margin-bottom: -1rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  box-shadow: var(--ep-shadow-sm);
 }
 .emp-edit-back:hover {
-  color: var(--ep-text-main);
+  background: #f8fafc;
+  transform: translateX(-2px);
 }
 .emp-edit-back i {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
 }
 
 .edit-profile-container {
@@ -457,7 +491,8 @@
 }
 .left-panel-image {
   max-width: 100%;
-  height: auto;
+  max-height: 450px;
+  object-fit: contain;
 }
 
 .right-panel {
@@ -582,7 +617,7 @@ textarea:focus {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 2rem;
+  padding: 1rem;
   border: 2px dashed var(--ep-border-color);
   border-radius: var(--ep-radius-md);
   background: #f8fafc;

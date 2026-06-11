@@ -53,32 +53,34 @@ export function EmployerProfile() {
 
   return (
     <main className="ep-page">
-      {!editProfile ? (
-        <>
-          <ProfileBanner 
-            companyName={kyc?.company_name || loggedUser?.company_name}
-            stats={stats}
-            onEditClick={() => setEditProfile(true)}
-          />
-          <PrimaryDetails 
-            profile={profile}
-            kyc={kyc}
-            loggedUser={loggedUser}
-          />
-          <CompanyDetails 
-            kyc={kyc}
-          />
-          <DocumentLinks 
-            kyc={kyc}
-          />
-        </>
-      ) : (
-        <EditProfileForm 
-          profile={profile}
-          kyc={kyc}
-          onCancel={() => setEditProfile(false)}
-          updateKycMutation={updateKycMutation}
-        />
+      <ProfileBanner 
+        companyName={kyc?.company_name || loggedUser?.company_name}
+        stats={stats}
+        onEditClick={() => setEditProfile(true)}
+      />
+      <PrimaryDetails 
+        profile={profile}
+        kyc={kyc}
+        loggedUser={loggedUser}
+      />
+      <CompanyDetails 
+        kyc={kyc}
+      />
+      <DocumentLinks 
+        kyc={kyc}
+      />
+
+      {editProfile && (
+        <div className="ep-modal-overlay">
+          <div className="ep-modal-content">
+            <EditProfileForm 
+              profile={profile}
+              kyc={kyc}
+              onCancel={() => setEditProfile(false)}
+              updateKycMutation={updateKycMutation}
+            />
+          </div>
+        </div>
       )}
     </main>
   );
