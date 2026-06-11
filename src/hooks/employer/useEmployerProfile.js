@@ -1,5 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getEmployerProfile, updateEmployerKyc } from "../../services/employer/employerProfileService";
+import {
+  getEmployerProfile,
+  updateEmployerKyc,
+} from "@/services/employer/employerProfileService";
 import { toast } from "react-toastify";
 
 // Key for profile query
@@ -9,7 +12,7 @@ export const useGetEmployerProfile = () => {
   return useQuery({
     queryKey: PROFILE_QUERY_KEY,
     queryFn: getEmployerProfile,
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    staleTime: 2 * 60 * 1000, // 5 minutes
   });
 };
 

@@ -14,7 +14,7 @@ export function EmployerProfile() {
   const [loggedUser, setLoggedUser] = useState(null);
 
   // Queries & Mutations
-  const { data: profileData, isLoading, isError } = useGetEmployerProfile();
+  const { data: profileData, isPending, isError } = useGetEmployerProfile();
   const updateKycMutation = useUpdateKyc();
 
   useEffect(() => {
@@ -24,7 +24,7 @@ export function EmployerProfile() {
     }
   }, []);
 
-  if (isLoading) {
+  if (isPending) {
     return (
       <main className="ep-page">
         <ProfileSkeleton />
