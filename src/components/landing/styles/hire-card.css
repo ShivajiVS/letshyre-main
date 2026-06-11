@@ -1,13 +1,9 @@
 .hire-card-section {
   padding: 5% 0;
   background-color: var(--primary-lite-blue);
-  /* border: 2px solid green; */
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor:
-    url("../assets/Bell-Icon.png") 16 16,
-    auto;
 }
 .hire-card-main {
   /* padding: 2% 2%; */
@@ -27,12 +23,20 @@
 }
 .hire-card-content > h2 {
   color: white;
-  font-size: 2rem;
-  font-weight: 500;
-  font-family: var(--font-primary02);
+  font-size: 2.2rem;
+  font-weight: 700;
+  font-family: "Outfit", sans-serif;
+  text-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1rem;
 }
 .hire-card-content > p {
-  color: white;
+  color: #ffffff;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  line-height: 1.6;
+  font-size: 1.05rem;
+  font-weight: 500;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  margin-bottom: 2rem;
 }
 .buttons-section02 {
   margin-top: 5%;
@@ -83,46 +87,64 @@
   scale: 1.2;
   /* height: auto; */
 }
+@keyframes wavePulse {
+  0% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.03) translateY(-1%);
+    opacity: 0.85;
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
 .hire-card-inner01 {
   position: absolute;
   right: 0;
   width: 93%;
-  /* height: 110%; */
-  /* border: 2px solid green; */
   height: 100%;
   border-radius: 30% 8% 8% 100% / 100% 8% 8% 0%;
   z-index: 2;
   background: linear-gradient(120deg, #72a1f1 13%, #8fbdee 25%, #cdfcf3 40%);
+  animation: wavePulse 8s infinite ease-in-out;
+  transform-origin: right center;
 }
 .hire-card-inner02 {
   position: absolute;
   right: 0;
   width: 75%;
-  /* border: 2px solid green; */
   height: 100%;
   border-radius: 42% 5% 8% 100% / 100% 5% 8% 0%;
   z-index: 2;
   background: linear-gradient(110deg, #6296ef 13%, #8fbdee 26%, #cdfcf3 50%);
+  animation: wavePulse 9s infinite ease-in-out 1s;
+  transform-origin: right center;
 }
 .hire-card-inner03 {
   position: absolute;
   right: 0;
   width: 55%;
-  /* border: 2px solid green; */
   height: 100%;
   border-radius: 50% 5% 8% 100% / 100% 5% 8% 0%;
   z-index: 2;
   background: linear-gradient(120deg, #6296ef 15%, #8fbdee 26%, #cdfcf3 70%);
+  animation: wavePulse 10s infinite ease-in-out 2s;
+  transform-origin: right center;
 }
 .hire-card-inner04 {
   position: absolute;
   right: 0;
   width: 38%;
-  /* border: 2px solid green; */
   height: 100%;
   border-radius: 60% 5% 8% 100% / 100% 5% 8% 0%;
   z-index: 2;
   background: linear-gradient(120deg, #6296ef 13%, #8fbdee 26%, #6296ef 40%);
+  animation: wavePulse 11s infinite ease-in-out 3s;
+  transform-origin: right center;
 }
 /* ---------- Responsive: tablet / small laptops (<= 992px) ---------- */
 @media (max-width: 992px) {

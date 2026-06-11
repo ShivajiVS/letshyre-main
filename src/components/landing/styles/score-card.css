@@ -141,6 +141,7 @@
    BASE CARD
 ══════════════════════════════════════════ */
 .sc-card {
+  position: relative;
   border-radius: 24px;
   background: rgba(255, 255, 255, 0.45);
   border: 1px solid rgba(255, 255, 255, 0.78);
@@ -160,6 +161,63 @@
   box-shadow:
     0 20px 52px rgba(80, 120, 220, 0.18),
     inset 0 1px 0 rgba(255, 255, 255, 0.95);
+}
+
+/* ── SPOTLIGHT GLOW ── */
+.sc-card-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    600px circle at calc(var(--mouse-x, 0) * 1px) calc(var(--mouse-y, 0) * 1px),
+    rgba(255, 255, 255, 0.6),
+    transparent 40%
+  );
+  opacity: 0;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+  z-index: 0;
+}
+.sc-card:hover > .sc-card-glow,
+.sc-mini-card:hover > .sc-card-glow {
+  opacity: 1;
+}
+
+/* Ensure content stays above the glow */
+.sc-card > *:not(.sc-card-glow),
+.sc-mini-card > *:not(.sc-card-glow) {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── SHIMMERING BORDERS ── */
+.sc-card::after,
+.sc-mini-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px; /* Border thickness */
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.9), transparent);
+  background-size: 200% 100%;
+  animation: shimmerBorder 3.5s infinite linear;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.7;
+}
+
+@keyframes shimmerBorder {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }
 
 /* ── LEFT card ── */
@@ -195,6 +253,7 @@
    MINI-CARDS  (center column)
 ══════════════════════════════════════════ */
 .sc-mini-card {
+  position: relative;
   flex: 1;
   border-radius: 20px;
   background: rgba(255, 255, 255, 0.5);
@@ -202,6 +261,7 @@
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   padding: 1.5rem;
+  overflow: hidden;
   box-shadow:
     0 4px 20px rgba(80, 120, 220, 0.1),
     inset 0 1px 0 rgba(255, 255, 255, 0.9);
@@ -410,11 +470,8 @@
 }
 .sc-progress__fill {
   height: 100%;
-  width: var(--fill-width, 0%);
-  /* background-color: rgb(47, 242, 47); */
   background: linear-gradient(90deg, #3a7bd5, #60a5fa);
   border-radius: 100px;
-  transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* ══════════════════════════════════════════
