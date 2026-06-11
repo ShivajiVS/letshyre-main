@@ -5,7 +5,7 @@ import Cand02 from "@/assets/Cand02.png";
 import Cand03 from "@/assets/Cand03.png";
 import Cand04 from "@/assets/Cand04.png";
 
-import "./Candidate.css";
+import "./styles/candidate.css";
 
 export function Candidate() {
   const images = [Cand01, Cand02, Cand03, Cand04];
