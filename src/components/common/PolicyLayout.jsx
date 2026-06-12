@@ -5,7 +5,13 @@ import { toast } from "sonner";
 import "@/pages/styles/policy-layout.css";
 
 import { SkeletonLoader } from "@/components/TermsAndConditions/SkeletonLoader";
-import { UpArrowIcon, PrintIcon, SearchIcon, ExpandIcon, CollapseIcon } from "@/components/TermsAndConditions/Icons";
+import {
+  UpArrowIcon,
+  PrintIcon,
+  SearchIcon,
+  ExpandIcon,
+  CollapseIcon,
+} from "@/components/TermsAndConditions/Icons";
 
 export function PolicyLayout({ title, metaDescription, intro, sections }) {
   const [loading, setLoading] = useState(true);
@@ -14,7 +20,7 @@ export function PolicyLayout({ title, metaDescription, intro, sections }) {
   const [isMobile, setIsMobile] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [feedbackGiven, setFeedbackGiven] = useState(null);
-  
+
   // New States for UI/UX enhancements
   const [fontSizeLevel, setFontSizeLevel] = useState(1); // 0 = small, 1 = normal, 2 = large
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -23,7 +29,7 @@ export function PolicyLayout({ title, metaDescription, intro, sections }) {
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 30,
-    restDelta: 0.001
+    restDelta: 0.001,
   });
 
   const readTime = useMemo(() => {
@@ -36,26 +42,26 @@ export function PolicyLayout({ title, metaDescription, intro, sections }) {
 
   const filteredSections = useMemo(() => {
     if (!searchQuery.trim()) return sections;
-    return sections.filter(sec => 
-      sec.title.toLowerCase().includes(searchQuery.toLowerCase())
+    return sections.filter((sec) =>
+      sec.title.toLowerCase().includes(searchQuery.toLowerCase()),
     );
   }, [searchQuery, sections]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
     const timer = setTimeout(() => setLoading(false), 800);
-    
+
     const checkMobile = () => {
       const mobile = window.innerWidth <= 860;
       setIsMobile(mobile);
       if (mobile) setSidebarCollapsed(false);
     };
     checkMobile();
-    window.addEventListener('resize', checkMobile);
+    window.addEventListener("resize", checkMobile);
 
     return () => {
       clearTimeout(timer);
-      window.removeEventListener('resize', checkMobile);
+      window.removeEventListener("resize", checkMobile);
     };
   }, []);
 
@@ -65,8 +71,9 @@ export function PolicyLayout({ title, metaDescription, intro, sections }) {
         const element = document.getElementById(id);
         if (element) {
           const yOffset = -120;
-          const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-          window.scrollTo({ top: y, behavior: 'smooth' });
+          const y =
+            element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+          window.scrollTo({ top: y, behavior: "smooth" });
         }
       }, 100);
     } else {
@@ -87,12 +94,12 @@ export function PolicyLayout({ title, metaDescription, intro, sections }) {
   };
 
   const handleFeedback = (isHelpful) => {
-    setFeedbackGiven(isHelpful ? 'yes' : 'no');
+    setFeedbackGiven(isHelpful ? "yes" : "no");
     toast.success("Thank you for your feedback!");
   };
 
   const changeFontSize = (delta) => {
-    setFontSizeLevel(prev => {
+    setFontSizeLevel((prev) => {
       const next = prev + delta;
       return next >= 0 && next <= 2 ? next : prev;
     });
@@ -126,18 +133,17 @@ export function PolicyLayout({ title, metaDescription, intro, sections }) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [loading, sections]);
 
-  const activeSectionTitle = sections.find(s => s.id === activeSection)?.title || sections[0]?.title || "";
+  const activeSectionTitle =
+    sections.find((s) => s.id === activeSection)?.title ||
+    sections[0]?.title ||
+    "";
 
   return (
     <>
       <Helmet>
         <title>{title} | LetsHyre</title>
-        <meta
-          name="description"
-          content={metaDescription}
-        />
+        <meta name="description" content={metaDescription} />
       </Helmet>
-
 
       <main className={`tc-container tc-font-level-${fontSizeLevel}`}>
         <motion.div
@@ -153,9 +159,11 @@ export function PolicyLayout({ title, metaDescription, intro, sections }) {
           >
             <h1>{title}</h1>
             <div className="tc-hero-badges">
-              <span className="tc-read-time hide-on-print">⏱ ~{readTime} min read</span>
-              
-              <div className="tc-font-controls hide-on-print" title="Adjust Text Size">
+              <span className="tc-read-time hide-on-print">
+                ⏱ ~{readTime} min read
+              </span>
+
+              {/* <div className="tc-font-controls hide-on-print" title="Adjust Text Size">
                 <button 
                   onClick={() => changeFontSize(-1)} 
                   disabled={fontSizeLevel === 0}
@@ -170,11 +178,14 @@ export function PolicyLayout({ title, metaDescription, intro, sections }) {
                 >
                   A+
                 </button>
-              </div>
+              </div> */}
 
-              <button className="tc-print-btn hide-on-print" onClick={handlePrint}>
+              {/* <button
+                className="tc-print-btn hide-on-print"
+                onClick={handlePrint}
+              >
                 <PrintIcon /> Download PDF
-              </button>
+              </button> */}
             </div>
           </motion.div>
         </section>
@@ -182,26 +193,27 @@ export function PolicyLayout({ title, metaDescription, intro, sections }) {
         {loading ? (
           <SkeletonLoader />
         ) : (
-          <div className={`tc-wrapper ${sidebarCollapsed && !isMobile ? 'tc-sidebar-collapsed' : ''}`}>
-            
+          <div
+            className={`tc-wrapper ${sidebarCollapsed && !isMobile ? "tc-sidebar-collapsed" : ""}`}
+          >
             {!isMobile && (
               <aside className="tc-sidebar hide-on-print">
                 <div className="tc-sidebar-header">
                   <h3>Contents</h3>
-                  <button 
-                    className="tc-collapse-btn" 
+                  <button
+                    className="tc-collapse-btn"
                     onClick={() => setSidebarCollapsed(true)}
                     title="Collapse Sidebar"
                   >
                     <CollapseIcon />
                   </button>
                 </div>
-                
+
                 <div className="tc-search-box">
                   <SearchIcon />
-                  <input 
-                    type="text" 
-                    placeholder="Search sections..." 
+                  <input
+                    type="text"
+                    placeholder="Search sections..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
@@ -213,7 +225,9 @@ export function PolicyLayout({ title, metaDescription, intro, sections }) {
                       <li key={`nav-${section.id}`}>
                         <button
                           className={`tc-sidebar-link ${
-                            activeSection === section.id && !searchQuery ? "active" : ""
+                            activeSection === section.id && !searchQuery
+                              ? "active"
+                              : ""
                           }`}
                           onClick={() => scrollToSection(section.id)}
                           type="button"
@@ -223,7 +237,9 @@ export function PolicyLayout({ title, metaDescription, intro, sections }) {
                       </li>
                     ))}
                     {filteredSections.length === 0 && (
-                      <li className="tc-no-results">No sections match your search.</li>
+                      <li className="tc-no-results">
+                        No sections match your search.
+                      </li>
                     )}
                   </ul>
                 </nav>
@@ -236,11 +252,10 @@ export function PolicyLayout({ title, metaDescription, intro, sections }) {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5 }}
             >
-              
               {/* Expand Sidebar Button for Desktop */}
               {!isMobile && sidebarCollapsed && (
-                <button 
-                  className="tc-expand-btn hide-on-print" 
+                <button
+                  className="tc-expand-btn hide-on-print"
                   onClick={() => setSidebarCollapsed(false)}
                   title="Expand Sidebar"
                 >
@@ -250,13 +265,14 @@ export function PolicyLayout({ title, metaDescription, intro, sections }) {
 
               <AnimatePresence>
                 {isMobile && showScrollTop && !searchQuery && (
-                  <motion.div 
+                  <motion.div
                     className="tc-mobile-reading-pill hide-on-print"
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
                   >
-                    <span>Reading:</span> {activeSectionTitle.replace(/^\d+\.\s*/, '')}
+                    <span>Reading:</span>{" "}
+                    {activeSectionTitle.replace(/^\d+\.\s*/, "")}
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -264,18 +280,16 @@ export function PolicyLayout({ title, metaDescription, intro, sections }) {
               {isMobile && (
                 <div className="tc-search-box tc-mobile-search hide-on-print">
                   <SearchIcon />
-                  <input 
-                    type="text" 
-                    placeholder="Search sections..." 
+                  <input
+                    type="text"
+                    placeholder="Search sections..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
                 </div>
               )}
 
-              <p className="tc-intro">
-                {intro}
-              </p>
+              <p className="tc-intro">{intro}</p>
 
               {filteredSections.map((section, index) => (
                 <motion.section
@@ -291,14 +305,10 @@ export function PolicyLayout({ title, metaDescription, intro, sections }) {
                   }}
                 >
                   <div className="tc-section-header">
-                    <h2 className="tc-section-title">
-                      {section.title}
-                    </h2>
+                    <h2 className="tc-section-title">{section.title}</h2>
                   </div>
-                  
-                  <div className="tc-section-body">
-                    {section.content}
-                  </div>
+
+                  <div className="tc-section-body">{section.content}</div>
                 </motion.section>
               ))}
 
@@ -306,15 +316,15 @@ export function PolicyLayout({ title, metaDescription, intro, sections }) {
                 <div className="tc-feedback-widget hide-on-print">
                   <p>Was this document clear and helpful?</p>
                   <div className="tc-feedback-actions">
-                    <button 
-                      className={`tc-feedback-btn ${feedbackGiven === 'yes' ? 'active' : ''}`}
+                    <button
+                      className={`tc-feedback-btn ${feedbackGiven === "yes" ? "active" : ""}`}
                       onClick={() => handleFeedback(true)}
                       disabled={feedbackGiven !== null}
                     >
                       👍 Yes
                     </button>
-                    <button 
-                      className={`tc-feedback-btn ${feedbackGiven === 'no' ? 'active' : ''}`}
+                    <button
+                      className={`tc-feedback-btn ${feedbackGiven === "no" ? "active" : ""}`}
                       onClick={() => handleFeedback(false)}
                       disabled={feedbackGiven !== null}
                     >
@@ -327,7 +337,6 @@ export function PolicyLayout({ title, metaDescription, intro, sections }) {
           </div>
         )}
       </main>
-
 
       <AnimatePresence>
         {showScrollTop && (

@@ -45,7 +45,10 @@ export const sections = [
           <li>All submitted information is accurate and truthful</li>
           <li>Resumes and employment information are genuine</li>
           <li>AI interviews are completed honestly</li>
-          <li>No impersonation or <span className="tc-highlight">fraudulent activity</span> will occur</li>
+          <li>
+            No impersonation or{" "}
+            <span className="tc-highlight">fraudulent activity</span> will occur
+          </li>
         </ul>
       </>
     ),
@@ -79,7 +82,10 @@ export const sections = [
         <p className="tc-section-text">Users acknowledge that:</p>
         <ul className="tc-list">
           <li>
-            AI-generated interview reports are <Tooltip text="Serving as a sign or suggestion rather than a definitive guarantee."><span className="tc-highlight">indicative only</span></Tooltip>
+            AI-generated interview reports are{" "}
+            <Tooltip text="Serving as a sign or suggestion rather than a definitive guarantee.">
+              <span className="tc-highlight">indicative only</span>
+            </Tooltip>
           </li>
           <li>Interview insights may not always be fully accurate</li>
           <li>
@@ -102,7 +108,8 @@ export const sections = [
     content: (
       <>
         <p className="tc-section-text">
-          Certain employer services may require paid <span className="tc-highlight">subscriptions</span>.
+          Certain employer services may require paid{" "}
+          <span className="tc-highlight">subscriptions</span>.
         </p>
         <p className="tc-section-text">LetsHyre reserves the right to:</p>
         <ul className="tc-list">
@@ -111,8 +118,11 @@ export const sections = [
           <li>Update platform features</li>
         </ul>
         <p className="tc-section-text">
-          Changes will apply <Tooltip text="Taking effect from the date of the change going forward.">prospectively</Tooltip> and will not affect completed
-          purchases.
+          Changes will apply{" "}
+          <Tooltip text="Taking effect from the date of the change going forward.">
+            prospectively
+          </Tooltip>{" "}
+          and will not affect completed purchases.
         </p>
       </>
     ),
@@ -124,13 +134,20 @@ export const sections = [
       <>
         <p className="tc-section-text">
           All content, software, branding, technology, interview frameworks, and
-          platform materials are the <Tooltip text="Creations of the mind, such as software, branding, and proprietary algorithms."><span className="tc-highlight">property of LetsHyre</span></Tooltip>.
+          platform materials are the{" "}
+          <Tooltip text="Creations of the mind, such as software, branding, and proprietary algorithms.">
+            <span className="tc-highlight">property of LetsHyre</span>
+          </Tooltip>
+          .
         </p>
         <p className="tc-section-text">Users may not:</p>
         <ul className="tc-list">
           <li>Copy platform content</li>
           <li>
-            <Tooltip text="Deconstructing software to extract its source code or proprietary logic.">Reverse engineer</Tooltip> platform functionality
+            <Tooltip text="Deconstructing software to extract its source code or proprietary logic.">
+              Reverse engineer
+            </Tooltip>{" "}
+            platform functionality
           </li>
           <li>Redistribute proprietary materials</li>
           <li>Use LetsHyre branding without written permission.</li>
@@ -160,7 +177,9 @@ export const sections = [
     content: (
       <>
         <p className="tc-section-text">
-          LetsHyre reserves the right to <span className="tc-highlight">suspend or terminate</span> accounts that:
+          LetsHyre reserves the right to{" "}
+          <span className="tc-highlight">suspend or terminate</span> accounts
+          that:
         </p>
         <ul className="tc-list">
           <li>Violate these Terms</li>
@@ -176,14 +195,21 @@ export const sections = [
     title: "10. Limitation of Liability",
     content: (
       <>
-        <p className="tc-section-text">LetsHyre shall <span className="tc-highlight">not be liable</span> for:</p>
+        <p className="tc-section-text">
+          LetsHyre shall <span className="tc-highlight">not be liable</span>{" "}
+          for:
+        </p>
         <ul className="tc-list">
           <li>Hiring decisions</li>
           <li>Employment disputes</li>
           <li>Employer-candidate interactions</li>
           <li>Business losses</li>
           <li>
-            Indirect or <Tooltip text="Damages that do not flow directly from an act but from some of the consequences of the act.">consequential damages</Tooltip>.
+            Indirect or{" "}
+            <Tooltip text="Damages that do not flow directly from an act but from some of the consequences of the act.">
+              consequential damages
+            </Tooltip>
+            .
           </li>
         </ul>
       </>
@@ -221,8 +247,8 @@ export const sections = [
         <div className="tc-contact">
           <p className="tc-section-text">
             Email:{" "}
-            <a href="mailto:support@letshyre.com" className="tc-contact-email">
-              support@letshyre.com
+            <a href="mailto:support@letshyre.ai" className="tc-contact-email">
+              support@letshyre.ai
             </a>
           </p>
         </div>

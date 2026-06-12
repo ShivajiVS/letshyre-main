@@ -6,7 +6,9 @@ export const sections = [
     title: "1. Information We Collect",
     content: (
       <>
-        <p className="tc-section-text"><strong>Candidate Information:</strong></p>
+        <p className="tc-section-text">
+          <strong>Candidate Information:</strong>
+        </p>
         <p className="tc-section-text">We may collect:</p>
         <ul className="tc-list">
           <li>Full Name</li>
@@ -22,7 +24,9 @@ export const sections = [
           <li>Profile Information submitted by candidates</li>
         </ul>
         <br />
-        <p className="tc-section-text"><strong>Employer Information:</strong></p>
+        <p className="tc-section-text">
+          <strong>Employer Information:</strong>
+        </p>
         <p className="tc-section-text">We may collect:</p>
         <ul className="tc-list">
           <li>Company Name</li>
@@ -34,7 +38,9 @@ export const sections = [
           <li>Job Descriptions.</li>
         </ul>
         <br />
-        <p className="tc-section-text"><strong>Technical Information:</strong></p>
+        <p className="tc-section-text">
+          <strong>Technical Information:</strong>
+        </p>
         <p className="tc-section-text">We may automatically collect:</p>
         <ul className="tc-list">
           <li>IP Address</li>
@@ -72,7 +78,8 @@ export const sections = [
     content: (
       <>
         <p className="tc-section-text">
-          LetsHyre uses artificial intelligence technologies to conduct role-based interviews and generate interview reports.
+          LetsHyre uses artificial intelligence technologies to conduct
+          role-based interviews and generate interview reports.
         </p>
         <p className="tc-section-text">We may process:</p>
         <ul className="tc-list">
@@ -82,7 +89,8 @@ export const sections = [
           <li>AI-generated interview reports</li>
         </ul>
         <p className="tc-section-text">
-          These reports are intended to assist employers in evaluating candidates and are not a guarantee of hiring outcomes.
+          These reports are intended to assist employers in evaluating
+          candidates and are not a guarantee of hiring outcomes.
         </p>
       </>
     ),
@@ -96,9 +104,13 @@ export const sections = [
         <ul className="tc-list">
           <li>Verified employers using LetsHyre</li>
           <li>Authorized service providers supporting platform operations</li>
-          <li>Government or legal authorities when required by applicable law</li>
+          <li>
+            Government or legal authorities when required by applicable law
+          </li>
         </ul>
-        <p className="tc-section-text">LetsHyre does not sell personal information to third parties.</p>
+        <p className="tc-section-text">
+          LetsHyre does not sell personal information to third parties.
+        </p>
       </>
     ),
   },
@@ -108,7 +120,9 @@ export const sections = [
     content: (
       <>
         <p className="tc-section-text">
-          We implement reasonable technical and organizational measures to protect personal information from unauthorized access, disclosure, alteration, or destruction.
+          We implement reasonable technical and organizational measures to
+          protect personal information from unauthorized access, disclosure,
+          alteration, or destruction.
         </p>
       </>
     ),
@@ -119,7 +133,9 @@ export const sections = [
     content: (
       <>
         <p className="tc-section-text">
-          We retain information only as long as necessary to provide services, comply with legal obligations, resolve disputes, and enforce our agreements.
+          We retain information only as long as necessary to provide services,
+          comply with legal obligations, resolve disputes, and enforce our
+          agreements.
         </p>
       </>
     ),
@@ -134,7 +150,9 @@ export const sections = [
           <li>Access their personal information</li>
           <li>Request correction of inaccurate information</li>
           <li>Request deletion of their account</li>
-          <li>Request removal of personal information where legally applicable</li>
+          <li>
+            Request removal of personal information where legally applicable
+          </li>
         </ul>
       </>
     ),
@@ -145,7 +163,8 @@ export const sections = [
     content: (
       <>
         <p className="tc-section-text">
-          LetsHyre may use cookies and analytics technologies to improve platform functionality, security, and user experience.
+          LetsHyre may use cookies and analytics technologies to improve
+          platform functionality, security, and user experience.
         </p>
       </>
     ),
@@ -156,7 +175,9 @@ export const sections = [
     content: (
       <>
         <p className="tc-section-text">
-          Our platform may contain links to third-party websites or services. LetsHyre is not responsible for the privacy practices of third-party platforms.
+          Our platform may contain links to third-party websites or services.
+          LetsHyre is not responsible for the privacy practices of third-party
+          platforms.
         </p>
       </>
     ),
@@ -167,7 +188,9 @@ export const sections = [
     content: (
       <>
         <p className="tc-section-text">
-          LetsHyre may update this Privacy Policy from time to time. Continued use of the platform after updates constitutes acceptance of the revised policy.
+          LetsHyre may update this Privacy Policy from time to time. Continued
+          use of the platform after updates constitutes acceptance of the
+          revised policy.
         </p>
       </>
     ),
@@ -182,8 +205,8 @@ export const sections = [
             For privacy-related questions:
             <br />
             Email:{" "}
-            <a href="mailto:support@letshyre.com" className="tc-contact-email">
-              support@letshyre.com
+            <a href="mailto:support@letshyre.ai" className="tc-contact-email">
+              support@letshyre.ai
             </a>
           </p>
         </div>

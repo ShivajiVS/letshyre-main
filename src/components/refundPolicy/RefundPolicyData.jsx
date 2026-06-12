@@ -64,7 +64,8 @@ export const sections = [
         <ul className="tc-list">
           <li>Stops future recurring charges</li>
           <li>
-            Does not automatically qualify for refunds of current billing periods.
+            Does not automatically qualify for refunds of current billing
+            periods.
           </li>
         </ul>
       </>
@@ -107,8 +108,8 @@ export const sections = [
             For billing and refund-related inquiries:
             <br />
             Email:{" "}
-            <a href="mailto:support@letshyre.com" className="tc-contact-email">
-              support@letshyre.com
+            <a href="mailto:support@letshyre.ai" className="tc-contact-email">
+              support@letshyre.ai
             </a>
           </p>
         </div>
