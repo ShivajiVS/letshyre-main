@@ -291,7 +291,7 @@
   margin-bottom: 16px;
 }
 
-.sc-bar-chart {
+.sc-section-main .sc-bar-chart {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
@@ -299,7 +299,7 @@
   width: 100%;
 }
 
-.sc-bar-item {
+.sc-section-main .sc-bar-item {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -307,14 +307,14 @@
   flex: 1;
 }
 
-.sc-bar-value {
+.sc-section-main .sc-bar-value {
   font-weight: 600;
   margin-bottom: 8px;
   font-size: 15px;
   text-align: center;
 }
 
-.sc-bar-container {
+.sc-section-main .sc-bar-container {
   width: 80px;
   height: 200px;
   background: #eef2fb;
@@ -325,7 +325,7 @@
   overflow: hidden;
 }
 
-.sc-bar {
+.sc-section-main .sc-bar {
   width: 100%;
   border-radius: 8px 8px 0 0;
   background: repeating-linear-gradient(
@@ -338,14 +338,14 @@
   transition: 0.6s ease;
 }
 
-.sc-bar-label {
+.sc-section-main .sc-bar-label {
   width: 100%;
   padding-top: 10px;
   display: flex;
   gap: 10px;
 }
 
-.sc-bar-label span {
+.sc-section-main .sc-bar-label span {
   width: 19%;
   font-size: 14px;
   text-align: center;
@@ -581,11 +581,11 @@
   .sc-profile-card {
     height: 180px;
   }
-  .sc-bar-chart {
+  .sc-section-main .sc-bar-chart {
     height: 160px;
     gap: 1px;
   }
-  .sc-bar-container {
+  .sc-section-main .sc-bar-container {
     width: 45px;
     height: 120px;
   }
@@ -636,7 +636,7 @@
     width: 160px;
     height: 160px;
   }
-  .sc-bar-container {
+  .sc-section-main .sc-bar-container {
     width: 35px;
   }
   .sc-bar-label {

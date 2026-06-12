@@ -66,9 +66,18 @@ export function EmployeeScoreCard() {
   }
 
   const scData = responseData.data;
-  const categoryScores = scData.category_scores || {};
-  const commMetrics = categoryScores.comm_metrics || {};
-  const questions = categoryScores.question_breakdown || [];
+  const {
+    candidate_name,
+    candidate_role,
+    overall_score,
+    created_at,
+    candidate_skills,
+    candidate_profile_photo,
+    category_scores,
+  } = scData;
+
+  const commMetrics = category_scores?.comm_metrics || {};
+  const questions = category_scores?.question_breakdown || [];
 
   const displayQuestions = [];
   for (const qa of questions) {
@@ -88,10 +97,10 @@ export function EmployeeScoreCard() {
     },
   ];
 
-  const skills = scData.candidate_skills || [];
+  const skills = candidate_skills || [];
 
-  const formattedDate = scData.created_at
-    ? new Date(scData.created_at).toLocaleDateString("en-US", {
+  const formattedDate = created_at
+    ? new Date(created_at).toLocaleDateString("en-US", {
         month: "short",
         day: "2-digit",
         year: "numeric",
@@ -111,13 +120,13 @@ export function EmployeeScoreCard() {
         <div className="sc-cand-details">
           <div className="sc-cand-col">
             <h4>Candidate Name</h4>
-            <h3>{scData.candidate_name || "N/A"}</h3>
+            <h3>{candidate_name || "N/A"}</h3>
           </div>
           <div className="sc-cand-divider" />
           <div className="sc-cand-col">
             <h4>Role Applied For</h4>
             <h3 style={{ textTransform: "capitalize" }}>
-              {scData.category_scores.candidate_role || "N/A"}
+              {candidate_role || "N/A"}
             </h3>
           </div>
           <div className="sc-cand-divider" />
@@ -136,19 +145,19 @@ export function EmployeeScoreCard() {
               {/* PROFILE CARD */}
               <div className="sc-profile-card">
                 <img
-                  src={scData.candidate_profile_photo || user_pic}
+                  src={candidate_profile_photo || user_pic}
                   alt="candidate"
                 />
                 <div className="sc-profile-overlay">
-                  <h3>{scData.candidate_name || "Candidate"}</h3>
+                  <h3>{candidate_name || "Candidate"}</h3>
                   <p style={{ textTransform: "capitalize" }}>
-                    {scData.category_scores.candidate_role || "N/A"}
+                    {candidate_role || "N/A"}
                   </p>
                 </div>
               </div>
               {/* PERFORMANCE CARD */}
               <div className="sc-performance-card">
-                <h1>{Math.round(scData.overall_score || 0)}%</h1>
+                <h1>{Math.round(overall_score || 0)}%</h1>
                 <h3>Overall Performance Summary</h3>
                 <p>Based on {displayQuestions.length} Interview Questions</p>
                 <div className="sc-circle-bg">
