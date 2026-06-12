@@ -14,8 +14,9 @@ export const fetchOpenJobs = (params) => {
  * Fetch AI-matched candidates for a specific job.
  * GET /user/v1/employer_job_ai/matching/{jobId}/
  */
-export const fetchAIMatchedCandidates = (jobId) => {
-  return api.get(`/user/v1/employer_job_ai/matching/${jobId}/`);
+export const fetchAIMatchedCandidates = (jobId, { appliedOnly = false } = {}) => {
+  const params = appliedOnly ? { applied_only: true } : {};
+  return api.get(`/user/v1/employer_job_ai/matching/${jobId}/`, { params });
 };
 
 /**

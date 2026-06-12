@@ -31,11 +31,11 @@ export const useOpenJobs = (page = 1) => {
  * Fetch AI-matched candidates for a selected job.
  * Only runs when jobId is provided.
  */
-export const useAIMatchedCandidates = (jobId) => {
+export const useAIMatchedCandidates = (jobId, appliedOnly = false) => {
   return useQuery({
-    queryKey: ["aiMatchedCandidates", jobId],
+    queryKey: ["aiMatchedCandidates", jobId, { appliedOnly }],
     queryFn: async () => {
-      const res = await fetchAIMatchedCandidates(jobId);
+      const res = await fetchAIMatchedCandidates(jobId, { appliedOnly });
       const responseData = res.data?.data || res.data;
       return {
         matches: responseData?.matches || [],

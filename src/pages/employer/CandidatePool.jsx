@@ -22,6 +22,10 @@ export function CandidatePool() {
   const [selectedJobId, setSelectedJobId] = useState(null);
   const [jobPage, setJobPage] = useState(1);
   const [candidateToUnlock, setCandidateToUnlock] = useState(null);
+  const [candidateFilter, setCandidateFilter] = useState("ai_matched");
+
+  // Derive whether to pass applied_only query param
+  const appliedOnly = candidateFilter === "applied";
 
   // ================= QUERIES =================
   const {
@@ -36,7 +40,7 @@ export function CandidatePool() {
     isLoading: candidatesLoading,
     isError: candidatesError,
     refetch: refetchCandidates,
-  } = useAIMatchedCandidates(selectedJobId);
+  } = useAIMatchedCandidates(selectedJobId, appliedOnly);
 
   const unlockMutation = useUnlockCandidateProfile();
 
@@ -53,6 +57,7 @@ export function CandidatePool() {
   // ================= HANDLERS =================
   const handleSelectJob = (jobId) => {
     setSelectedJobId(jobId);
+    setCandidateFilter("ai_matched"); // Reset filter when switching jobs
   };
 
   const handleJobPageChange = (page) => {
@@ -228,6 +233,15 @@ export function CandidatePool() {
                 </span>
               )}
             </h2>
+            <select
+              id="cp-candidate-filter"
+              className="cp-filter-select"
+              value={candidateFilter}
+              onChange={(e) => setCandidateFilter(e.target.value)}
+            >
+              <option value="ai_matched">AI Matched</option>
+              <option value="applied">Applied</option>
+            </select>
           </div>
 
           {/* Loading */}
