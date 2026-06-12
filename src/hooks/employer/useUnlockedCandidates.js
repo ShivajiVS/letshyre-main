@@ -1,9 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchUnlockedCandidates } from "@/services/employer/unlockedCandidates.service";
 
-/**
- * Hook to fetch all unlocked candidates for the employer.
- */
+
 export const useUnlockedCandidates = () => {
   return useQuery({
     queryKey: ["unlockedCandidates"],

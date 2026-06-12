@@ -1,4 +1,4 @@
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   fetchOpenJobs,
   fetchAIMatchedCandidates,
@@ -67,10 +67,22 @@ export const useCandidateInterviews = (candidateId) => {
  * Unlock a candidate profile with selected interviews.
  */
 export const useUnlockCandidateProfile = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: async (data) => {
       const res = await unlockCandidateProfile(data);
       return res.data;
+    },
+    onSuccess: (data, variables) => {
+      if (variables?.candidate) {
+        queryClient.invalidateQueries({
+          queryKey: ["candidateInterviews", variables.candidate],
+        });
+      }
+      queryClient.invalidateQueries({
+        queryKey: ["unlockedCandidates"],
+      });
     },
   });
 };
