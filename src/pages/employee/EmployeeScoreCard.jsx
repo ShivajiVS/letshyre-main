@@ -44,6 +44,12 @@ export function EmployeeScoreCard() {
 
   const commMetrics = category_scores?.comm_metrics || {};
   const questionBreakdown = category_scores?.question_breakdown || [];
+  const displayQuestions = [];
+  for (const qa of questionBreakdown) {
+    if (qa.type === "AUDIO" && qa.is_dummy_audio) break;
+    if (qa.type !== "AUDIO" && !qa.answer_provided) break;
+    displayQuestions.push(qa);
+  }
   const strengths = category_scores?.strengths || [];
   const recommendations = category_scores?.recommendations || [];
   const areasForImprovement = category_scores?.areas_for_improvement || [];
@@ -112,7 +118,7 @@ export function EmployeeScoreCard() {
                   {overall_score != null ? overall_score.toFixed(1) : "0"}%
                 </h1>
                 <h3>Overall Performance Summary</h3>
-                <p>Based on {questionBreakdown.length} Interview Questions</p>
+                <p>Based on {displayQuestions.length} Interview Questions</p>
                 <div className="sc-circle-bg">
                   <img src={sc_bg} alt="" />
                 </div>
@@ -162,11 +168,11 @@ export function EmployeeScoreCard() {
         </div>
 
         {/* ================= QUESTIONS & ANSWERS (NEW DESIGN) ================= */}
-        {questionBreakdown.length > 0 && (
+        {displayQuestions.length > 0 && (
           <div className="esc-qa-section">
             <h3 className="esc-qa-heading">Questions & Answers Breakdown</h3>
 
-            {questionBreakdown.map((qa, i) => {
+            {displayQuestions.map((qa, i) => {
               const badgeType = qa.type ? qa.type.toLowerCase() : "default";
               return (
                 <div key={i} className="esc-qa-card">
