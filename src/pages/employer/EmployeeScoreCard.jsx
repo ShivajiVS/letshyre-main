@@ -1,10 +1,9 @@
 import { useSearchParams } from "react-router";
 import sc_bg from "@/assets/scorecard-bg.png";
 import user_pic from "@/assets/user-pic.jpeg";
-// import Demo_video from "@/assets/Video_part_demo.png";
 
-import "./styles/EmployeeScoreCard.css";
 import { useUnlockedCandidateScorecard } from "@/hooks/employer/useUnlockedCandidateScorecard";
+import "./styles/EmployeeScoreCard.css";
 
 export function EmployeeScoreCard() {
   const [searchParams] = useSearchParams();
@@ -71,6 +70,13 @@ export function EmployeeScoreCard() {
   const commMetrics = categoryScores.comm_metrics || {};
   const questions = categoryScores.question_breakdown || [];
 
+  const displayQuestions = [];
+  for (const qa of questions) {
+    if (qa.type === "AUDIO" && qa.is_dummy_audio) break;
+    if (qa.type !== "AUDIO" && !qa.answer_provided) break;
+    displayQuestions.push(qa);
+  }
+
   const metrics = [
     { label: "Clarity", value: commMetrics.clarity || 0 },
     { label: "Relevance", value: commMetrics.relevance || 0 },
@@ -110,7 +116,9 @@ export function EmployeeScoreCard() {
           <div className="sc-cand-divider" />
           <div className="sc-cand-col">
             <h4>Role Applied For</h4>
-            <h3>{scData.candidate_role || "N/A"}</h3>
+            <h3 style={{ textTransform: "capitalize" }}>
+              {scData.category_scores.candidate_role || "N/A"}
+            </h3>
           </div>
           <div className="sc-cand-divider" />
           <div className="sc-cand-col sc-cand-col--right">
@@ -127,17 +135,22 @@ export function EmployeeScoreCard() {
             <div className="sc-left-part">
               {/* PROFILE CARD */}
               <div className="sc-profile-card">
-                <img src={scData.candidate_profile_photo || user_pic} alt="candidate" />
+                <img
+                  src={scData.candidate_profile_photo || user_pic}
+                  alt="candidate"
+                />
                 <div className="sc-profile-overlay">
                   <h3>{scData.candidate_name || "Candidate"}</h3>
-                  <p>{scData.candidate_role || "Role"}</p>
+                  <p style={{ textTransform: "capitalize" }}>
+                    {scData.category_scores.candidate_role || "N/A"}
+                  </p>
                 </div>
               </div>
               {/* PERFORMANCE CARD */}
               <div className="sc-performance-card">
                 <h1>{Math.round(scData.overall_score || 0)}%</h1>
                 <h3>Overall Performance Summary</h3>
-                <p>Based on {questions.length} Interview Questions</p>
+                <p>Based on {displayQuestions.length} Interview Questions</p>
                 <div className="sc-circle-bg">
                   <img src={sc_bg} alt="" />
                 </div>
@@ -200,12 +213,12 @@ export function EmployeeScoreCard() {
         <div className="sc-qa-section">
           <div className="sc-qa-outer-card">
             <h3 className="sc-qa-heading">Questions & Answers</h3>
-            {questions.length === 0 ? (
+            {displayQuestions.length === 0 ? (
               <p className="pp-grey-text">
                 No questions found for this interview.
               </p>
             ) : (
-              questions.map((qa, i) => (
+              displayQuestions.map((qa, i) => (
                 <div key={i} className="sc-qa-card">
                   {/* Type Badge */}
                   <div className="sc-qa-header-row">
