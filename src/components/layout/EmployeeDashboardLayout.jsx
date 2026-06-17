@@ -3,16 +3,18 @@ import { NavLink, Outlet, useNavigate, useLocation } from "react-router";
 import { useQueryClient } from "@tanstack/react-query";
 
 import logo from "@/assets/logo2.png";
-import logoutImg from "@/assets/logout.png";
-
-import { logoutMe } from "@/services/auth.service";
 import EmployeeLockedOverlay from "@/components/layout/EmployeeLockedOverlay";
+import EmployeeRightPanelForJobs from "./EmployeeRightPanelForJobs";
+import ProfileStatusModal from "./ProfileStatusModal";
+import LogoutModal from "./LogoutModal";
 import ProfileCompletion from "@/pages/employee/components/profile/ProfileCompletion";
+
+import { useEmployeeLogout } from "@/hooks/employee/useEmployeeLogout";
 import {
   useCandidateProfile,
   CANDIDATE_PROFILE_KEY,
 } from "@/hooks/useCandidateProfile";
-import EmployeeRightPanelForJobs from "./EmployeeRightPanelForJobs";
+
 import "./styles/employee-dashboard-layout.css";
 
 export function EmployeeDashboardLayout() {
@@ -25,6 +27,7 @@ export function EmployeeDashboardLayout() {
   const queryClient = useQueryClient();
 
   const { data: userData, isLoading } = useCandidateProfile();
+  const isApproved = userData?.is_approved;
 
   const profileCompleted = userData?.is_profile_complete === true;
 
@@ -33,14 +36,8 @@ export function EmployeeDashboardLayout() {
     setShowProfileFlow(false);
   };
 
-  const handleLogout = async () => {
-    setShowLogoutModal(false);
-    await logoutMe();
-    setTimeout(() => {
-      localStorage.removeItem("user");
-      navigate("/employee/sign-in", { replace: true });
-    }, 800);
-  };
+  const { mutate: performLogout, isPending: isLoggingOut } =
+    useEmployeeLogout();
 
   const getPageTitle = () => {
     if (location.pathname.includes("profile"))
@@ -324,35 +321,21 @@ export function EmployeeDashboardLayout() {
         </div>
       )}
 
-      {showLogoutModal && (
-        <div
-          className="logout-overlay"
-          onClick={() => setShowLogoutModal(false)}
-        >
-          <div className="logout-modal" onClick={(e) => e.stopPropagation()}>
-            <div
-              className="logout-close"
-              onClick={() => setShowLogoutModal(false)}
-            >
-              <i className="bi bi-x-lg"></i>
-            </div>
-            <img src={logoutImg} alt="Logout" className="logout-img" />
-            <h3>Oh no, you're leaving</h3>
-            <p>Are you sure you want to logout?</p>
-            <div className="logout-actions">
-              <button
-                className="logout-no"
-                onClick={() => setShowLogoutModal(false)}
-              >
-                Naah!
-              </button>
-              <button className="logout-yes" onClick={handleLogout}>
-                Yes, Log me out
-              </button>
-            </div>
-          </div>
-        </div>
+      {userData && (!isApproved || userData?.is_rejected === true) && (
+        <ProfileStatusModal
+          isRejected={userData?.is_rejected === true}
+          rejectionReason={userData?.reject_reason}
+          onLogout={() => performLogout()}
+          isLoggingOut={isLoggingOut}
+        />
       )}
+
+      <LogoutModal
+        isOpen={showLogoutModal}
+        onClose={() => setShowLogoutModal(false)}
+        onConfirm={() => performLogout()}
+        isLoggingOut={isLoggingOut}
+      />
     </div>
   );
 }
