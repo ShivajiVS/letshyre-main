@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { useFormContext } from "react-hook-form";
 import { motion } from "framer-motion";
 import { useSubmitProfile } from "../../../../hooks/employee/useProfile";
@@ -14,7 +15,7 @@ function StepReview({ onBack, onFinish }) {
   const profileData = getValues();
 
   const user = JSON.parse(localStorage.getItem("user")) || {};
-  
+
   // Safe Fallbacks
   const company = profileData.present_or_last_working_company || "-";
   const lastWorking = profileData.last_day_of_working || "-";
@@ -33,8 +34,8 @@ function StepReview({ onBack, onFinish }) {
   const finalRoles = profileData.selected_role
     ? [profileData.selected_role]
     : profileData.suggested_roles?.length
-    ? profileData.suggested_roles
-    : [];
+      ? profileData.suggested_roles
+      : [];
 
   const parsed = profileData.parsed_resume_data;
   const finalParsed = parsed?.data || parsed || {};
@@ -69,29 +70,49 @@ function StepReview({ onBack, onFinish }) {
       // IDENTITY
       fd.append("gender", profileData.gender || "");
       fd.append("dob", profileData.dob || "");
-      
+
       const cleanAadhaar = (profileData.aadhar_number || "").replace(/\D/g, "");
       fd.append("aadhar_number", cleanAadhaar);
       fd.append("location", profileData.location || "");
       fd.append("address", profileData.address || "");
 
-      if (profileData.profile_photo && typeof profileData.profile_photo !== "string") {
-        fd.append("profile_photo", profileData.profile_photo, profileData.profile_photo.name || "profile_photo.png");
+      if (
+        profileData.profile_photo &&
+        typeof profileData.profile_photo !== "string"
+      ) {
+        fd.append(
+          "profile_photo",
+          profileData.profile_photo,
+          profileData.profile_photo.name || "profile_photo.png",
+        );
       }
 
       // JOB DETAILS
-      fd.append("present_or_last_working_company", profileData.present_or_last_working_company || "");
+      fd.append(
+        "present_or_last_working_company",
+        profileData.present_or_last_working_company || "",
+      );
       fd.append("last_day_of_working", profileData.last_day_of_working || "");
       fd.append("current_ctc", profileData.current_ctc || "");
       fd.append("expected_ctc", profileData.expected_ctc || "");
       fd.append("preferred_industry", profileData.preferred_industry || "");
-      fd.append("preferred_locations", JSON.stringify(profileData.preferred_locations || []));
+      fd.append(
+        "preferred_locations",
+        JSON.stringify(profileData.preferred_locations || []),
+      );
 
-      if (profileData.resignation_letter) fd.append("resignation_letter", profileData.resignation_letter);
-      if (profileData.experience_letter) fd.append("experience_letter", profileData.experience_letter);
-      if (profileData.present_offer) fd.append("present_offer", profileData.present_offer);
-      fd.append("notice_period_proof_type", profileData.notice_period_proof_type || "");
-      if (profileData.notice_period_proof) fd.append("notice_period_proof", profileData.notice_period_proof);
+      if (profileData.resignation_letter)
+        fd.append("resignation_letter", profileData.resignation_letter);
+      if (profileData.experience_letter)
+        fd.append("experience_letter", profileData.experience_letter);
+      if (profileData.present_offer)
+        fd.append("present_offer", profileData.present_offer);
+      fd.append(
+        "notice_period_proof_type",
+        profileData.notice_period_proof_type || "",
+      );
+      if (profileData.notice_period_proof)
+        fd.append("notice_period_proof", profileData.notice_period_proof);
 
       // RESUME & ROLE
       if (profileData.resume) fd.append("resume", profileData.resume);
@@ -105,7 +126,10 @@ function StepReview({ onBack, onFinish }) {
       fd.append("education", JSON.stringify(resumeReview.education || []));
       fd.append("experience", JSON.stringify(resumeReview.experience || []));
       fd.append("projects", JSON.stringify(resumeReview.projects || []));
-      fd.append("certifications", JSON.stringify(resumeReview.certifications || []));
+      fd.append(
+        "certifications",
+        JSON.stringify(resumeReview.certifications || []),
+      );
 
       // Calculate Total Exp
       let totalExpYears = 0;
@@ -133,7 +157,6 @@ function StepReview({ onBack, onFinish }) {
 
       await submitProfileMutation.mutateAsync(fd);
       onFinish();
-      
     } catch (e) {
       console.error(e);
       if (e.response?.status === 401) {
@@ -142,7 +165,30 @@ function StepReview({ onBack, onFinish }) {
         window.location.href = "/login";
         return;
       }
-      setError(e.message || "Profile submission failed. Please try again.");
+      let errorMessage = "Profile submission failed. Please try again.";
+
+      if (e.response?.data) {
+        const responseData = e.response.data;
+
+        if (responseData.data && typeof responseData.data === "object") {
+          // Extract the first field validation error (e.g. from 'aadhar_number')
+          const firstErrorKey = Object.keys(responseData.data)[0];
+          const firstErrorArray = responseData.data[firstErrorKey];
+
+          if (Array.isArray(firstErrorArray) && firstErrorArray.length > 0) {
+            errorMessage = firstErrorArray[0];
+          } else if (typeof firstErrorArray === "string") {
+            errorMessage = firstErrorArray;
+          }
+        } else if (responseData.message) {
+          // Fallback to the top-level message (e.g., "Validation failed.")
+          errorMessage = responseData.message;
+        }
+      } else if (e.message) {
+        errorMessage = e.message;
+      }
+
+      setError(errorMessage);
     }
   };
 
@@ -162,6 +208,41 @@ function StepReview({ onBack, onFinish }) {
           grid-template-columns: 280px 1fr;
           gap: 24px;
           align-items: start;
+        }
+        .overlay-loader {
+          position: fixed;
+          inset: 0;
+          background: rgba(255, 255, 255, 0.4);
+          -webkit-backdrop-filter: blur(8px);
+          backdrop-filter: blur(8px);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          z-index: 99999;
+          text-align: center;
+        }
+        .pc-spinner-modern {
+          width: 54px;
+          height: 54px;
+          border: 4px solid #e2e8f0;
+          border-top-color: var(--pc-secondary);
+          border-radius: 50%;
+          animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+          box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+        }
+        .loader-title {
+          margin-top: 24px;
+          color: var(--pc-text-dark);
+          font-size: 20px;
+          font-weight: 700;
+          letter-spacing: -0.3px;
+        }
+        .loader-subtitle {
+          color: #64748b;
+          font-size: 15px;
+          margin-top: 8px;
+          font-weight: 500;
         }
         .review-left {
           background: #ffffff;
@@ -309,26 +390,46 @@ function StepReview({ onBack, onFinish }) {
         }
       `}</style>
 
-      {isPending && (
-        <div className="overlay-loader">
-          <div style={{ width: 60, height: 60, border: "4px solid #f1f5f9", borderTopColor: "var(--pc-secondary)", borderRadius: "50%", animation: "spin 1s linear infinite" }}></div>
-          <h2 style={{ marginTop: 24, color: "var(--pc-text-dark)" }}>Finalizing your Profile...</h2>
-          <p style={{ color: "#64748b" }}>Please wait while we securely save your details.</p>
-        </div>
-      )}
+      {isPending &&
+        createPortal(
+          <div className="overlay-loader">
+            <div className="pc-spinner-modern"></div>
+            <h2 className="loader-title">Submitting profile...</h2>
+            <p className="loader-subtitle">Please wait a moment.</p>
+          </div>,
+          document.body,
+        )}
 
       <div className="review-layout">
         <div className="review-left">
           {photoSrc ? (
             <img src={photoSrc} className="review-avatar" alt="Candidate" />
           ) : (
-            <div className="review-avatar" style={{ background: "#f1f5f9", display: "inline-block" }} />
+            <div
+              className="review-avatar"
+              style={{ background: "#f1f5f9", display: "inline-block" }}
+            />
           )}
           <div className="review-name">{user?.name || "Candidate"}</div>
           <div className="review-meta">
-            <p>{gender} • {dob}</p>
+            <p>
+              {gender} • {dob}
+            </p>
             <p>{location}</p>
-            <div style={{ marginTop: 12, display: "inline-flex", alignItems: "center", gap: 6, background: "#dcfce7", color: "#16a34a", padding: "4px 12px", borderRadius: 20, fontSize: 12, fontWeight: 600 }}>
+            <div
+              style={{
+                marginTop: 12,
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 6,
+                background: "#dcfce7",
+                color: "#16a34a",
+                padding: "4px 12px",
+                borderRadius: 20,
+                fontSize: 12,
+                fontWeight: 600,
+              }}
+            >
               <i className="bi bi-shield-check"></i> Aadhaar Verified
             </div>
           </div>
@@ -336,7 +437,9 @@ function StepReview({ onBack, onFinish }) {
 
         <div className="review-right">
           <div className="review-section">
-            <h4><i className="bi bi-briefcase"></i> Job Preferences</h4>
+            <h4>
+              <i className="bi bi-briefcase"></i> Job Preferences
+            </h4>
             <div className="info-grid">
               <div className="info-item">
                 <div className="info-label">Current Company</div>
@@ -366,38 +469,54 @@ function StepReview({ onBack, onFinish }) {
           </div>
 
           <div className="review-section">
-            <h4><i className="bi bi-person-badge"></i> Selected Roles</h4>
+            <h4>
+              <i className="bi bi-person-badge"></i> Selected Roles
+            </h4>
             <div className="badges-wrap">
               {finalRoles.map((r, i) => (
-                <span key={i} className="badge-solid">{r}</span>
+                <span key={i} className="badge-solid">
+                  {r}
+                </span>
               ))}
             </div>
           </div>
 
           <div className="review-section">
-            <h4><i className="bi bi-lightning"></i> Top Skills Extracted</h4>
+            <h4>
+              <i className="bi bi-lightning"></i> Top Skills Extracted
+            </h4>
             <div className="badges-wrap">
               {resumeReview.skills.length > 0 ? (
                 resumeReview.skills.map((s, i) => (
-                  <span key={i} className="badge-outline">{s}</span>
+                  <span key={i} className="badge-outline">
+                    {s}
+                  </span>
                 ))
               ) : (
-                <span className="info-value" style={{ fontWeight: 400 }}>No specific skills extracted.</span>
+                <span className="info-value" style={{ fontWeight: 400 }}>
+                  No specific skills extracted.
+                </span>
               )}
             </div>
           </div>
 
           <div className="review-section">
-            <h4><i className="bi bi-journal-check"></i> Experience</h4>
+            <h4>
+              <i className="bi bi-journal-check"></i> Experience
+            </h4>
             {resumeReview.experience.length === 0 ? (
               <div className="list-card">No experience data found.</div>
             ) : (
               resumeReview.experience.map((e, i) => (
                 <div key={i} className="list-card">
-                  {typeof e === "string" ? e : (
+                  {typeof e === "string" ? (
+                    e
+                  ) : (
                     <>
                       <div className="list-title">{e.role}</div>
-                      <div className="list-subtitle">{e.company} • {e.duration}</div>
+                      <div className="list-subtitle">
+                        {e.company} • {e.duration}
+                      </div>
                       <div className="list-desc">{e.description}</div>
                     </>
                   )}
@@ -407,17 +526,25 @@ function StepReview({ onBack, onFinish }) {
           </div>
 
           <div className="review-section">
-            <h4><i className="bi bi-mortarboard"></i> Education</h4>
+            <h4>
+              <i className="bi bi-mortarboard"></i> Education
+            </h4>
             {resumeReview.education.length === 0 ? (
               <div className="list-card">No education data found.</div>
             ) : (
               resumeReview.education.map((e, i) => (
                 <div key={i} className="list-card">
-                  {typeof e === "string" ? e : (
+                  {typeof e === "string" ? (
+                    e
+                  ) : (
                     <>
                       <div className="list-title">{e.degree || "N/A"}</div>
-                      <div className="list-subtitle">{e.institution || "N/A"}</div>
-                      <div className="list-desc" style={{ marginTop: 0 }}>{e.duration || ""}</div>
+                      <div className="list-subtitle">
+                        {e.institution || "N/A"}
+                      </div>
+                      <div className="list-desc" style={{ marginTop: 0 }}>
+                        {e.duration || ""}
+                      </div>
                     </>
                   )}
                 </div>
@@ -428,10 +555,18 @@ function StepReview({ onBack, onFinish }) {
           {error && <div className="error-msg">{error}</div>}
 
           <div className="pc-actions">
-            <button className="btn-secondary" onClick={onBack} disabled={isPending}>
+            <button
+              className="btn-secondary"
+              onClick={onBack}
+              disabled={isPending}
+            >
               <i className="bi bi-arrow-left"></i> Back to Edit
             </button>
-            <button className="btn-primary" onClick={handleSubmit} disabled={isPending}>
+            <button
+              className="btn-primary"
+              onClick={handleSubmit}
+              disabled={isPending}
+            >
               Confirm & Submit <i className="bi bi-check-circle"></i>
             </button>
           </div>
