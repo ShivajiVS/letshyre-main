@@ -75,25 +75,28 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 48px;
-  height: 48px;
+  width: 54px;
+  height: 54px;
   border-radius: 50%;
   background: #ffffff;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #cbd5e1;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15), 0 0 0 4px rgba(255, 255, 255, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #60a5fa;
-  font-size: 18px;
+  color: #3b82f6; /* Darker, punchier blue */
+  font-size: 24px;
+  font-weight: 800;
   cursor: pointer;
-  z-index: 10;
-  transition: all 0.2s ease;
+  z-index: 20;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .slider-arrow:hover {
   background: #f8fafc;
-  transform: translateY(-50%) scale(1.05);
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2), 0 0 0 4px rgba(255, 255, 255, 0.8);
+  color: #1d4ed8;
 }
 
 .slider-arrow.left {
@@ -109,6 +112,7 @@
   gap: 24px;
   overflow-x: auto;
   scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
   padding: 20px 0;
   /* hide scrollbar */
   scrollbar-width: none;
@@ -140,6 +144,7 @@
   flex-shrink: 0;
   border: 2px solid #ffffff;
   transition: transform 0.3s ease;
+  scroll-snap-align: center;
 }
 
 .team-grid-card:hover {
@@ -375,3 +380,32 @@
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(98, 150, 239, 0.3);
 }
+
+/* =========================================================
+   RESPONSIVE LAYOUT (SINGLE CANDIDATE ON MOBILE)
+========================================================= */
+@media (max-width: 768px) {
+  .team-slider-wrapper {
+    padding: 0 40px; /* Reduce padding to fit arrows nicely */
+  }
+
+  .team-grid-card {
+    min-width: 100%; /* Show exactly 1 card per view */
+    height: 380px; /* Give it slightly more height if needed on mobile */
+  }
+
+  .team-card-avatar {
+    width: 200px;
+    height: 250px;
+    bottom: 90px;
+  }
+
+  .team-container::before {
+    height: 320px; /* Adjust blue block for single column */
+  }
+
+  .team-title {
+    font-size: 24px;
+  }
+}
+

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./styles/team.css";
 
 import {
@@ -17,12 +17,40 @@ export function Team() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [memberToEdit, setMemberToEdit] = useState(null);
   const sliderRef = useRef(null);
+  const [showLeftArrow, setShowLeftArrow] = useState(false);
+  const [showRightArrow, setShowRightArrow] = useState(true);
 
   // Queries & Mutations
   const { data: teamMembers, isLoading, isError } = useTeamMembers();
   const { mutate: addMember, isPending: isAdding } = useAddTeamMember();
   const { mutate: updateMember, isPending: isUpdating } = useUpdateTeamMember();
   const { mutate: deleteMember } = useDeleteTeamMember();
+
+  // Scroll visibility effect
+  useEffect(() => {
+    const handleScroll = () => {
+      if (sliderRef.current) {
+        const { scrollLeft, scrollWidth, clientWidth } = sliderRef.current;
+        setShowLeftArrow(scrollLeft > 0);
+        // Using Math.ceil to avoid floating point precision issues at the end of scroll
+        setShowRightArrow(Math.ceil(scrollLeft + clientWidth) < scrollWidth);
+      }
+    };
+
+    const slider = sliderRef.current;
+    if (slider) {
+      slider.addEventListener("scroll", handleScroll);
+      // Check initial state once data loads
+      handleScroll();
+    }
+    
+    window.addEventListener("resize", handleScroll);
+
+    return () => {
+      if (slider) slider.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
+    };
+  }, [teamMembers]);
 
   // Handlers
   const handleOpenAddModal = () => {
@@ -85,15 +113,26 @@ export function Team() {
     }
   };
 
+  const getScrollAmount = () => {
+    if (sliderRef.current) {
+      // On mobile devices (<= 768px), scroll by exactly the container's width (one card)
+      if (window.innerWidth <= 768) {
+        return sliderRef.current.clientWidth;
+      }
+      return 300; // Default for larger screens
+    }
+    return 300;
+  };
+
   const scrollLeft = () => {
     if (sliderRef.current) {
-      sliderRef.current.scrollBy({ left: -300, behavior: "smooth" });
+      sliderRef.current.scrollBy({ left: -getScrollAmount(), behavior: "smooth" });
     }
   };
 
   const scrollRight = () => {
     if (sliderRef.current) {
-      sliderRef.current.scrollBy({ left: 300, behavior: "smooth" });
+      sliderRef.current.scrollBy({ left: getScrollAmount(), behavior: "smooth" });
     }
   };
 
@@ -125,15 +164,21 @@ export function Team() {
         </div>
       ) : teamMembers && teamMembers.length > 0 ? (
         <div className="team-slider-wrapper">
-          <button className="slider-arrow left" onClick={scrollLeft}>
+          <button 
+            className={`slider-arrow left ${showLeftArrow ? 'visible' : 'hidden'}`} 
+            onClick={scrollLeft}
+            aria-label="Scroll left"
+            style={{ opacity: showLeftArrow ? 1 : 0, pointerEvents: showLeftArrow ? 'auto' : 'none' }}
+          >
             ❮
           </button>
           
           <div className="team-slider" ref={sliderRef}>
-            {teamMembers.map((member) => (
+            {teamMembers.map((member, index) => (
               <TeamCard
                 key={member.id}
                 member={member}
+                index={index}
                 onEdit={handleOpenEditModal}
                 onDelete={handleDelete}
                 onToggleStatus={handleToggleStatus}
@@ -141,7 +186,12 @@ export function Team() {
             ))}
           </div>
 
-          <button className="slider-arrow right" onClick={scrollRight}>
+          <button 
+            className={`slider-arrow right ${showRightArrow ? 'visible' : 'hidden'}`} 
+            onClick={scrollRight}
+            aria-label="Scroll right"
+            style={{ opacity: showRightArrow ? 1 : 0, pointerEvents: showRightArrow ? 'auto' : 'none' }}
+          >
             ❯
           </button>
         </div>
