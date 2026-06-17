@@ -2,9 +2,11 @@ import { Helmet } from "react-helmet-async";
 import "./styles/about.css";
 import { AboutHero } from "@/components/about/AboutHero";
 import { AboutTrust } from "@/components/about/AboutTrust";
-import { AboutWhatWeDo } from "@/components/about/AboutWhatWeDo";
 import { AboutMissionVision } from "@/components/about/AboutMissionVision";
+import { AboutIntro } from "@/components/about/AboutIntro";
+import { AboutWhatWeDo } from "@/components/about/AboutWhatWeDo";
 import { AboutWhy } from "@/components/about/AboutWhy";
+import { AboutProfileDuration } from "@/components/about/AboutProfileDuration";
 import { AboutCommitment } from "@/components/about/AboutCommitment";
 
 export function About() {
@@ -21,10 +23,12 @@ export function About() {
       <main className="about-page-container">
         <div className="about-content-wrapper">
           <AboutHero />
-          <AboutTrust />
-          <AboutWhatWeDo />
+          {/* <AboutTrust /> */}
           <AboutMissionVision />
+          <AboutIntro />
+          <AboutWhatWeDo />
           <AboutWhy />
+          <AboutProfileDuration />
           <AboutCommitment />
         </div>
       </main>

@@ -33,7 +33,7 @@ export function AboutWhatWeDo() {
           <ul className="zigzag-list">
             <motion.li whileHover={{ x: 5, color: "#10b981" }} transition={{ duration: 0.2 }}>
               <i className="bi bi-check-circle-fill"></i>
-              Access a pool of experienced professionals
+              Access experienced professionals actively seeking opportunities
             </motion.li>
             <motion.li whileHover={{ x: 5, color: "#10b981" }} transition={{ duration: 0.2 }}>
               <i className="bi bi-check-circle-fill"></i>
@@ -41,15 +41,27 @@ export function AboutWhatWeDo() {
             </motion.li>
             <motion.li whileHover={{ x: 5, color: "#10b981" }} transition={{ duration: 0.2 }}>
               <i className="bi bi-check-circle-fill"></i>
-              Conduct role-based AI interviews at scale
+              Conduct AI-powered role-based interviews
             </motion.li>
             <motion.li whileHover={{ x: 5, color: "#10b981" }} transition={{ duration: 0.2 }}>
               <i className="bi bi-check-circle-fill"></i>
-              Review structured interview reports and insights
+              Review interview scorecards and insights
             </motion.li>
             <motion.li whileHover={{ x: 5, color: "#10b981" }} transition={{ duration: 0.2 }}>
               <i className="bi bi-check-circle-fill"></i>
-              Reduce hiring timelines and recruitment effort
+              Interview Recordings
+            </motion.li>
+            <motion.li whileHover={{ x: 5, color: "#10b981" }} transition={{ duration: 0.2 }}>
+              <i className="bi bi-check-circle-fill"></i>
+              Reduce hiring effort and screening time
+            </motion.li>
+            <motion.li whileHover={{ x: 5, color: "#10b981" }} transition={{ duration: 0.2 }}>
+              <i className="bi bi-check-circle-fill"></i>
+              Access transparent candidate information
+            </motion.li>
+            <motion.li whileHover={{ x: 5, color: "#10b981" }} transition={{ duration: 0.2 }}>
+              <i className="bi bi-check-circle-fill"></i>
+              Pay only for the candidate profiles you choose to unlock
             </motion.li>
           </ul>
         </div>
@@ -76,19 +88,27 @@ export function AboutWhatWeDo() {
           <ul className="zigzag-list">
             <motion.li whileHover={{ x: 5, color: "#10b981" }} transition={{ duration: 0.2 }}>
               <i className="bi bi-check-circle-fill"></i>
-              A platform to showcase professional experience and skills
+              Create a professional profile
             </motion.li>
             <motion.li whileHover={{ x: 5, color: "#10b981" }} transition={{ duration: 0.2 }}>
               <i className="bi bi-check-circle-fill"></i>
-              Opportunities to be discovered by hiring companies
+              Showcase skills and experience
             </motion.li>
             <motion.li whileHover={{ x: 5, color: "#10b981" }} transition={{ duration: 0.2 }}>
               <i className="bi bi-check-circle-fill"></i>
-              AI-driven interview opportunities aligned with their expertise
+              Participate in AI-powered role-based interviews
             </motion.li>
             <motion.li whileHover={{ x: 5, color: "#10b981" }} transition={{ duration: 0.2 }}>
               <i className="bi bi-check-circle-fill"></i>
-              Increased visibility to employers actively looking for experienced talent
+              Improve profile visibility
+            </motion.li>
+            <motion.li whileHover={{ x: 5, color: "#10b981" }} transition={{ duration: 0.2 }}>
+              <i className="bi bi-check-circle-fill"></i>
+              Increase opportunities to be discovered by employers
+            </motion.li>
+            <motion.li whileHover={{ x: 5, color: "#10b981" }} transition={{ duration: 0.2 }}>
+              <i className="bi bi-check-circle-fill"></i>
+              Connect with companies hiring experienced professionals
             </motion.li>
           </ul>
         </div>

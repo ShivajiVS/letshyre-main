@@ -1,9 +1,6 @@
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router";
 
 export function AboutCommitment() {
-  const navigate = useNavigate();
-
   return (
     <motion.section
       className="about-commitment"
@@ -13,25 +10,21 @@ export function AboutCommitment() {
       transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
     >
       <div className="about-commitment-bg"></div>
-      <h2 className="about-commitment-title">Our Commitment</h2>
+      <h2 className="about-commitment-title">Disclaimer</h2>
       <p className="about-commitment-desc">
-        At LetsHyre, we believe technology should enhance hiring—not replace
-        human judgment. Our platform is designed to support employers with
-        better information, improve candidate visibility, and create a more
-        efficient hiring experience for everyone involved.
+        LetsHyre provides AI-assisted interview and candidate screening services. AI-generated scorecards and insights are intended to support hiring decisions and should not be considered the sole basis for employment decisions. Final hiring decisions remain the responsibility of employers.
       </p>
-      <p className="about-commitment-highlight">
-        The future of hiring is faster, smarter, and more accessible—and
-        LetsHyre is building that future.
+      <p className="about-commitment-highlight" style={{ marginTop: "2rem" }}>
+        Contact Us
       </p>
       
-      <button 
+      <a 
+        href="mailto:support@letshyre.ai"
         className="btn-white-cta" 
-        style={{ marginTop: "20px", position: "relative", zIndex: 1 }}
-        onClick={() => navigate("/contact")}
+        style={{ marginTop: "20px", position: "relative", zIndex: 1, display: "inline-block", textDecoration: "none" }}
       >
-        Get in Touch &rarr;
-      </button>
+        support@letshyre.ai
+      </a>
     </motion.section>
   );
 }

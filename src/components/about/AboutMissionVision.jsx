@@ -14,9 +14,7 @@ export function AboutMissionVision() {
           <i className="bi bi-bullseye"></i> Our Mission
         </h3>
         <p className="mv-desc">
-          To make hiring faster, smarter, and more transparent by leveraging
-          artificial intelligence and automation while keeping human
-          decision-making at the center of recruitment.
+          To simplify hiring by combining artificial intelligence with transparent candidate evaluation, helping employers discover qualified talent efficiently while providing experienced professionals with fair opportunities to showcase their capabilities.
         </p>
       </div>
 
@@ -25,10 +23,7 @@ export function AboutMissionVision() {
           <i className="bi bi-eye"></i> Our Vision
         </h3>
         <p className="mv-desc">
-          To become the trusted global hiring marketplace for experienced
-          professionals, enabling organizations to find qualified talent
-          efficiently and helping candidates connect with meaningful career
-          opportunities.
+          To become the most trusted AI-powered hiring marketplace for experienced professionals, enabling employers to make better hiring decisions and helping candidates connect with meaningful career opportunities.
         </p>
       </div>
     </motion.section>

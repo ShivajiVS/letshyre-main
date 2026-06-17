@@ -28,9 +28,9 @@ export function AboutWhy() {
         {/* Top wide card */}
         <div className="bento-card bento-wide">
           <div className="bento-content">
-            <h4 className="bento-title">AI-Powered Interviews</h4>
+            <h4 className="bento-title">AI-Powered Hiring</h4>
             <p className="bento-desc">
-              Conduct role-specific interviews anytime, anywhere, through intelligent AI-driven conversations.
+              Role-based AI interviews help employers evaluate candidates more efficiently.
             </p>
           </div>
           <div className="bento-icon-wrapper"><i className="bi bi-robot bento-icon"></i></div>
@@ -42,7 +42,7 @@ export function AboutWhy() {
           <div className="bento-content">
             <h4 className="bento-title">Faster Hiring</h4>
             <p className="bento-desc">
-              Reduce time spent on manual screening and repetitive interview processes.
+              Reduce manual screening effort and accelerate hiring decisions.
             </p>
           </div>
         </div>
@@ -51,9 +51,9 @@ export function AboutWhy() {
         <div className="bento-card">
           <div className="bento-icon-wrapper"><i className="bi bi-graph-up-arrow bento-icon"></i></div>
           <div className="bento-content">
-            <h4 className="bento-title">Scalable Recruitment</h4>
+            <h4 className="bento-title">Experienced Talent Network</h4>
             <p className="bento-desc">
-              Whether hiring for a single position or multiple roles, LetsHyre helps organizations streamline recruitment at scale, maintaining high-quality talent pipelines.
+              Connect with immediate joiners, notice-period professionals, and experienced candidates actively seeking opportunities.
             </p>
           </div>
         </div>
@@ -62,9 +62,9 @@ export function AboutWhy() {
         <div className="bento-card bento-highlight">
           <div className="bento-icon-wrapper"><i className="bi bi-search bento-icon"></i></div>
           <div className="bento-content">
-            <h4 className="bento-title">Better Discovery</h4>
+            <h4 className="bento-title">Pay-Per-Unlock Model</h4>
             <p className="bento-desc">
-              Connect with experienced professionals who perfectly match hiring requirements.
+              Pay only when you choose to unlock candidate information relevant to your hiring needs.
             </p>
           </div>
         </div>
@@ -73,9 +73,9 @@ export function AboutWhy() {
         <div className="bento-card">
           <div className="bento-icon-wrapper"><i className="bi bi-shield-check bento-icon"></i></div>
           <div className="bento-content">
-            <h4 className="bento-title">Transparent Process</h4>
+            <h4 className="bento-title">Interview Transparency</h4>
             <p className="bento-desc">
-              Access structured interview insights that support informed hiring decisions.
+              Structured interview scorecards and insights support informed hiring decisions.
             </p>
           </div>
         </div>
