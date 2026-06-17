@@ -40,14 +40,11 @@ export function TeamCard({ member, onEdit, onDelete, onToggleStatus }) {
             <button onClick={(e) => handleAction(e, () => onEdit(member))}>
               Edit
             </button>
+            <button onClick={(e) => handleAction(e, () => onDelete(member))}>
+              Remove
+            </button>
             <button onClick={(e) => handleAction(e, () => onToggleStatus(member))}>
               {member.status === "Active" ? "Hold" : "Activate"}
-            </button>
-            <button
-              className="delete-btn"
-              onClick={(e) => handleAction(e, () => onDelete(member))}
-            >
-              Remove
             </button>
           </div>
         )}
@@ -56,9 +53,6 @@ export function TeamCard({ member, onEdit, onDelete, onToggleStatus }) {
       <img src={teamDefault} alt={member.full_name} className="team-card-avatar" />
       <h3 className="team-card-name">{member.full_name}</h3>
       <p className="team-card-role">{member.title}</p>
-      <span className={`team-card-status ${member.status}`}>
-        {member.status}
-      </span>
     </div>
   );
 }
