@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { toast } from "sonner";
 import "./styles/team.css";
 
 import {
@@ -43,7 +44,7 @@ export function Team() {
       // Check initial state once data loads
       handleScroll();
     }
-    
+
     window.addEventListener("resize", handleScroll);
 
     return () => {
@@ -68,28 +69,49 @@ export function Team() {
     setMemberToEdit(null);
   };
 
-  const handleFormSubmit = (formData) => {
+  const addTeamMember = (formData) => {
     if (memberToEdit) {
       updateMember(
         { id: memberToEdit.id, data: formData },
         {
           onSuccess: (res) => {
-            if (res.success) handleCloseModal();
-            else alert(res.message || "Failed to update member");
+            if (res.success) {
+              handleCloseModal();
+              toast.success("Member updated successfully");
+            } else toast.error(res.message || "Failed to update member");
           },
-        }
+          onError: (err) => {
+            const res = err.response?.data;
+            const msg =
+              res?.data && Object.keys(res.data).length > 0
+                ? Object.values(res.data).flat().join(", ")
+                : res?.message || "Failed to update member";
+            toast.error(msg);
+          },
+        },
       );
     } else {
       const newMemberData = { ...formData, title: "Recruiter" };
       addMember(newMemberData, {
         onSuccess: (res) => {
-          if (res.success) handleCloseModal();
-          else {
-            const msg = res?.data
-              ? Object.values(res.data).flat().join(", ")
-              : res.message || "Failed to add member";
-            alert(msg);
+          if (res.success) {
+            handleCloseModal();
+            toast.success("Member added successfully");
+          } else {
+            const msg =
+              res?.data && Object.keys(res.data).length > 0
+                ? Object.values(res.data).flat().join(", ")
+                : res.message || "Failed to add member";
+            toast.error(msg);
           }
+        },
+        onError: (err) => {
+          const res = err.response?.data;
+          const msg =
+            res?.data && Object.keys(res.data).length > 0
+              ? Object.values(res.data).flat().join(", ")
+              : res?.message || "Failed to add member";
+          toast.error(msg);
         },
       });
     }
@@ -100,15 +122,27 @@ export function Team() {
     updateMember(
       { id: member.id, data: { status: newStatus } },
       {
-        onError: () => alert("Failed to toggle status"),
-      }
+        onSuccess: () => toast.success(`Status updated to ${newStatus}`),
+        onError: (err) => {
+          const res = err.response?.data;
+          const msg = res?.message || "Failed to toggle status";
+          toast.error(msg);
+        },
+      },
     );
   };
 
   const handleDelete = (member) => {
-    if (window.confirm(`Are you sure you want to remove ${member.full_name}?`)) {
+    if (
+      window.confirm(`Are you sure you want to remove ${member.full_name}?`)
+    ) {
       deleteMember(member.id, {
-        onError: () => alert("Failed to remove member"),
+        onSuccess: () => toast.success("Member removed successfully"),
+        onError: (err) => {
+          const res = err.response?.data;
+          const msg = res?.message || "Failed to remove member";
+          toast.error(msg);
+        },
       });
     }
   };
@@ -126,13 +160,19 @@ export function Team() {
 
   const scrollLeft = () => {
     if (sliderRef.current) {
-      sliderRef.current.scrollBy({ left: -getScrollAmount(), behavior: "smooth" });
+      sliderRef.current.scrollBy({
+        left: -getScrollAmount(),
+        behavior: "smooth",
+      });
     }
   };
 
   const scrollRight = () => {
     if (sliderRef.current) {
-      sliderRef.current.scrollBy({ left: getScrollAmount(), behavior: "smooth" });
+      sliderRef.current.scrollBy({
+        left: getScrollAmount(),
+        behavior: "smooth",
+      });
     }
   };
 
@@ -143,13 +183,22 @@ export function Team() {
         <p className="team-subtitle">
           See who is already here and bring new members into the fold.
         </p>
-        <button className="emp-btn-black add-member-btn" onClick={handleOpenAddModal}>
+        <button
+          className="emp-btn-black add-member-btn"
+          onClick={handleOpenAddModal}
+        >
           Add member
         </button>
       </div>
 
       {isError && (
-        <div style={{ color: "#ef4444", textAlign: "center", marginBottom: "16px" }}>
+        <div
+          style={{
+            color: "#ef4444",
+            textAlign: "center",
+            marginBottom: "16px",
+          }}
+        >
           Failed to load team members. Please try again.
         </div>
       )}
@@ -164,15 +213,18 @@ export function Team() {
         </div>
       ) : teamMembers && teamMembers.length > 0 ? (
         <div className="team-slider-wrapper">
-          <button 
-            className={`slider-arrow left ${showLeftArrow ? 'visible' : 'hidden'}`} 
+          <button
+            className={`slider-arrow left ${showLeftArrow ? "visible" : "hidden"}`}
             onClick={scrollLeft}
             aria-label="Scroll left"
-            style={{ opacity: showLeftArrow ? 1 : 0, pointerEvents: showLeftArrow ? 'auto' : 'none' }}
+            style={{
+              opacity: showLeftArrow ? 1 : 0,
+              pointerEvents: showLeftArrow ? "auto" : "none",
+            }}
           >
             ❮
           </button>
-          
+
           <div className="team-slider" ref={sliderRef}>
             {teamMembers.map((member, index) => (
               <TeamCard
@@ -186,11 +238,14 @@ export function Team() {
             ))}
           </div>
 
-          <button 
-            className={`slider-arrow right ${showRightArrow ? 'visible' : 'hidden'}`} 
+          <button
+            className={`slider-arrow right ${showRightArrow ? "visible" : "hidden"}`}
             onClick={scrollRight}
             aria-label="Scroll right"
-            style={{ opacity: showRightArrow ? 1 : 0, pointerEvents: showRightArrow ? 'auto' : 'none' }}
+            style={{
+              opacity: showRightArrow ? 1 : 0,
+              pointerEvents: showRightArrow ? "auto" : "none",
+            }}
           >
             ❯
           </button>
@@ -202,7 +257,7 @@ export function Team() {
       <TeamMemberModal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
-        onSubmit={handleFormSubmit}
+        onSubmit={addTeamMember}
         memberToEdit={memberToEdit}
         isPending={isAdding || isUpdating}
       />
