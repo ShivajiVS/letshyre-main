@@ -196,9 +196,6 @@ export function EmployerDashboardLayout() {
   const credits = creditsData?.available_credits || 0;
   const teamCount = teamData?.count || 0;
 
-  /* ─────────────────────────────────────────
-     SINGLE SOURCE OF TRUTH for active menu.
-  ───────────────────────────────────────── */
   const isSubPage = SUB_ITEMS.some(({ to }) => location.pathname === to);
 
   const normalizePath = (path) => {
@@ -523,7 +520,7 @@ export function EmployerDashboardLayout() {
             <div className="emp-top-icons">
               <i className="bi bi-bell" />
             </div>
-            <div className="emp-user-name">
+            {/* <div className="emp-user-name">
               {profileLoading ? (
                 <span
                   className="emp-topbar-sk"
@@ -537,7 +534,7 @@ export function EmployerDashboardLayout() {
               ) : (
                 loggedUser?.name || loggedUser?.username || "User"
               )}
-            </div>
+            </div> */}
             <div
               className={`emp-top-icons ${
                 location.pathname.includes("profile") ? "emp-icon-active" : ""
