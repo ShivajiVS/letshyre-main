@@ -7,7 +7,8 @@ export const sections = [
     content: (
       <>
         <p className="tc-section-text">
-          LetsHyre operates on a Pay-Per-Unlock hiring model. Employers may make one-time payments to unlock:
+          LetsHyre operates on a Pay-Per-Unlock hiring model. Employers may make
+          one-time payments to unlock:
         </p>
         <ul className="tc-list">
           <li>Candidate Profiles</li>
@@ -15,11 +16,15 @@ export const sections = [
           <li>Interview Recordings</li>
           <li>Candidate Contact Information</li>
         </ul>
+        <br />
         <p className="tc-section-text">
-          Each unlock purchase grants access to the selected candidate's profile information, interview scorecards, interview recordings, and contact details, subject to platform availability.
+          Each unlock purchase grants access to the selected candidate's profile
+          information, interview scorecards, interview recordings, and contact
+          details, subject to platform availability.
         </p>
         <p className="tc-section-text">
-          Unlock purchases are one-time transactions and do not constitute a subscription or recurring service.
+          Unlock purchases are one-time transactions and do not constitute a
+          subscription or recurring service.
         </p>
       </>
     ),
@@ -34,12 +39,20 @@ export const sections = [
         </p>
         <ul className="tc-list">
           <li>Duplicate payments for the same candidate unlock.</li>
-          <li>Incorrect billing caused by a technical error on the LetsHyre platform.</li>
-          <li>Successful payment where access to the purchased candidate information was not provided due to a platform issue.</li>
+          <li>
+            Incorrect billing caused by a technical error on the LetsHyre
+            platform.
+          </li>
+          <li>
+            Successful payment where access to the purchased candidate
+            information was not provided due to a platform issue.
+          </li>
           <li>Unauthorized transactions verified through investigation.</li>
         </ul>
+        <br />
         <p className="tc-section-text">
-          All refund requests must be submitted within 7 days of the transaction date.
+          All refund requests must be submitted within 7 days of the transaction
+          date.
         </p>
       </>
     ),
@@ -54,16 +67,31 @@ export const sections = [
         </p>
         <ul className="tc-list">
           <li>Candidate profiles that have been successfully unlocked.</li>
-          <li>Interview scorecards or interview recordings that have been successfully accessed.</li>
-          <li>Candidate contact information that has been successfully revealed.</li>
-          <li>Employer dissatisfaction with a candidate's qualifications, skills, experience, communication abilities, or suitability for a role.</li>
-          <li>Failure to contact or hire a candidate after unlocking their profile.</li>
+          <li>
+            Interview scorecards or interview recordings that have been
+            successfully accessed.
+          </li>
+          <li>
+            Candidate contact information that has been successfully revealed.
+          </li>
+          <li>
+            Employer dissatisfaction with a candidate's qualifications, skills,
+            experience, communication abilities, or suitability for a role.
+          </li>
+          <li>
+            Failure to contact or hire a candidate after unlocking their
+            profile.
+          </li>
           <li>Candidate unresponsiveness after profile unlock.</li>
-          <li>Changes in hiring requirements after a candidate has been unlocked.</li>
+          <li>
+            Changes in hiring requirements after a candidate has been unlocked.
+          </li>
           <li>Hiring outcomes or recruitment results.</li>
         </ul>
+        <br />
         <p className="tc-section-text">
-          Once candidate information has been successfully unlocked and made available to the employer, the transaction is considered completed.
+          Once candidate information has been successfully unlocked and made
+          available to the employer, the transaction is considered completed.
         </p>
       </>
     ),
@@ -74,13 +102,16 @@ export const sections = [
     content: (
       <>
         <p className="tc-section-text">
-          Eligible refund requests will be reviewed by LetsHyre within 7–14 business days.
+          Eligible refund requests will be reviewed by LetsHyre within 7–14
+          business days.
         </p>
         <p className="tc-section-text">
           Additional information may be requested to verify refund eligibility.
         </p>
         <p className="tc-section-text">
-          Approved refunds will be processed through the original payment method used for the transaction. Processing times may vary depending on the payment provider or financial institution.
+          Approved refunds will be processed through the original payment method
+          used for the transaction. Processing times may vary depending on the
+          payment provider or financial institution.
         </p>
       </>
     ),
@@ -91,10 +122,13 @@ export const sections = [
     content: (
       <>
         <p className="tc-section-text">
-          LetsHyre reserves the right to deny refund requests where fraudulent activity, misuse of the platform, violation of the Terms & Conditions, or abuse of the refund process is suspected.
+          LetsHyre reserves the right to deny refund requests where fraudulent
+          activity, misuse of the platform, violation of the Terms & Conditions,
+          or abuse of the refund process is suspected.
         </p>
         <p className="tc-section-text">
-          Accounts involved in fraudulent payment activity may be suspended or permanently terminated.
+          Accounts involved in fraudulent payment activity may be suspended or
+          permanently terminated.
         </p>
       </>
     ),
@@ -105,10 +139,14 @@ export const sections = [
     content: (
       <>
         <p className="tc-section-text">
-          If a user initiates a chargeback or payment dispute through a bank, card issuer, or payment provider, LetsHyre reserves the right to investigate the transaction and provide relevant records to the payment processor.
+          If a user initiates a chargeback or payment dispute through a bank,
+          card issuer, or payment provider, LetsHyre reserves the right to
+          investigate the transaction and provide relevant records to the
+          payment processor.
         </p>
         <p className="tc-section-text">
-          Fraudulent or abusive chargeback activity may result in account suspension or termination.
+          Fraudulent or abusive chargeback activity may result in account
+          suspension or termination.
         </p>
       </>
     ),
@@ -119,7 +157,9 @@ export const sections = [
     content: (
       <>
         <p className="tc-section-text">
-          LetsHyre reserves the right to modify or update this Refund Policy at any time. Updated versions will be published on the website and become effective upon publication.
+          LetsHyre reserves the right to modify or update this Refund Policy at
+          any time. Updated versions will be published on the website and become
+          effective upon publication.
         </p>
       </>
     ),
