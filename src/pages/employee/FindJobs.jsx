@@ -5,24 +5,18 @@ import {
   useApplyForJob,
 } from "@/hooks/useFindJobs";
 
-/* ── Components ── */
 import JobCard from "./components/findJobs/JobCard";
 import JobCardSkeleton from "./components/findJobs/JobCardSkeleton";
 import JobDetailModal from "./components/findJobs/JobDetailModal";
 import FindJobsFilters from "./components/findJobs/FindJobsFilters";
 import EmptyState from "./components/findJobs/EmptyState";
 
-/* ── Assets ── */
 import slide1 from "@/assets/Carousel-1.jpg";
 import slide2 from "@/assets/Carousel-2.jpg";
 import slide3 from "@/assets/Carousel-3.jpg";
 
-/* ── Styles ── */
 import "./styles/find-jobs.css";
 
-/* ══════════════════════════════════════════════════
-   CONSTANTS
-   ══════════════════════════════════════════════════ */
 const DEBOUNCE_MS = 400;
 
 const INITIAL_FILTERS = {
@@ -36,9 +30,6 @@ const INITIAL_FILTERS = {
 
 const slides = [{ image: slide1 }, { image: slide2 }, { image: slide3 }];
 
-/* ══════════════════════════════════════════════════
-   FindJobs PAGE
-   ══════════════════════════════════════════════════ */
 export function FindJobs() {
   /* ── Local UI state ── */
   const [showFilters, setShowFilters] = useState(false);
@@ -61,9 +52,6 @@ export function FindJobs() {
     storedUser?.username ||
     "User";
 
-  /* ══════════════════════════════════════════════════
-     DEBOUNCED SEARCH
-     ══════════════════════════════════════════════════ */
   useEffect(() => {
     debounceTimer.current = setTimeout(() => {
       setDebouncedSearch(searchText);
@@ -73,9 +61,6 @@ export function FindJobs() {
     return () => clearTimeout(debounceTimer.current);
   }, [searchText]);
 
-  /* ══════════════════════════════════════════════════
-     REACT QUERY HOOKS
-     ══════════════════════════════════════════════════ */
   const queryFilters = {
     ...filters,
     job_search: debouncedSearch,
@@ -95,9 +80,6 @@ export function FindJobs() {
 
   const applyMutation = useApplyForJob();
 
-  /* ══════════════════════════════════════════════════
-     BANNER AUTO-SLIDE
-     ══════════════════════════════════════════════════ */
   useEffect(() => {
     const interval = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % slides.length);
@@ -106,9 +88,6 @@ export function FindJobs() {
     return () => clearInterval(interval);
   }, []);
 
-  /* ══════════════════════════════════════════════════
-     HANDLERS
-     ══════════════════════════════════════════════════ */
   const handleFilterChange = useCallback((key, value) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
     setCurrentPage(1);
@@ -146,21 +125,12 @@ export function FindJobs() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
-  /* ══════════════════════════════════════════════════
-     DERIVED DATA
-     ══════════════════════════════════════════════════ */
   const jobs = jobsData?.results || [];
   const totalCount = jobsData?.count || 0;
   const totalPages = jobsData?.totalPages || 1;
 
-  /* ══════════════════════════════════════════════════
-     RENDER
-     ══════════════════════════════════════════════════ */
   return (
     <>
-      {/* ═══════════════════════════════════════════
-          BANNER SECTION (KEPT AS-IS)
-          ═══════════════════════════════════════════ */}
       <div className="cd-welcome">
         <h3>Welcome {userName}!</h3>
         <p>

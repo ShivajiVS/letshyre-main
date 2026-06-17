@@ -87,13 +87,13 @@ export default function JobCard({ job, onViewDetails }) {
           {job?.experience_required && (
             <span className="fj-meta-tag">
               <i className="bi bi-briefcase"></i>
-              {job.experience_required} yrs
+              {job.experience_required.replace(/\s*(?:years?|yrs?)$/i, "").trim()} yrs
             </span>
           )}
           {job?.salary_range && (
             <span className="fj-meta-tag">
               <i className="bi bi-currency-rupee"></i>
-              {job.salary_range} LPA
+              {job.salary_range.replace(/\s*(?:LPA|lpa)$/i, "").trim()} LPA
             </span>
           )}
           {job?.employment_type && (

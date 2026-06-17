@@ -5,9 +5,7 @@ import { useEffect } from "react";
  */
 const formatEmploymentType = (type) => {
   if (!type) return "N/A";
-  return type
-    .replace(/_/g, " ")
-    .replace(/\b\w/g, (char) => char.toUpperCase());
+  return type.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
 };
 
 /**
@@ -81,13 +79,13 @@ export default function JobDetailModal({ job, onClose, onApply, isApplying }) {
           {job?.experience_required && (
             <span className="fj-modal-meta-tag">
               <i className="bi bi-briefcase"></i>
-              {job.experience_required} Years
+              {job.experience_required}
             </span>
           )}
           {job?.salary_range && (
             <span className="fj-modal-meta-tag">
               <i className="bi bi-currency-rupee"></i>
-              {job.salary_range} LPA
+              {job.salary_range}
             </span>
           )}
           {job?.location && (
