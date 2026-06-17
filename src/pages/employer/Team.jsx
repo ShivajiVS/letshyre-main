@@ -1,260 +1,133 @@
-import React, { useRef, useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import teamDefault from "@/assets/team-img01.png";
-import "./empSubSections.css";
+import React, { useState } from "react";
+import "./styles/team.css";
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+import {
+  useTeamMembers,
+  useAddTeamMember,
+  useUpdateTeamMember,
+  useDeleteTeamMember,
+} from "../../hooks/employer/useTeam";
+
+import { TeamCard } from "./components/teams/TeamCard";
+import { TeamMemberModal } from "./components/teams/TeamMemberModal";
+import { TeamSkeleton } from "./components/teams/TeamSkeleton";
+import { EmptyTeamState } from "./components/teams/EmptyTeamState";
 
 export function Team() {
-  const sliderRef = useRef(null);
-  const menuRef = useRef();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [memberToEdit, setMemberToEdit] = useState(null);
 
-  const [team, setTeam] = useState([]);
-  const [activeMenu, setActiveMenu] = useState(null);
-  const [showForm, setShowForm] = useState(false);
-  const [editMode, setEditMode] = useState(false);
-  const [selectedMember, setSelectedMember] = useState(null);
-  const [loading, setLoading] = useState(false);
+  // Queries & Mutations
+  const { data: teamMembers, isLoading, isError } = useTeamMembers();
+  const { mutate: addMember, isPending: isAdding } = useAddTeamMember();
+  const { mutate: updateMember, isPending: isUpdating } = useUpdateTeamMember();
+  const { mutate: deleteMember } = useDeleteTeamMember();
 
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
-
-  const token = JSON.parse(localStorage.getItem("user"))?.access_token;
-
-  // ================= FETCH =================
-  const fetchTeam = async () => {
-    try {
-      setLoading(true);
-      const res = await fetch(`${BASE_URL}/user/v1/employer_team_members/`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const data = await res.json();
-      if (data.success) setTeam(data.data.results);
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setLoading(false);
-    }
+  // Handlers
+  const handleOpenAddModal = () => {
+    setMemberToEdit(null);
+    setIsModalOpen(true);
   };
 
-  useEffect(() => {
-    fetchTeam();
-  }, []);
-
-  // ================= INPUT =================
-  const handleInput = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+  const handleOpenEditModal = (member) => {
+    setMemberToEdit(member);
+    setIsModalOpen(true);
   };
 
-  // ================= ADD (FIXED) =================
-  const handleAdd = async () => {
-    if (!form.name || !form.email || !form.password) {
-      alert("All fields required");
-      return;
-    }
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setMemberToEdit(null);
+  };
 
-    try {
-      const res = await fetch(`${BASE_URL}/user/v1/employer_team_members/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+  const handleFormSubmit = (formData) => {
+    if (memberToEdit) {
+      updateMember(
+        { id: memberToEdit.id, data: formData },
+        {
+          onSuccess: (res) => {
+            if (res.success) handleCloseModal();
+            else alert(res.message || "Failed to update member");
+          },
+        }
+      );
+    } else {
+      const newMemberData = { ...formData, title: "Recruiter" };
+      addMember(newMemberData, {
+        onSuccess: (res) => {
+          if (res.success) handleCloseModal();
+          else {
+            const msg = res?.data
+              ? Object.values(res.data).flat().join(", ")
+              : res.message || "Failed to add member";
+            alert(msg);
+          }
         },
-        body: JSON.stringify({
-          full_name: form.name,
-          email: form.email,
-          password: form.password, // ✅ ONLY THIS
-          title: "Recruiter",
-        }),
       });
-
-      const data = await res.json();
-
-      console.log("ADD RESPONSE:", data);
-
-      if (res.ok && data.success) {
-        alert("✅ Member Added");
-        closePopup();
-        fetchTeam();
-      } else {
-        const msg = data?.data
-          ? Object.values(data.data).flat().join(", ")
-          : data.message;
-
-        alert(msg);
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Something went wrong");
     }
   };
 
-  // ================= EDIT =================
-  const handleEdit = (m) => {
-    setSelectedMember(m);
-    setForm({ name: m.full_name, email: m.email, password: "" });
-    setEditMode(true);
-    setShowForm(true);
-    setActiveMenu(null);
-  };
-
-  const handleUpdate = async () => {
-    const res = await fetch(
-      `${BASE_URL}/user/v1/employer_team_members/${selectedMember.id}/`,
+  const handleToggleStatus = (member) => {
+    const newStatus = member.status === "Active" ? "Hold" : "Active";
+    updateMember(
+      { id: member.id, data: { status: newStatus } },
       {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          full_name: form.name,
-          email: form.email,
-        }),
+        onError: () => alert("Failed to toggle status"),
       }
     );
+  };
 
-    const data = await res.json();
-
-    if (data.success) {
-      closePopup();
-      fetchTeam();
+  const handleDelete = (member) => {
+    if (window.confirm(`Are you sure you want to remove ${member.full_name}?`)) {
+      deleteMember(member.id, {
+        onError: () => alert("Failed to remove member"),
+      });
     }
-  };
-
-  // ================= DELETE =================
-  const handleDelete = async (m) => {
-    if (!window.confirm("Delete member?")) return;
-
-    await fetch(`${BASE_URL}/user/v1/employer_team_members/${m.id}/`, {
-      method: "DELETE",
-      headers: { Authorization: `Bearer ${token}` },
-    });
-
-    fetchTeam();
-  };
-
-  // ================= STATUS =================
-  const handleToggleStatus = async (m) => {
-    const newStatus = m.status === "Active" ? "Hold" : "Active";
-
-    setTeam((prev) =>
-      prev.map((x) => (x.id === m.id ? { ...x, status: newStatus } : x))
-    );
-
-    setActiveMenu(null);
-
-    await fetch(`${BASE_URL}/user/v1/employer_team_members/${m.id}/`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ status: newStatus }),
-    });
-  };
-
-  // ================= CLOSE =================
-  const closePopup = () => {
-    setShowForm(false);
-    setEditMode(false);
-    setForm({ name: "", email: "", password: "" });
   };
 
   return (
-    <div className="team-section">
+    <div className="team-container">
       <div className="team-header">
         <h2>Meet your team</h2>
-        <button onClick={() => setShowForm(true)}>Add Member</button>
-      </div>
-
-      <div className="team-cards-wrapper">
-        <button className="arrow left" onClick={() => sliderRef.current.scrollBy({ left: -300 })}>
-          ❮
-        </button>
-
-        <div className="team-slider" ref={sliderRef}>
-          {loading ? (
-            <p>Loading...</p>
-          ) : (
-            team.map((m, i) => (
-              <motion.div key={m.id} className="team-card">
-                <div
-                  className="menu"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setActiveMenu(activeMenu === i ? null : i);
-                  }}
-                >
-                  ⋮
-                </div>
-
-                {activeMenu === i && (
-                  <div className="dropdown" ref={menuRef}>
-                    <p onClick={() => handleEdit(m)}>Edit</p>
-                    <p onClick={() => handleDelete(m)}>Remove</p>
-                    <p onClick={() => handleToggleStatus(m)}>
-                      {m.status === "Active" ? "Hold" : "Activate"}
-                    </p>
-                  </div>
-                )}
-
-                <img src={teamDefault} />
-                <h3>{m.full_name}</h3>
-                <p>{m.title}</p>
-                <span className={m.status}>{m.status}</span>
-              </motion.div>
-            ))
-          )}
-        </div>
-
-        <button className="arrow right" onClick={() => sliderRef.current.scrollBy({ left: 300 })}>
-          ❯
+        <button className="emp-btn-primary" onClick={handleOpenAddModal}>
+          + Add Member
         </button>
       </div>
 
-      {showForm && (
-        <div className="emp-overlay">
-          <div className="emp-modal">
-            <h3>{editMode ? "Edit Member" : "Add Member"}</h3>
-
-            <input
-              name="name"
-              value={form.name}
-              onChange={handleInput}
-              placeholder="Full Name"
-            />
-
-            <input
-              name="email"
-              value={form.email}
-              onChange={handleInput}
-              placeholder="Email"
-            />
-
-            {!editMode && (
-              <input
-                name="password"
-                value={form.password}
-                onChange={handleInput}
-                placeholder="Password"
-                type="password"
-              />
-            )}
-
-            <button className="primary-btn" onClick={editMode ? handleUpdate : handleAdd}>
-              {editMode ? "Update Member" : "Add Member"}
-            </button>
-
-            <button className="cancel-btn" onClick={closePopup}>
-              Cancel
-            </button>
-          </div>
+      {isError && (
+        <div style={{ color: "#ef4444", marginBottom: "16px" }}>
+          Failed to load team members. Please try again.
         </div>
       )}
+
+      {isLoading ? (
+        <div className="team-grid">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <TeamSkeleton key={i} />
+          ))}
+        </div>
+      ) : teamMembers && teamMembers.length > 0 ? (
+        <div className="team-grid">
+          {teamMembers.map((member) => (
+            <TeamCard
+              key={member.id}
+              member={member}
+              onEdit={handleOpenEditModal}
+              onDelete={handleDelete}
+              onToggleStatus={handleToggleStatus}
+            />
+          ))}
+        </div>
+      ) : (
+        <EmptyTeamState onAdd={handleOpenAddModal} />
+      )}
+
+      <TeamMemberModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onSubmit={handleFormSubmit}
+        memberToEdit={memberToEdit}
+        isPending={isAdding || isUpdating}
+      />
     </div>
   );
 }
