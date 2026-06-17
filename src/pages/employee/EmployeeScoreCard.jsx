@@ -45,11 +45,13 @@ export function EmployeeScoreCard() {
   const commMetrics = category_scores?.comm_metrics || {};
   const questionBreakdown = category_scores?.question_breakdown || [];
   const displayQuestions = [];
+
   for (const qa of questionBreakdown) {
     if (qa.type === "AUDIO" && qa.is_dummy_audio) break;
-    if (qa.type !== "AUDIO" && !qa.answer_provided) break;
+    if (qa.type !== "AUDIO" && qa.answer_provided === "") break;
     displayQuestions.push(qa);
   }
+
   const strengths = category_scores?.strengths || [];
   const recommendations = category_scores?.recommendations || [];
   const areasForImprovement = category_scores?.areas_for_improvement || [];
@@ -89,7 +91,7 @@ export function EmployeeScoreCard() {
           <div className="sc-cand-divider" />
           <div className="sc-cand-col">
             <h4>Role Applied For</h4>
-            <h3>{candidate_role || "N/A"}</h3>
+            <h3>{category_scores?.candidate_role || "N/A"}</h3>
           </div>
           <div className="sc-cand-divider" />
           <div className="sc-cand-col sc-cand-col--right">

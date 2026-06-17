@@ -1,7 +1,6 @@
 import { useSearchParams } from "react-router";
-import sc_bg from "@/assets/scorecard-bg.png";
-import user_pic from "@/assets/user-pic.jpeg";
 
+import sc_bg from "@/assets/scorecard-bg.png";
 import { useUnlockedCandidateScorecard } from "@/hooks/employer/useUnlockedCandidateScorecard";
 import "./styles/EmployeeScoreCard.css";
 
@@ -18,9 +17,7 @@ export function EmployeeScoreCard() {
   if (!id) {
     return (
       <div className="sc-section-main">
-        <div className="sc-error-banner">
-          No candidate ID provided in the URL.
-        </div>
+        <div className="sc-error-banner">No Candidate found</div>
       </div>
     );
   }
@@ -82,7 +79,7 @@ export function EmployeeScoreCard() {
   const displayQuestions = [];
   for (const qa of questions) {
     if (qa.type === "AUDIO" && qa.is_dummy_audio) break;
-    if (qa.type !== "AUDIO" && !qa.answer_provided) break;
+    if (qa.type !== "AUDIO" && qa.answer_provided === "") break;
     displayQuestions.push(qa);
   }
 
@@ -126,7 +123,7 @@ export function EmployeeScoreCard() {
           <div className="sc-cand-col">
             <h4>Role Applied For</h4>
             <h3 style={{ textTransform: "capitalize" }}>
-              {candidate_role || "N/A"}
+              {category_scores?.candidate_role || "N/A"}
             </h3>
           </div>
           <div className="sc-cand-divider" />
@@ -144,10 +141,7 @@ export function EmployeeScoreCard() {
             <div className="sc-left-part">
               {/* PROFILE CARD */}
               <div className="sc-profile-card">
-                <img
-                  src={candidate_profile_photo || user_pic}
-                  alt="candidate"
-                />
+                <img src={candidate_profile_photo} alt="candidate" />
                 <div className="sc-profile-overlay">
                   <h3>{candidate_name || "Candidate"}</h3>
                   <p style={{ textTransform: "capitalize" }}>

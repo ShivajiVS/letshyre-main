@@ -4,8 +4,8 @@ import { Link } from "react-router";
 export function ScoreCardItem({ scorecard }) {
   const {
     id,
-    candidate_role,
     overall_score,
+    category_scores,
     created_at,
     candidate_skills,
     ai_model_name,
@@ -27,7 +27,9 @@ export function ScoreCardItem({ scorecard }) {
     <div className="sc-card-item">
       <div className="sc-card-top">
         <div>
-          <h3 className="sc-card-role">{candidate_role || "Candidate"}</h3>
+          <h3 className="sc-card-role">
+            {category_scores?.candidate_role || "N/A"}
+          </h3>
           <p className="sc-card-date">Completed on: {formattedDate}</p>
         </div>
         <div className="sc-card-score-badge">
