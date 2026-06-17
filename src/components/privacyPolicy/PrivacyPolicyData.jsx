@@ -19,8 +19,7 @@ export const sections = [
           <li>Educational Qualifications</li>
           <li>Professional Skills and Experience</li>
           <li>AI Interview Responses</li>
-          <li>Interview Transcripts</li>
-          <li>Interview Reports</li>
+          <li>Interview Scorecards</li>
           <li>Profile Information submitted by candidates</li>
         </ul>
         <br />
@@ -33,9 +32,9 @@ export const sections = [
           <li>Recruiter Name</li>
           <li>Business Email Address</li>
           <li>Contact Information</li>
-          <li>pan, registration numbers.</li>
           <li>Hiring Requirements</li>
-          <li>Job Descriptions.</li>
+          <li>Job Descriptions</li>
+          <li>Profile Information submitted by employers</li>
         </ul>
         <br />
         <p className="tc-section-text">
@@ -63,7 +62,7 @@ export const sections = [
           <li>Create and manage user accounts</li>
           <li>Match candidates with relevant job opportunities</li>
           <li>Conduct AI-powered role-based interviews</li>
-          <li>Generate interview reports and candidate insights</li>
+          <li>Generate interview scorecards and candidate insights</li>
           <li>Facilitate recruitment and hiring processes</li>
           <li>Improve platform performance and user experience</li>
           <li>Communicate platform updates and notifications</li>
@@ -73,24 +72,38 @@ export const sections = [
     ),
   },
   {
-    id: "ai-interview-data",
-    title: "3. AI Interview Data",
+    id: "ai-interview-processing-and-consent",
+    title: "3. AI Interview Processing and Consent",
     content: (
       <>
         <p className="tc-section-text">
           LetsHyre uses artificial intelligence technologies to conduct
-          role-based interviews and generate interview reports.
+          role-based interviews and generate interview scorecards and insights.
         </p>
+        <p className="tc-section-text">
+          By participating in AI interviews, candidates acknowledge and consent
+          to:
+        </p>
+        <ul className="tc-list">
+          <li>AI-based processing of interview responses</li>
+          <li>Generation of AI-powered interview scorecards and insights</li>
+          <li>Evaluation of responses for recruitment purposes</li>
+          <li>
+            Sharing of interview scorecards and insights with employers through
+            the LetsHyre platform
+          </li>
+        </ul>
+        <br />
         <p className="tc-section-text">We may process:</p>
         <ul className="tc-list">
-          <li>Interview responses</li>
-          <li>Interview transcripts</li>
-          <li>Interview recordings (if applicable)</li>
-          <li>AI-generated interview reports</li>
+          <li>Interview Responses</li>
+          <li>Interview Recordings</li>
+          <li>AI-Generated Interview Scorecards</li>
         </ul>
+        <br />
         <p className="tc-section-text">
-          These reports are intended to assist employers in evaluating
-          candidates and are not a guarantee of hiring outcomes.
+          AI-generated scorecards and insights are intended to assist employers
+          in evaluating candidates and do not guarantee hiring outcomes.
         </p>
       </>
     ),
@@ -102,12 +115,33 @@ export const sections = [
       <>
         <p className="tc-section-text">We may share information with:</p>
         <ul className="tc-list">
-          <li>Verified employers using LetsHyre</li>
+          <li>Employers using LetsHyre for legitimate recruitment purposes</li>
           <li>Authorized service providers supporting platform operations</li>
+          <li>
+            Trusted cloud hosting, analytics, communication, payment processing,
+            and AI service providers
+          </li>
           <li>
             Government or legal authorities when required by applicable law
           </li>
         </ul>
+        <br />
+        <p className="tc-section-text">
+          Candidate profiles may be matched and presented to employers based on
+          job requirements, role relevance, skills, experience, and other
+          matching criteria.
+        </p>
+        <p className="tc-section-text">
+          Detailed candidate information, interview scorecards, interview
+          recordings, and candidate contact information may be made available to
+          employers when employers choose to unlock candidate information
+          through the LetsHyre platform.
+        </p>
+        <p className="tc-section-text">
+          Employers are responsible for using candidate information solely for
+          legitimate recruitment purposes and in accordance with applicable
+          laws.
+        </p>
         <p className="tc-section-text">
           LetsHyre does not sell personal information to third parties.
         </p>
@@ -115,34 +149,41 @@ export const sections = [
     ),
   },
   {
-    id: "data-security",
-    title: "5. Data Security",
+    id: "profile-activity-and-data-retention",
+    title: "5. Profile Activity and Data Retention",
     content: (
       <>
         <p className="tc-section-text">
-          We implement reasonable technical and organizational measures to
-          protect personal information from unauthorized access, disclosure,
-          alteration, or destruction.
+          To maintain a high-quality and actively available talent pool,
+          candidate profiles remain active on the platform for up to 90 days
+          from the date of profile creation.
         </p>
-      </>
-    ),
-  },
-  {
-    id: "data-retention",
-    title: "6. Data Retention",
-    content: (
-      <>
         <p className="tc-section-text">
-          We retain information only as long as necessary to provide services,
-          comply with legal obligations, resolve disputes, and enforce our
-          agreements.
+          Candidates may update their profile information during this period and
+          participate in additional AI interviews, including retakes for the
+          same role or interviews for different roles, in accordance with
+          platform policies.
+        </p>
+        <p className="tc-section-text">
+          LetsHyre may allow candidates to complete up to three interview
+          attempts to improve their interview scorecards, profile strength, and
+          visibility to employers.
+        </p>
+        <p className="tc-section-text">
+          After the 90-day period expires, candidate profiles may be permanently
+          removed from the active LetsHyre candidate pool.
+        </p>
+        <p className="tc-section-text">
+          Candidates who wish to continue using LetsHyre after profile removal
+          may create a new profile, subject to the platform's policies and
+          requirements.
         </p>
       </>
     ),
   },
   {
     id: "user-rights",
-    title: "7. User Rights",
+    title: "6. User Rights",
     content: (
       <>
         <p className="tc-section-text">Users may:</p>
@@ -154,6 +195,30 @@ export const sections = [
             Request removal of personal information where legally applicable
           </li>
         </ul>
+        <br />
+        <p className="tc-section-text">
+          Users may submit account deletion or data removal requests by
+          contacting LetsHyre support. Certain information may be retained where
+          required by law or for legitimate business purposes.
+        </p>
+      </>
+    ),
+  },
+  {
+    id: "data-security",
+    title: "7. Data Security",
+    content: (
+      <>
+        <p className="tc-section-text">
+          LetsHyre implements reasonable technical and organizational safeguards
+          to protect personal information from unauthorized access, disclosure,
+          alteration, misuse, or destruction.
+        </p>
+        <p className="tc-section-text">
+          While we take appropriate measures to protect information, no method
+          of electronic storage or transmission over the internet can be
+          guaranteed to be completely secure.
+        </p>
       </>
     ),
   },
@@ -163,8 +228,12 @@ export const sections = [
     content: (
       <>
         <p className="tc-section-text">
-          LetsHyre may use cookies and analytics technologies to improve
-          platform functionality, security, and user experience.
+          LetsHyre may use cookies and similar technologies to improve platform
+          functionality, security, analytics, performance, and user experience.
+        </p>
+        <p className="tc-section-text">
+          Users may choose to disable cookies through their browser settings;
+          however, certain platform features may not function properly.
         </p>
       </>
     ),
@@ -175,9 +244,17 @@ export const sections = [
     content: (
       <>
         <p className="tc-section-text">
-          Our platform may contain links to third-party websites or services.
+          LetsHyre may use trusted third-party service providers to support
+          platform operations, including hosting, analytics, communication,
+          payment processing, and AI-related services.
+        </p>
+        <p className="tc-section-text">
+          These service providers may process information on our behalf solely
+          for the purpose of providing their services to LetsHyre.
+        </p>
+        <p className="tc-section-text">
           LetsHyre is not responsible for the privacy practices of third-party
-          platforms.
+          websites or services that may be accessed through external links.
         </p>
       </>
     ),
@@ -188,9 +265,12 @@ export const sections = [
     content: (
       <>
         <p className="tc-section-text">
-          LetsHyre may update this Privacy Policy from time to time. Continued
-          use of the platform after updates constitutes acceptance of the
-          revised policy.
+          LetsHyre may update this Privacy Policy from time to time.
+        </p>
+        <p className="tc-section-text">
+          Any updates will be published on this page. Continued use of the
+          platform after such updates constitutes acceptance of the revised
+          Privacy Policy.
         </p>
       </>
     ),
@@ -202,12 +282,15 @@ export const sections = [
       <>
         <div className="tc-contact">
           <p className="tc-section-text">
-            For privacy-related questions:
+            For privacy-related questions, requests, or concerns, please
+            contact:
             <br />
             Email:{" "}
             <a href="mailto:support@letshyre.ai" className="tc-contact-email">
               support@letshyre.ai
             </a>
+            <br />
+            LetsHyre Support Team
           </p>
         </div>
       </>
