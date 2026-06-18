@@ -26,6 +26,11 @@ export function EmployeeDashboardLayout() {
   const location = useLocation();
   const queryClient = useQueryClient();
 
+  const showRightPanel =
+    location.pathname.includes("find-jobs") ||
+    location.pathname === "/employee" ||
+    location.pathname === "/employee/";
+
   const { data: userData, isLoading } = useCandidateProfile();
   const isApproved = userData?.is_approved;
 
@@ -309,20 +314,12 @@ export function EmployeeDashboardLayout() {
             </div>
           </header>
 
-          <div
-            className={`cd-main-grid ${
-              location.pathname.includes("find-jobs") ||
-              location.pathname === "/employee"
-                ? "profile-full"
-                : ""
-            }`}
-          >
-            <section className="cd-center">
+          <div className={`cd-main-grid ${showRightPanel ? "layout-with-panel" : ""}`}>
+            <section className="cd-center" key={location.pathname} aria-label="Main Content">
               <Outlet />
             </section>
             {/* RIGHT PANEL */}
-            {(location.pathname.includes("find-jobs") ||
-              location.pathname === "/employee") && (
+            {showRightPanel && (
               <EmployeeRightPanelForJobs profile={userData} />
             )}
           </div>

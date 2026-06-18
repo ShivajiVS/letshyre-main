@@ -182,8 +182,8 @@
   padding-bottom: 16px;
 }
 
-/* PROFILE FULL WIDTH MODE */
-.cd-main-grid.profile-full {
+/* LAYOUT WITH RIGHT PANEL */
+.cd-main-grid.layout-with-panel {
   grid-template-columns: 2.5fr 0.8fr;
 }
 
@@ -570,7 +570,7 @@
   .cd-dashboard {
     padding: 0px;
   }
-  .cd-main-grid.profile-full {
+  .cd-main-grid.layout-with-panel {
     grid-template-columns: 1fr;
   }
 }
