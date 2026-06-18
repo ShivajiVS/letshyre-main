@@ -182,13 +182,13 @@ export function EmployeeDashboardLayout() {
         {/* LEFT SIDEBAR */}
         <aside className={`cd-sidebar ${mobileMenuOpen ? "open" : ""}`}>
           <div className="ls-logo-text cd-logo">
+            <img src={logo} alt="Letshyre logo" className="logo" />
             <div
               className="cd-sidebar-close"
               onClick={() => setMobileMenuOpen(false)}
             >
               ✕
             </div>
-            <img src={logo} alt="Letshyre logo" className="logo" />
           </div>
 
           <ul className="cd-menu">
@@ -219,6 +219,16 @@ export function EmployeeDashboardLayout() {
                 onClick={() => setMobileMenuOpen(false)}
               >
                 <i className="bi bi-file-earmark-text"></i> Scorecard
+              </NavLink>
+            </li>
+
+            <li className="mobile-only-menu">
+              <NavLink
+                to="/employee/profile"
+                className={({ isActive }) => (isActive ? "active" : "")}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <i className="bi bi-person"></i> Profile
               </NavLink>
             </li>
 
@@ -285,6 +295,12 @@ export function EmployeeDashboardLayout() {
 
                 <i className="bi bi-chevron-right cd-user-arrow"></i>
               </div>
+              <button
+                className="cd-hamburger"
+                onClick={() => setMobileMenuOpen(true)}
+              >
+                <i className="bi bi-list" />
+              </button>
             </div>
           </header>
 
