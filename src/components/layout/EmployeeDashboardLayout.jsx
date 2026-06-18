@@ -314,14 +314,17 @@ export function EmployeeDashboardLayout() {
             </div>
           </header>
 
-          <div className={`cd-main-grid ${showRightPanel ? "layout-with-panel" : ""}`}>
-            <section className="cd-center" key={location.pathname} aria-label="Main Content">
+          <div
+            className={`cd-main-grid ${showRightPanel ? "layout-with-panel" : ""}`}
+          >
+            <section
+              className="cd-center"
+              key={location.pathname}
+              aria-label="Main Content"
+            >
               <Outlet />
             </section>
-            {/* RIGHT PANEL */}
-            {showRightPanel && (
-              <EmployeeRightPanelForJobs profile={userData} />
-            )}
+            {showRightPanel && <EmployeeRightPanelForJobs profile={userData} />}
           </div>
         </main>
       </div>

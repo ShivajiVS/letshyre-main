@@ -2,7 +2,6 @@ import React, { useEffect, useState, useRef } from "react";
 import api from "@/services/api";
 import "./empSubSections.css";
 
-/* ---------------- STATUS ---------------- */
 
 function normaliseStatus(raw) {
   return raw?.toLowerCase() === "paid" ? "paid" : "unpaid";
@@ -17,7 +16,6 @@ function StatusBadge({ raw }) {
   );
 }
 
-/* ---------------- SEARCH ---------------- */
 
 function Search({ onSearch }) {
   const inputRef = useRef(null);
@@ -60,7 +58,6 @@ function Search({ onSearch }) {
   );
 }
 
-/* ---------------- INVOICE ---------------- */
 
 export function Invoice() {
   const [invoices, setInvoices] = useState([]);
@@ -99,7 +96,6 @@ export function Invoice() {
     }
   };
 
-  /* ---------------- SEARCH + FILTER ---------------- */
 
   const handleSearch = (query) => {
     let filtered = [...invoices];

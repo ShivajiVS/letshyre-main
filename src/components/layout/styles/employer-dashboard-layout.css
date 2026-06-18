@@ -10,9 +10,6 @@
   font-family: "Inter", sans-serif;
 }
 
-/* ─────────────────────────────────────────
-     SIDEBAR
-  ───────────────────────────────────────── */
 .emp-sidebar {
   width: 320px;
   min-width: 250px;
@@ -43,9 +40,6 @@
   padding-left: 10px;
 }
 
-/* ─────────────────────────────────────────
-     MENU LIST
-  ───────────────────────────────────────── */
 .emp-menu {
   list-style: none;
   padding: 0;

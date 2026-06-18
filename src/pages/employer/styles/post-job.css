@@ -1,9 +1,9 @@
 /* Post Job Section */
 .emp-post-job-main {
   display: grid;
-  grid-template-rows: 50px auto;
+  grid-template-rows: max-content 1fr;
   height: 100%;
-  padding: 14px;
+  padding: 8px;
 }
 
 .emp-post-job-content h2 {
@@ -192,7 +192,6 @@
 /* ================= Tablet View ================= */
 @media (max-width: 1024px) {
   .emp-post-job-main {
-    grid-template-rows: auto auto;
     gap: 20px;
   }
 
@@ -219,7 +218,6 @@
 /* ================= Mobile View ================= */
 @media (max-width: 600px) {
   .emp-post-job-main {
-    grid-template-rows: auto auto;
     gap: 15px;
   }
 

@@ -1,11 +1,8 @@
-/* ================= WRAPPER ================= */
 .sc-list-wrapper {
-  padding: 15px 20px;
   background-color: #f7fbff;
-  min-height: 80vh;
+  min-height: 100vh;
 }
 
-/* ================= HEADER ================= */
 .sc-list-header {
   margin-bottom: 25px;
 }
@@ -14,12 +11,12 @@
   font-size: 20px;
   font-weight: 700;
   color: var(--secondary-sky-blue, #2a60d8);
-  margin-bottom: 5px;
+  margin-bottom: 7px;
 }
 
 .sc-list-header p {
   color: #666;
-  font-size: 15px;
+  font-size: 14px;
 }
 
 /* ================= GRID ================= */

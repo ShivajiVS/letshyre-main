@@ -95,7 +95,7 @@ export function MyApplications() {
                       <p className="ma-job-company">{getCompanyName(job)}</p>
                     </div>
 
-                    <div>
+                    <div className="ma-job-actions">
                       <span className={`ma-badge ${job.status || "Applied"}`}>
                         {job.status || "Applied"}
                       </span>

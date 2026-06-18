@@ -44,7 +44,6 @@ export function FindJobs() {
 
   const debounceTimer = useRef(null);
 
-  /* ── Username from localStorage ── */
   const storedUser = JSON.parse(localStorage.getItem("user")) || {};
   const userName =
     storedUser?.first_name ||
@@ -158,9 +157,6 @@ export function FindJobs() {
         </div>
       </div>
 
-      {/* ═══════════════════════════════════════════
-          SEARCH BAR
-          ═══════════════════════════════════════════ */}
       <div className="fj-search-bar">
         <i className="bi bi-search fj-search-icon"></i>
         <input
@@ -179,9 +175,6 @@ export function FindJobs() {
         </button>
       </div>
 
-      {/* ═══════════════════════════════════════════
-          FILTER PANEL
-          ═══════════════════════════════════════════ */}
       {showFilters && (
         <FindJobsFilters
           filters={filters}
@@ -192,9 +185,6 @@ export function FindJobs() {
         />
       )}
 
-      {/* ═══════════════════════════════════════════
-          RESULTS HEADER
-          ═══════════════════════════════════════════ */}
       <div className="fj-results-header">
         <p className="fj-results-count">
           {isLoading ? (
@@ -210,9 +200,6 @@ export function FindJobs() {
         )}
       </div>
 
-      {/* ═══════════════════════════════════════════
-          JOB LIST
-          ═══════════════════════════════════════════ */}
       <div className="fj-job-list">
         {isLoading ? (
           <JobCardSkeleton count={4} />
@@ -239,10 +226,6 @@ export function FindJobs() {
           ))
         )}
       </div>
-
-      {/* ═══════════════════════════════════════════
-          PAGINATION
-          ═══════════════════════════════════════════ */}
       {!isLoading && !isError && totalPages > 1 && (
         <div className="fj-pagination">
           <button
@@ -273,9 +256,6 @@ export function FindJobs() {
         </div>
       )}
 
-      {/* ═══════════════════════════════════════════
-          JOB DETAIL MODAL
-          ═══════════════════════════════════════════ */}
       {selectedJob && (
         <JobDetailModal
           job={selectedJob}

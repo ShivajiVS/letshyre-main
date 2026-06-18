@@ -1,4 +1,3 @@
-/* ================= PAGE ================= */
 .cd-page {
   height: 100vh;
   background-color: #eef4ff;
@@ -6,7 +5,6 @@
   box-sizing: border-box;
 }
 
-/* ================= DASHBOARD ================= */
 .cd-dashboard {
   display: flex;
   gap: 7px;
@@ -18,17 +16,14 @@
   margin: 0 auto;
 }
 
-/* Blur + dim when locked */
 .cd-dimmed {
   filter: blur(2px) brightness(0.85);
   pointer-events: none;
 }
 
-/* ================= SIDEBAR ================= */
 .cd-sidebar {
-  width: 20%;
-  max-width: 280px;
-  min-width: 220px;
+  width: 320px;
+  min-width: 250px;
   border-radius: 12px;
   background: white;
   padding: 20px 15px;
@@ -55,7 +50,7 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 16px; /* Increased gap for more breathing room */
+  gap: 16px;
   height: 100%;
 }
 
@@ -169,12 +164,10 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-/* Legacy cd-user block removed */
-
-/* ================= MAIN GRID ================= */
 .cd-main-grid {
   display: grid;
   grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
   gap: 14px;
   transition: grid-template-columns 0.3s ease;
   flex: 1;
@@ -182,7 +175,6 @@
   padding-bottom: 16px;
 }
 
-/* LAYOUT WITH RIGHT PANEL */
 .cd-main-grid.layout-with-panel {
   grid-template-columns: 2.5fr 0.8fr;
 }
@@ -195,7 +187,7 @@
 }
 
 .cd-center::-webkit-scrollbar {
-  width: 6px;
+  width: 2px;
 }
 
 .cd-center::-webkit-scrollbar-thumb {
@@ -560,8 +552,6 @@
   z-index: 998;
 }
 
-/* ================= RESPONSIVE ================= */
-
 /* TABLET */
 @media (max-width: 992px) {
   .cd-main-grid {
@@ -648,6 +638,7 @@
   }
   .cd-main {
     padding: 10px;
+    height: 100dvh;
   }
   .apply-btn {
     padding: 10px 5px;
@@ -659,7 +650,6 @@
   }
 }
 
-/* ================= JOB CARD PREMIUM ================= */
 .cd-job-card {
   display: flex;
   gap: 8px;
@@ -977,7 +967,7 @@
   display: flex;
   flex-direction: column;
   min-width: 0;
-  flex: 1;  
+  flex: 1;
 }
 
 .cd-user-name {
