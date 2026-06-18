@@ -593,6 +593,9 @@
 
 /* MOBILE */
 @media (max-width: 768px) {
+  .cd-page-title {
+    display: none;
+  }
   .cd-dashboard {
     padding: 0px;
     display: grid;

@@ -236,7 +236,6 @@ export function EmployeeDashboardLayout() {
               className="logout"
               onClick={() => {
                 setShowLogoutModal(true);
-                setMobileMenuOpen(false);
               }}
             >
               <i className="bi bi-box-arrow-right"></i> Logout
@@ -324,7 +323,6 @@ export function EmployeeDashboardLayout() {
         </main>
       </div>
 
-      {/* OVERLAYS & MODALS */}
       {userData && !profileCompleted && !showProfileFlow && (
         <EmployeeLockedOverlay onAction={() => setShowProfileFlow(true)} />
       )}
