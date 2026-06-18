@@ -12,7 +12,15 @@ export default function EmployeeRightPanelForJobs({ profile }) {
     <aside className="cd-right-panel">
       <h4>Take your AI Interview</h4>
       <div className="cd-profile-card">
-        <img src={profile?.profile_photo} alt="Your Profile" />
+        <img
+          src={profile?.profile_photo || ""}
+          alt="Your Profile"
+          onError={(e) => {
+            e.currentTarget.src = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(
+              userName || "User",
+            )}`;
+          }}
+        />
         <h5>{userName}</h5>
         <p>
           You have {profile?.interview_attempts_remaining || 0} more attempts

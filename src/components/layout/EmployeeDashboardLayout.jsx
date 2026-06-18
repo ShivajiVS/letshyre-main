@@ -195,7 +195,13 @@ export function EmployeeDashboardLayout() {
             <li>
               <NavLink
                 to="/employee/find-jobs"
-                className={({ isActive }) => (isActive ? "active" : "")}
+                className={({ isActive }) =>
+                  isActive ||
+                  location.pathname === "/employee" ||
+                  location.pathname === "/employee/"
+                    ? "active"
+                    : ""
+                }
                 onClick={() => setMobileMenuOpen(false)}
               >
                 <i className="bi bi-suitcase-lg"></i> Find Jobs
