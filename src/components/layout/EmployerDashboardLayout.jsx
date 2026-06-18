@@ -417,12 +417,23 @@ export function EmployerDashboardLayout() {
 
       {/* ── SIDEBAR ── */}
       <aside className={`emp-sidebar ${mobileMenuOpen ? "open" : ""}`}>
-        <div className="emp-sidebar-close" onClick={closeMobile}>
-          ✕
+        <div className="emp-logo-wrapper">
+          <img src={logo} className="emp-logo" alt="logo" />
+          <div className="emp-sidebar-close" onClick={closeMobile}>
+            ✕
+          </div>
         </div>
-        <img src={logo} className="emp-logo" alt="logo" />
 
         <ul className="emp-menu">
+          <li className="emp-mobile-only-menu">
+            <NavLink
+              to="/employer/profile"
+              className={location.pathname.includes("profile") ? "emp-nav-active" : ""}
+              onClick={closeMobile}
+            >
+              <i className="bi bi-person" /> Profile
+            </NavLink>
+          </li>
           {MENU_ITEMS.map(({ id, to, icon, label }) => (
             <li key={id} id={id}>
               <NavLink
@@ -464,7 +475,10 @@ export function EmployerDashboardLayout() {
             </ul>
           )}
 
-          <li className="emp-logout" onClick={() => setShowLogoutModal(true)}>
+          <li
+            className="emp-logout"
+            onClick={() => setShowLogoutModal(true)}
+          >
             <span className="emp-menu-link">
               <i className="bi bi-box-arrow-right" />
               <span>Logout</span>
@@ -657,6 +671,7 @@ export function EmployerDashboardLayout() {
       {showLogoutModal && (
         <div
           className="logout-overlay"
+          style={{ zIndex: 99999 }}
           onClick={() => setShowLogoutModal(false)}
         >
           <div className="logout-modal" onClick={(e) => e.stopPropagation()}>
