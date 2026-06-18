@@ -168,6 +168,71 @@ h5 {
   font-size: 15px;
 }
 
+.cl-checkbox-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 13px;
+  color: #0f172a;
+  font-weight: 500;
+  user-select: none;
+  position: relative;
+  padding-left: 28px;
+  text-align: left;
+  line-height: 1.4;
+}
+
+.cl-checkbox-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  position: absolute;
+  top: 1px;
+  left: 0;
+  height: 18px;
+  width: 18px;
+  background-color: transparent;
+  border: 2px solid #0f172a;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.cl-checkbox-container:hover input ~ .checkmark {
+  border-color: #3b82f6;
+  background-color: rgba(59, 130, 246, 0.05);
+}
+
+.cl-checkbox-container input:checked ~ .checkmark {
+  background-color: #0f172a;
+  border-color: #0f172a;
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.cl-checkbox-container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.cl-checkbox-container .checkmark:after {
+  left: 5px;
+  top: 1px;
+  width: 4px;
+  height: 9px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
 /* ================= BACKGROUND BALLS ================= */
 .cl-ball01,
 .cl-ball02 {
@@ -571,5 +636,8 @@ h5 {
   }
   .auth-image img {
     max-width: 280px;
+  }
+  .cl-checkbox-container {
+    font-size: 11px;
   }
 }

@@ -2,12 +2,16 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { Link } from "react-router";
 import { useFinalRegisterMutation } from "@/hooks/useRegisterMutations";
 
 const passwordSchema = z
   .object({
     password: z.string().min(8, "Password must be at least 8 characters"),
     confirmPassword: z.string(),
+    agreed_to_terms: z.literal(true, {
+      errorMap: () => ({ message: "You must agree to the Terms & Conditions" }),
+    }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
@@ -23,10 +27,18 @@ export function SharedSetPassword({ registerData, onNext, role }) {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(passwordSchema),
+    defaultValues: {
+      password: "",
+      confirmPassword: "",
+      agreed_to_terms: false,
+    },
   });
+
+  const agreed = watch("agreed_to_terms");
 
   const onSubmit = (data) => {
     // The role field might be needed for the backend. Usually role_id: 2 for candidate, 3 for employer.
@@ -35,6 +47,7 @@ export function SharedSetPassword({ registerData, onNext, role }) {
       ...registerData,
       password: data.password,
       confirm_password: data.confirmPassword,
+      agreed_to_terms: data.agreed_to_terms,
       role,
     };
 
@@ -51,7 +64,7 @@ export function SharedSetPassword({ registerData, onNext, role }) {
   return (
     <div className="register-box">
       <h1 className="cl-title">
-        {role === "employer" ? "Employer Password" : "Employee Password"}
+        {role === "Employer" ? "Employer Password" : "Employee Password"}
       </h1>
       <p className="cl-sub-para">Secure your account with a strong password</p>
 
@@ -114,10 +127,57 @@ export function SharedSetPassword({ registerData, onNext, role }) {
           )}
         </div>
 
+        {/* TERMS CHECKBOX */}
+        <div style={{ marginTop: "10px" }}>
+          <div className="cl-checkbox-container" style={{ cursor: "default" }}>
+            <input
+              id="terms_checkbox"
+              type="checkbox"
+              {...register("agreed_to_terms")}
+            />
+            <label
+              htmlFor="terms_checkbox"
+              className="checkmark"
+              style={{ cursor: "pointer" }}
+            ></label>
+            <span>
+              I agree to the{" "}
+              <Link
+                to="/T&C"
+                target="_blank"
+                style={{ color: "#1d4ed8", textDecoration: "underline" }}
+              >
+                Terms & Conditions
+              </Link>{" "}
+              and{" "}
+              <Link
+                to="/policy"
+                target="_blank"
+                style={{ color: "#1d4ed8", textDecoration: "underline" }}
+              >
+                Privacy Policy
+              </Link>
+              .
+            </span>
+          </div>
+          {errors.agreed_to_terms && (
+            <p
+              style={{
+                color: "#ffdddd",
+                fontSize: "13px",
+                marginTop: "6px",
+                textAlign: "left",
+              }}
+            >
+              {errors.agreed_to_terms.message}
+            </p>
+          )}
+        </div>
+
         <button
           className="cl-btn button01"
           type="submit"
-          disabled={mutation.isPending}
+          disabled={mutation.isPending || !agreed}
         >
           {mutation.isPending ? "Creating Account..." : "Complete Registration"}
         </button>

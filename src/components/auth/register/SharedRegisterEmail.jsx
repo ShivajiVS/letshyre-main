@@ -49,12 +49,15 @@ export function SharedRegisterEmail({ onNext, role }) {
     });
   };
 
-  const loginRoute = role === "employer" ? "/employer/sign-in" : "/employee/sign-in";
+  const loginRoute =
+    role === "employer" ? "/employer/sign-in" : "/employee/sign-in";
 
   return (
     <div className="register-box">
       <h1 className="cl-title cl-title22">
-        {role === "employer" ? "Employer Registration" : "Employee Registration"}
+        {role === "Employer"
+          ? "Employer Registration"
+          : "Employee Registration"}
       </h1>
 
       <p className="cl-sub-para">
@@ -63,7 +66,10 @@ export function SharedRegisterEmail({ onNext, role }) {
           : "Create your LetsHyre account to find your next job."}
       </p>
 
-      <form className="cl-form register-form-align" onSubmit={handleSubmit(onSubmit)}>
+      <form
+        className="cl-form register-form-align"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         {/* USERNAME */}
         <div>
           <div className="cl-input-group">
@@ -75,7 +81,14 @@ export function SharedRegisterEmail({ onNext, role }) {
             />
           </div>
           {errors.username && (
-            <p style={{ color: "red", fontSize: "13px", marginTop: "4px", textAlign: "left" }}>
+            <p
+              style={{
+                color: "red",
+                fontSize: "13px",
+                marginTop: "4px",
+                textAlign: "left",
+              }}
+            >
               {errors.username.message}
             </p>
           )}
@@ -92,7 +105,14 @@ export function SharedRegisterEmail({ onNext, role }) {
             />
           </div>
           {errors.fullName && (
-            <p style={{ color: "red", fontSize: "13px", marginTop: "4px", textAlign: "left" }}>
+            <p
+              style={{
+                color: "red",
+                fontSize: "13px",
+                marginTop: "4px",
+                textAlign: "left",
+              }}
+            >
               {errors.fullName.message}
             </p>
           )}
@@ -110,13 +130,24 @@ export function SharedRegisterEmail({ onNext, role }) {
             <i className="bi bi-envelope cl-icon"></i>
           </div>
           {errors.email && (
-            <p style={{ color: "red", fontSize: "13px", marginTop: "4px", textAlign: "left" }}>
+            <p
+              style={{
+                color: "red",
+                fontSize: "13px",
+                marginTop: "4px",
+                textAlign: "left",
+              }}
+            >
               {errors.email.message}
             </p>
           )}
         </div>
 
-        <button className="cl-btn button01" type="submit" disabled={mutation.isPending}>
+        <button
+          className="cl-btn button01"
+          type="submit"
+          disabled={mutation.isPending}
+        >
           {mutation.isPending ? "Sending OTP..." : "Verify"}
         </button>
       </form>

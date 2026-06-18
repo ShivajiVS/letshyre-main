@@ -109,7 +109,7 @@ export function SharedOtpVerify({ email, otpSessionKey, onNext, role }) {
   return (
     <div className="register-box">
       <h1 className="cl-title">
-        {role === "employer"
+        {role === "Employer"
           ? "Employer Verification"
           : "Employee Verification"}
       </h1>

@@ -4,7 +4,10 @@ import { z } from "zod";
 import { useSendMobileOtpMutation } from "@/hooks/useRegisterMutations";
 
 const mobileSchema = z.object({
-  mobile: z.string().length(10, "Enter valid 10 digit mobile number").regex(/^\d+$/, "Must be digits only"),
+  mobile: z
+    .string()
+    .length(10, "Enter valid 10 digit mobile number")
+    .regex(/^\d+$/, "Must be digits only"),
 });
 
 export function SharedMobileVerify({ onNext, role }) {
@@ -39,14 +42,16 @@ export function SharedMobileVerify({ onNext, role }) {
             });
           }
         },
-      }
+      },
     );
   };
 
   return (
     <div className="register-box">
       <h1 className="cl-title">
-        {role === "employer" ? "Employer Registration" : "Employee Registration"}
+        {role === "Employer"
+          ? "Employer Registration"
+          : "Employee Registration"}
       </h1>
 
       <p className="cl-sub-para">
@@ -63,20 +68,35 @@ export function SharedMobileVerify({ onNext, role }) {
               maxLength={10}
               {...register("mobile", {
                 onChange: (e) => {
-                  setValue("mobile", e.target.value.replace(/\D/g, "").slice(0, 10), { shouldValidate: true });
-                }
+                  setValue(
+                    "mobile",
+                    e.target.value.replace(/\D/g, "").slice(0, 10),
+                    { shouldValidate: true },
+                  );
+                },
               })}
             />
             <i className="bi bi-phone cl-icon"></i>
           </div>
           {errors.mobile && (
-            <p style={{ color: "red", fontSize: "13px", marginTop: "4px", textAlign: "left" }}>
+            <p
+              style={{
+                color: "red",
+                fontSize: "13px",
+                marginTop: "4px",
+                textAlign: "left",
+              }}
+            >
               {errors.mobile.message}
             </p>
           )}
         </div>
 
-        <button className="cl-btn button01" type="submit" disabled={mutation.isPending}>
+        <button
+          className="cl-btn button01"
+          type="submit"
+          disabled={mutation.isPending}
+        >
           {mutation.isPending ? "Sending..." : "Send OTP"}
         </button>
       </form>

@@ -49,9 +49,7 @@ export function SharedRegisterFlow({ role }) {
     <div className="candidate-page-main">
       <div className="candidate-page">
         <div className="cl-ball022"></div>
-
         <div className="auth-card">
-          {/* ================= FORM SECTION ================= */}
           <div
             className={`auth-form ${animating ? "slide-out-left" : "slide-in"}`}
           >
