@@ -33,7 +33,8 @@ export function EmployerDashboard() {
   const fallbackValues = [65, 30, 85, 45, 75];
   const metrics = jobs.slice(0, 5).map((job, index) => ({
     label: job.title?.slice(0, 6) || "Job",
-    value: job.applicants_count || fallbackValues[index % fallbackValues.length],
+    value:
+      job.applicants_count || fallbackValues[index % fallbackValues.length],
     job: job.title,
   }));
 
@@ -66,7 +67,10 @@ export function EmployerDashboard() {
               <div className="sc-bar-chart">
                 {metrics.map((item, i) => (
                   <div className="sc-bar-item" key={i}>
-                    <div className="sc-bar-wrapper" style={{ height: `${item.value}%` }}>
+                    <div
+                      className="sc-bar-wrapper"
+                      style={{ height: `${item.value}%` }}
+                    >
                       <div className="sc-tooltip">{item.job}</div>
                       <div className="sc-bar-container">
                         <div className="sc-bar" />
@@ -89,26 +93,6 @@ export function EmployerDashboard() {
 
         {/* ================= CREDITS ================= */}
         <CreditUsageCard credits={stats?.credits} isLoading={isLoading} />
-        {/*
-        <div className="ds-sub-inner02">
-          <div className="ds-credit-card">
-            <h3>Team Credit Usage</h3>
-
-            <div className="ds-team-list">
-              {teamUsage && teamUsage.length > 0 ? (
-                teamUsage.map((user, index) => (
-                <div key={index} className="ds-team-item d-flex justify-content-between">
-                  <span className="ds-user-name">👤 {user.name}</span>
-                  <span className="ds-user-credits">{user.credits} credits</span>
-                </div>
-                ))
-              ) : (
-                <p>No usage data available</p>
-              )}
-            </div>
-          </div>
-        </div>
-      */}
       </div>
 
       {/* ================= MATCH LIST ================= */}

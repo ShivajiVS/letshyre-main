@@ -428,7 +428,9 @@ export function EmployerDashboardLayout() {
           <li className="emp-mobile-only-menu">
             <NavLink
               to="/employer/profile"
-              className={location.pathname.includes("profile") ? "emp-nav-active" : ""}
+              className={
+                location.pathname.includes("profile") ? "emp-nav-active" : ""
+              }
               onClick={closeMobile}
             >
               <i className="bi bi-person" /> Profile
@@ -475,10 +477,7 @@ export function EmployerDashboardLayout() {
             </ul>
           )}
 
-          <li
-            className="emp-logout"
-            onClick={() => setShowLogoutModal(true)}
-          >
+          <li className="emp-logout" onClick={() => setShowLogoutModal(true)}>
             <span className="emp-menu-link">
               <i className="bi bi-box-arrow-right" />
               <span>Logout</span>
@@ -527,7 +526,7 @@ export function EmployerDashboardLayout() {
                 ></span>
               ) : (
                 <>
-                  {teamCount + 1} {teamCount + 1 === 1 ? "Member" : "Members"}
+                  {teamCount} {teamCount + 1 === 1 ? "Member" : "Members"}
                 </>
               )}
             </button>
