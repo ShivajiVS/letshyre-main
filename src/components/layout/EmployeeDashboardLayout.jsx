@@ -34,12 +34,25 @@ export function EmployeeDashboardLayout() {
   const { data: userData, isLoading } = useCandidateProfile();
   const isApproved = userData?.is_approved;
 
-  const profileCompleted = userData?.is_profile_complete === true;
+  const profileCompleted =
+    userData?.is_profile_complete === true ||
+    localStorage.getItem("profileCompleted") === "true";
+
 
   const handleProfileComplete = () => {
-    queryClient.invalidateQueries({ queryKey: CANDIDATE_PROFILE_KEY });
+    // Immediately patch the cache so profileCompleted flips to true on this render.
+    queryClient.setQueryData(CANDIDATE_PROFILE_KEY, (old) =>
+      old ? { ...old, is_profile_complete: true } : old,
+    );
+    // Mark stale so next focus/navigation refetches — but DON'T refetch now,
+    // as an immediate refetch would race and overwrite our patch with old server data.
+    queryClient.invalidateQueries({
+      queryKey: CANDIDATE_PROFILE_KEY,
+      refetchType: "none",
+    });
     setShowProfileFlow(false);
   };
+
 
   const { mutate: performLogout, isPending: isLoggingOut } =
     useEmployeeLogout();
@@ -341,14 +354,16 @@ export function EmployeeDashboardLayout() {
         </div>
       )}
 
-      {userData && (!isApproved || userData?.is_rejected === true) && (
-        <ProfileStatusModal
-          isRejected={userData?.is_rejected === true}
-          rejectionReason={userData?.reject_reason}
-          onLogout={() => performLogout()}
-          isLoggingOut={isLoggingOut}
-        />
-      )}
+      {userData &&
+        profileCompleted &&
+        (!isApproved || userData?.is_rejected === true) && (
+          <ProfileStatusModal
+            isRejected={userData?.is_rejected === true}
+            rejectionReason={userData?.reject_reason}
+            onLogout={() => performLogout()}
+            isLoggingOut={isLoggingOut}
+          />
+        )}
 
       <LogoutModal
         isOpen={showLogoutModal}
