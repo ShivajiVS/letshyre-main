@@ -22,8 +22,28 @@ const api = axios.create({
 const getAccessToken = () =>
   localStorage.getItem(ACCESS_TOKEN_KEY);
 
-const getRefreshToken = () =>
-  localStorage.getItem(REFRESH_TOKEN_KEY);
+const getRefreshToken = () => {
+  // Primary key
+  const direct = localStorage.getItem(REFRESH_TOKEN_KEY);
+  if (direct) return direct;
+  // Fallback: read from the stored user object
+  try {
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    return user?.refresh_token || user?.refresh || null;
+  } catch {
+    return null;
+  }
+};
+
+/* ===============================
+   CLEAR AUTH STORAGE (selective)
+================================ */
+const clearAuthStorage = () => {
+  localStorage.removeItem(ACCESS_TOKEN_KEY);
+  localStorage.removeItem(REFRESH_TOKEN_KEY);
+  localStorage.removeItem("user");
+  // intentionally keep profileCompleted, UI prefs, etc.
+};
 
 /* ===============================
    PUBLIC ROUTES (NO AUTH HEADER)
@@ -117,6 +137,7 @@ api.interceptors.response.use(
         return new Promise((resolve, reject) => {
           failedQueue.push({
             resolve: (token) => {
+              originalRequest._retry = true;          // prevent re-refresh on queued retries
               originalRequest.headers.Authorization =
                 `Bearer ${token}`;
 
@@ -148,8 +169,6 @@ api.interceptors.response.use(
           }
         );
 
-        console.log("REFRESH RESPONSE:", res.data);
-
         const response = res.data;
         const data = response.data || response;
 
@@ -162,10 +181,17 @@ api.interceptors.response.use(
           throw new Error("No new access token returned");
         }
 
-        localStorage.setItem(
-          ACCESS_TOKEN_KEY,
-          newAccessToken
-        );
+        localStorage.setItem(ACCESS_TOKEN_KEY, newAccessToken);
+
+        // ── Save the NEW refresh token if the server rotates it ──
+        // Django Simple JWT (ROTATE_REFRESH_TOKENS=True) invalidates the old
+        // refresh token and issues a new one. Failing to save it means the
+        // next refresh will use a blacklisted token and always fail.
+        const newRefreshToken =
+          data.refresh_token || data.refresh;
+        if (newRefreshToken) {
+          localStorage.setItem(REFRESH_TOKEN_KEY, newRefreshToken);
+        }
 
         processQueue(null, newAccessToken);
 
@@ -183,14 +209,15 @@ api.interceptors.response.use(
           refreshError
         );
 
-        localStorage.clear();
+        isRefreshing = false;        // reset BEFORE navigation
+        clearAuthStorage();
 
         window.location.href = "/get-started";
 
         return Promise.reject(refreshError);
 
       } finally {
-        isRefreshing = false;
+        isRefreshing = false;        // safe to call again — idempotent
       }
     }
 
