@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavLink, Outlet, useNavigate, useLocation } from "react-router";
+import { NavLink, Outlet, useNavigate, useLocation, Link } from "react-router";
 import { useQueryClient } from "@tanstack/react-query";
 
 import logo from "@/assets/logo2.png";
@@ -38,7 +38,6 @@ export function EmployeeDashboardLayout() {
     userData?.is_profile_complete === true ||
     localStorage.getItem("profileCompleted") === "true";
 
-
   const handleProfileComplete = () => {
     // Immediately patch the cache so profileCompleted flips to true on this render.
     queryClient.setQueryData(CANDIDATE_PROFILE_KEY, (old) =>
@@ -52,7 +51,6 @@ export function EmployeeDashboardLayout() {
     });
     setShowProfileFlow(false);
   };
-
 
   const { mutate: performLogout, isPending: isLoggingOut } =
     useEmployeeLogout();
@@ -200,7 +198,10 @@ export function EmployeeDashboardLayout() {
         {/* LEFT SIDEBAR */}
         <aside className={`cd-sidebar ${mobileMenuOpen ? "open" : ""}`}>
           <div className="ls-logo-text cd-logo">
-            <img src={logo} alt="Letshyre logo" className="logo" />
+            <Link to={"/employee/find-jobs"}>
+              <img src={logo} alt="Letshyre logo" className="logo" />
+            </Link>
+
             <div
               className="cd-sidebar-close"
               onClick={() => setMobileMenuOpen(false)}
@@ -278,7 +279,9 @@ export function EmployeeDashboardLayout() {
         <main className="cd-main">
           <header className="cd-topbar">
             <div className="cd-mobile-left">
-              <img src={logo} className="cd-mobile-logo" alt="logo" />
+              <Link to={"/employee/find-jobs"}>
+                <img src={logo} className="cd-mobile-logo" alt="logo" />
+              </Link>
             </div>
 
             <h2 className="cd-page-title">{getPageTitle()}</h2>

@@ -348,7 +348,6 @@ export function EmployerDashboardLayout() {
 
   return (
     <div className="emp-dashboard">
-      {/* ── TOUR ── */}
       <Joyride
         steps={TOUR_STEPS}
         run={runTour}
@@ -418,7 +417,9 @@ export function EmployerDashboardLayout() {
       {/* ── SIDEBAR ── */}
       <aside className={`emp-sidebar ${mobileMenuOpen ? "open" : ""}`}>
         <div className="emp-logo-wrapper">
-          <img src={logo} className="emp-logo" alt="logo" />
+          <Link to={"/employer/"}>
+            <img src={logo} className="emp-logo" alt="logo" />
+          </Link>
           <div className="emp-sidebar-close" onClick={closeMobile}>
             ✕
           </div>
