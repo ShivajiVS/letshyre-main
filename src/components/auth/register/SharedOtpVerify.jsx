@@ -5,7 +5,7 @@ import {
 } from "@/hooks/useRegisterMutations";
 
 export function SharedOtpVerify({ email, otpSessionKey, onNext, role }) {
-  const [otp, setOtp] = useState("");
+  const [otp, setOtp] = useState(Array(6).fill(""));
   const [error, setError] = useState("");
   const [info, setInfo] = useState("");
   const [timer, setTimer] = useState(30);
@@ -29,18 +29,32 @@ export function SharedOtpVerify({ email, otpSessionKey, onNext, role }) {
   }, []);
 
   /* ================= OTP CHANGE ================= */
-  const handleChange = (value, index) => {
-    if (!/^\d?$/.test(value)) return;
+  const handleChange = (e, index) => {
+    const val = e.target.value;
+    let newChar = "";
 
-    const otpArr = otp.split("");
-    otpArr[index] = value;
-    const newOtp = otpArr.join("").slice(0, 6);
+    if (val.length > 1) {
+      newChar = val.replace(otp[index], "").replace(/\D/g, "");
+    } else {
+      newChar = val.replace(/\D/g, "");
+    }
+
+    if (val !== "" && newChar === "") {
+      const resetOtp = [...otp];
+      setOtp(resetOtp);
+      return;
+    }
+
+    newChar = newChar.slice(0, 1);
+
+    const newOtp = [...otp];
+    newOtp[index] = newChar;
 
     setOtp(newOtp);
     setError("");
     setInfo("");
 
-    if (value && index < 5) {
+    if (newChar !== "" && index < 5) {
       inputRefs.current[index + 1]?.focus();
     }
   };
@@ -48,6 +62,30 @@ export function SharedOtpVerify({ email, otpSessionKey, onNext, role }) {
   const handleKeyDown = (e, index) => {
     if (e.key === "Backspace" && !otp[index] && index > 0) {
       inputRefs.current[index - 1]?.focus();
+    } else if (e.key === "ArrowLeft" && index > 0) {
+      inputRefs.current[index - 1]?.focus();
+    } else if (e.key === "ArrowRight" && index < 5) {
+      inputRefs.current[index + 1]?.focus();
+    }
+  };
+
+  const handlePaste = (e) => {
+    e.preventDefault();
+    const pastedData = e.clipboardData.getData("text").trim();
+    // Extract only numbers
+    const numbersOnly = pastedData.replace(/\D/g, "");
+    if (numbersOnly.length > 0) {
+      const newOtp = [...otp];
+      for (let i = 0; i < numbersOnly.length && i < 6; i++) {
+        newOtp[i] = numbersOnly[i];
+      }
+      setOtp(newOtp);
+      setError("");
+      setInfo("");
+
+      // Focus the correct input or the last one if full
+      const focusIndex = Math.min(newOtp.length, 5);
+      inputRefs.current[focusIndex]?.focus();
     }
   };
 
@@ -57,7 +95,8 @@ export function SharedOtpVerify({ email, otpSessionKey, onNext, role }) {
     setError("");
     setInfo("");
 
-    if (otp.length !== 6) {
+    const otpString = otp.join("");
+    if (otpString.length !== 6) {
       setError("Enter valid 6-digit OTP");
       return;
     }
@@ -66,7 +105,7 @@ export function SharedOtpVerify({ email, otpSessionKey, onNext, role }) {
       {
         email,
         otpSessionKey: currentSessionKey,
-        otp: otp,
+        otp: otpString,
         otp_type: "Registration",
       },
       {
@@ -97,7 +136,7 @@ export function SharedOtpVerify({ email, otpSessionKey, onNext, role }) {
             setCurrentSessionKey(newSessionKey);
           }
 
-          setOtp("");
+          setOtp(Array(6).fill(""));
           setTimer(30);
           setInfo("OTP resent successfully");
           inputRefs.current[0]?.focus();
@@ -113,7 +152,20 @@ export function SharedOtpVerify({ email, otpSessionKey, onNext, role }) {
           ? "Employer Verification"
           : "Employee Verification"}
       </h1>
-      <p className="cl-sub-para">Enter the OTP we sent to your email</p>
+      <p className="cl-sub-para" style={{ marginBottom: 0 }}>
+        Enter the OTP we sent to your email
+      </p>
+      <p
+        className="cl-sub-para"
+        style={{
+          color: "#666",
+          fontSize: "13px",
+          marginBottom: "15px",
+        }}
+      >
+        Please check your inbox, including the <strong>spam</strong> or{" "}
+        <strong>promotions</strong> folder.
+      </p>
 
       <form className="cl-form" onSubmit={handleSubmit}>
         <div className="otp-inputs">
@@ -122,11 +174,12 @@ export function SharedOtpVerify({ email, otpSessionKey, onNext, role }) {
               key={index}
               ref={(el) => (inputRefs.current[index] = el)}
               type="text"
-              maxLength="1"
               className="otp-box"
               value={otp[index] || ""}
-              onChange={(e) => handleChange(e.target.value, index)}
+              onChange={(e) => handleChange(e, index)}
               onKeyDown={(e) => handleKeyDown(e, index)}
+              onPaste={handlePaste}
+              onFocus={(e) => e.target.select()}
             />
           ))}
         </div>
