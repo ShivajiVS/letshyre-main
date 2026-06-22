@@ -5,7 +5,6 @@ import { useNavigate } from "react-router";
 import { useSendEmailOtpMutation } from "@/hooks/useRegisterMutations";
 
 const emailSchema = z.object({
-  username: z.string().min(3, "Username must be at least 3 characters"),
   fullName: z.string().min(2, "Full name is required"),
   email: z.string().min(1, "Email is required").email("Invalid email address"),
 });
@@ -21,13 +20,13 @@ export function SharedRegisterEmail({ onNext, role }) {
   } = useForm({
     resolver: zodResolver(emailSchema),
     defaultValues: {
-      username: "",
       fullName: "",
       email: "",
     },
   });
 
   const onSubmit = (data) => {
+    console.log("clickeddd");
     mutation.mutate(data, {
       onSuccess: (response) => {
         const otpSessionKey =
@@ -40,7 +39,6 @@ export function SharedRegisterEmail({ onNext, role }) {
           localStorage.setItem("email_otp_session", otpSessionKey);
           onNext({
             name: data.fullName,
-            username: data.username,
             email: data.email,
             emailOtpSessionKey: otpSessionKey,
           });
@@ -50,7 +48,7 @@ export function SharedRegisterEmail({ onNext, role }) {
   };
 
   const loginRoute =
-    role === "employer" ? "/employer/sign-in" : "/employee/sign-in";
+    role === "Employer" ? "/employer/sign-in" : "/employee/sign-in";
 
   return (
     <div className="register-box">
@@ -61,7 +59,7 @@ export function SharedRegisterEmail({ onNext, role }) {
       </h1>
 
       <p className="cl-sub-para">
-        {role === "employer"
+        {role === "Employer"
           ? "Build your dream team faster. Enter your work email."
           : "Create your LetsHyre account to find your next job."}
       </p>
@@ -70,30 +68,6 @@ export function SharedRegisterEmail({ onNext, role }) {
         className="cl-form register-form-align"
         onSubmit={handleSubmit(onSubmit)}
       >
-        {/* USERNAME */}
-        <div>
-          <div className="cl-input-group">
-            <input
-              type="text"
-              placeholder="Username"
-              className="cl-input"
-              {...register("username")}
-            />
-          </div>
-          {errors.username && (
-            <p
-              style={{
-                color: "red",
-                fontSize: "13px",
-                marginTop: "4px",
-                textAlign: "left",
-              }}
-            >
-              {errors.username.message}
-            </p>
-          )}
-        </div>
-
         {/* FULL NAME */}
         <div>
           <div className="cl-input-group">

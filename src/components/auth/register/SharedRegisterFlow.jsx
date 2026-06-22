@@ -21,7 +21,6 @@ export function SharedRegisterFlow({ role }) {
 
   const [registerData, setRegisterData] = useState({
     name: "",
-    username: "",
     email: "",
     emailOtpSessionKey: "",
     phone_number: "",
@@ -60,7 +59,6 @@ export function SharedRegisterFlow({ role }) {
                   setRegisterData((prev) => ({
                     ...prev,
                     name: data.name,
-                    username: data.username,
                     email: data.email,
                     emailOtpSessionKey: data.emailOtpSessionKey,
                   }));
