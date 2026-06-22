@@ -89,8 +89,7 @@ export function SharedMobileOtp({ mobile, otpSessionKey, onNext, role }) {
       {
         onSuccess: (response) => {
           const newSessionKey =
-            response?.data?.otp_session_key ||
-            response?.data?.data?.otp_session_key;
+            response?.otp_session_key || response?.data?.otp_session_key;
 
           if (newSessionKey) {
             setCurrentSessionKey(newSessionKey);
