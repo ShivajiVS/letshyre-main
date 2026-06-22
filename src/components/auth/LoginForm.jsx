@@ -100,7 +100,7 @@ export function LoginForm({ role, registerLink }) {
               )
             }
           >
-            Forget Password?
+            Forgot Password?
           </span>
         </p>
 
