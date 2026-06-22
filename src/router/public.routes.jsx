@@ -3,6 +3,8 @@ import { ScrollToHash } from "@/components/ScrollToHash";
 import { RootLayout } from "@/components/layout/RootLayout";
 import { PublicLayout } from "@/components/layout/PublicLayout";
 
+import { requireGuest } from "@/loaders/requireAuth";
+
 const publicRoutes = [
   {
     element: <RootLayout />,
@@ -66,6 +68,7 @@ const publicRoutes = [
       },
       {
         path: "/get-started",
+        loader: requireGuest,
         async lazy() {
           const { GetStarted } = await import("@/pages/GetStarted");
           return { Component: GetStarted };
