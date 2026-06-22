@@ -29,7 +29,7 @@ export function LoginForm({ role, registerLink }) {
   const mutation = useLoginMutation(role);
 
   const onSubmit = (data) => {
-    mutation.mutate(data);
+    mutation.mutate({ ...data, role });
   };
 
   return (
@@ -47,7 +47,14 @@ export function LoginForm({ role, registerLink }) {
             <i className="bi bi-envelope cl-icon"></i>
           </div>
           {errors.email && (
-            <p style={{ color: "red", fontSize: "13px", marginTop: "6px", textAlign: "left" }}>
+            <p
+              style={{
+                color: "red",
+                fontSize: "13px",
+                marginTop: "6px",
+                textAlign: "left",
+              }}
+            >
               {errors.email.message}
             </p>
           )}
@@ -69,7 +76,14 @@ export function LoginForm({ role, registerLink }) {
             ></i>
           </div>
           {errors.password && (
-            <p style={{ color: "red", fontSize: "13px", marginTop: "6px", textAlign: "left" }}>
+            <p
+              style={{
+                color: "red",
+                fontSize: "13px",
+                marginTop: "6px",
+                textAlign: "left",
+              }}
+            >
               {errors.password.message}
             </p>
           )}
@@ -80,7 +94,10 @@ export function LoginForm({ role, registerLink }) {
           <span
             style={{ cursor: "pointer" }}
             onClick={() =>
-              navigate("/forgot-password", role === "employer" ? { state: { role: "employer" } } : {})
+              navigate(
+                "/forgot-password",
+                role === "employer" ? { state: { role: "employer" } } : {},
+              )
             }
           >
             Forget Password?
@@ -88,7 +105,11 @@ export function LoginForm({ role, registerLink }) {
         </p>
 
         {/* SUBMIT */}
-        <button className="cl-btn button01" type="submit" disabled={mutation.isPending}>
+        <button
+          className="cl-btn button01"
+          type="submit"
+          disabled={mutation.isPending}
+        >
           {mutation.isPending ? "Logging in..." : "LetsHyre Me"}
         </button>
       </form>

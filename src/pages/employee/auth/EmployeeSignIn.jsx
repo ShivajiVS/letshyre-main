@@ -5,7 +5,7 @@ import { LoginForm } from "@/components/auth/LoginForm";
 export function EmployeeSignIn() {
   return (
     <AuthLayout image={img01} title="Employee Login">
-      <LoginForm role="employee" registerLink="/employee/register" />
+      <LoginForm role="Candidate" registerLink="/employee/register" />
     </AuthLayout>
   );
 }

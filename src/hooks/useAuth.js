@@ -11,9 +11,9 @@ export const useLoginMutation = (role) => {
     mutationFn: authService.login,
     onSuccess: (data) => {
       toast.success("Login successful");
-      let defaultRedirect = role === "employer" ? "/employer" : "/employee";
-      
-      if (role === "employer" && data?.is_profile_completed === false) {
+      let defaultRedirect = role === "Employer" ? "/employer" : "/employee";
+
+      if (role === "Employer" && data?.is_profile_completed === false) {
         defaultRedirect = "/employer/onboarding";
       }
 
