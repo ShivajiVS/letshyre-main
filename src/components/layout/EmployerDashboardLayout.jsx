@@ -252,16 +252,15 @@ export function EmployerDashboardLayout() {
     }
   }, []);
 
-  /* ── handlers ── */
   const handleLogout = async () => {
     try {
       setShowLogoutModal(false);
       await logoutMe();
-      navigate("/employer/sign-in", { replace: true });
+      navigate("/", { replace: true });
     } catch (err) {
       console.error("Logout error:", err);
       localStorage.clear();
-      navigate("/employer/sign-in", { replace: true });
+      navigate("/", { replace: true });
     }
   };
 
@@ -330,7 +329,6 @@ export function EmployerDashboardLayout() {
     }
   };
 
-  /* ── Joyride callback ── */
   const handleJoyrideCallback = (data) => {
     const { status, action, type } = data;
 

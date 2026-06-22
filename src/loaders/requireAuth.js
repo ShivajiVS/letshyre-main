@@ -9,7 +9,7 @@ export const requireAuth =
 
     // 1. Not logged in
     if (!authData?.isAuthenticated) {
-      throw redirect("/get-started");
+      throw redirect("/");
     }
 
     // 2. Role not allowed

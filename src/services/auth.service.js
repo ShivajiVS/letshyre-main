@@ -1,34 +1,23 @@
 import api from "./api";
 import { getErrorMessage } from "../utils/errorHandler";
 
-/* ===============================
-   STORAGE KEYS
-================================ */
 const ACCESS_TOKEN_KEY = "accessToken";
 const REFRESH_TOKEN_KEY = "refreshToken";
 const USER_KEY = "user";
 
-/* ===============================
-   HELPER: SAFE RESPONSE PARSER
-================================ */
 const getResponseData = (res) => {
   return res?.data?.data || res?.data || {};
 };
 
-/* ===============================
-   LOGIN
-================================ */
 export const login = async (credentials) => {
   try {
     const res = await api.post("/user/v1/login/", credentials);
 
     const data = getResponseData(res);
 
-    const accessToken =
-      data.access_token || data.access || data.token;
+    const accessToken = data.access_token || data.access || data.token;
 
-    const refreshToken =
-      data.refresh_token || data.refresh;
+    const refreshToken = data.refresh_token || data.refresh;
 
     if (!accessToken) {
       console.error("LOGIN RESPONSE:", res.data);
@@ -44,22 +33,18 @@ export const login = async (credentials) => {
     localStorage.setItem(USER_KEY, JSON.stringify(data));
 
     return data;
-
   } catch (error) {
     throw new Error(getErrorMessage(error));
   }
 };
 
-/* ===============================
-   LOGOUT
-================================ */
 export const logoutMe = async () => {
   try {
     const refreshToken = localStorage.getItem(REFRESH_TOKEN_KEY);
 
     if (refreshToken) {
       await api.post("/user/v1/logout/", {
-        refresh: refreshToken,
+        refresh_token: refreshToken,
       });
     }
   } catch (err) {
@@ -69,9 +54,6 @@ export const logoutMe = async () => {
   }
 };
 
-/* ===============================
-   FORGOT PASSWORD
-================================ */
 const forgotPassword = async (payload) => {
   try {
     const res = await api.post("/user/v1/forgot_password/", payload);
@@ -81,9 +63,6 @@ const forgotPassword = async (payload) => {
   }
 };
 
-/* ===============================
-   REGISTER – SEND EMAIL OTP
-================================ */
 const sendRegisterEmailOtp = async (payload) => {
   try {
     const res = await api.post("/commonapp/v1/send_otp/", payload);
@@ -93,9 +72,6 @@ const sendRegisterEmailOtp = async (payload) => {
   }
 };
 
-/* ===============================
-   VERIFY EMAIL OTP
-================================ */
 const verifyEmailOtp = async (payload) => {
   try {
     const res = await api.post("/commonapp/v1/verify_otp/", payload);
@@ -105,9 +81,6 @@ const verifyEmailOtp = async (payload) => {
   }
 };
 
-/* ===============================
-   SEND MOBILE OTP
-================================ */
 const sendMobileOtp = async (payload) => {
   try {
     const res = await api.post("/commonapp/v1/mobile_send_otp/", payload);
@@ -117,9 +90,6 @@ const sendMobileOtp = async (payload) => {
   }
 };
 
-/* ===============================
-   VERIFY MOBILE OTP
-================================ */
 const verifyMobileOtp = async (payload) => {
   try {
     const res = await api.post("/commonapp/v1/mobile_verify_otp/", payload);
@@ -129,9 +99,6 @@ const verifyMobileOtp = async (payload) => {
   }
 };
 
-/* ===============================
-   FINAL REGISTER
-================================ */
 const finalRegister = async (payload) => {
   try {
     const res = await api.post("/user/v1/user_register/", payload);
@@ -141,19 +108,12 @@ const finalRegister = async (payload) => {
   }
 };
 
-/* ===============================
-   TOKEN HELPERS
-================================ */
 const getAccessToken = () => localStorage.getItem(ACCESS_TOKEN_KEY);
 
-const setAccessToken = (token) =>
-  localStorage.setItem(ACCESS_TOKEN_KEY, token);
+const setAccessToken = (token) => localStorage.setItem(ACCESS_TOKEN_KEY, token);
 
 const getRefreshToken = () => localStorage.getItem(REFRESH_TOKEN_KEY);
 
-/* ===============================
-   USER HELPERS
-================================ */
 const getCurrentUser = () => {
   try {
     const user = localStorage.getItem(USER_KEY);
@@ -165,9 +125,6 @@ const getCurrentUser = () => {
 
 const isAuthenticated = () => !!getAccessToken();
 
-/* ===============================
-   EXPORT
-================================ */
 export default {
   // auth
   login,
