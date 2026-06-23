@@ -67,11 +67,11 @@ export function PostJob({ editJobId = null }) {
 
   // ================= HELPERS =================
   const normalizeWorkType = (mode) => {
-    if (!mode) return "Hybrid";
+    if (!mode) return "";
     if (mode.toLowerCase().includes("remote")) return "Remote";
     if (mode.toLowerCase().includes("site")) return "On-site";
     if (mode.toLowerCase().includes("hybrid")) return "Hybrid";
-    return "Hybrid";
+    return "";
   };
 
   const normalizeDate = (dateStr) => {
@@ -205,7 +205,7 @@ export function PostJob({ editJobId = null }) {
       setJobData({
         title: data.job_title || jdJobTitle.trim(),
         work_type: normalizeWorkType(data.work_mode),
-        employment_type: data.employment_type || "Full-Time Employee",
+        employment_type: data.employment_type || "",
         industry_type: normalizeIndustry(data.industry_type),
 
         must_have_skills: skills,
@@ -224,7 +224,7 @@ export function PostJob({ editJobId = null }) {
         job_description: data.job_description || "",
 
         experience_required: expReq,
-        number_of_openings: data.number_of_openings || 1,
+        number_of_openings: data.number_of_openings ?? "",
         application_deadline: normalizeDate(data.application_deadline),
       });
 
@@ -242,57 +242,52 @@ export function PostJob({ editJobId = null }) {
     }
   };
 
-  const handlePostJob = async () => {
+  const handlePostJob = async (validatedData) => {
     try {
-      if (!jobData.title || !jobData.description) {
-        toast.error("Title & Description required");
-        return;
-      }
-
       const payload = {
-        title: jobData.title,
-        description: jobData.description,
-        country: jobData.country,
-        state: jobData.state,
-        city: jobData.city,
+        title: validatedData.title,
+        description: validatedData.description,
+        country: validatedData.country,
+        state: validatedData.state,
+        city: validatedData.city,
 
         work_mode:
-          jobData.work_type === "Hybrid"
+          validatedData.work_type === "Hybrid"
             ? "hybrid"
-            : jobData.work_type === "Remote"
+            : validatedData.work_type === "Remote"
               ? "remote"
               : "on_site",
 
         employment_type:
-          jobData.employment_type === "Full-Time Employee"
+          validatedData.employment_type === "Full-Time Employee"
             ? "full_time"
             : "part_time",
 
         industry_type:
-          jobData.industry_type === "other"
-            ? customIndustry || "other"
-            : jobData.industry_type,
+          validatedData.industry_type === "other"
+            ? validatedData.customIndustry || "other"
+            : validatedData.industry_type,
 
-        salary_range: jobData.salary_range,
-        experience_required: jobData.experience_required,
-        education_required: jobData.education,
-        specialization: jobData.specialization,
-        number_of_openings: Number(jobData.number_of_openings) || 1,
-        deadline: jobData.application_deadline || null,
+        salary_range: validatedData.salary_range,
+        experience_required: validatedData.experience_required,
+        education_required: validatedData.education,
+        specialization: validatedData.specialization,
+        number_of_openings: Number(validatedData.number_of_openings) || 1,
+        deadline: validatedData.application_deadline || null,
 
-        skills_required: jobData.must_have_skills
-          ? jobData.must_have_skills.split(",").map((s) => s.trim())
+        skills_required: validatedData.must_have_skills
+          ? validatedData.must_have_skills.split(",").map((s) => s.trim())
           : [],
 
-        responsibilities: jobData.description
-          ? jobData.description.split("\n")
+        responsibilities: validatedData.description
+          ? validatedData.description.split("\n")
           : [],
 
         is_active: true,
       };
 
       const formData = new FormData();
-      formData.append("title", jobData.title);
+      formData.append("title", validatedData.title);
       formData.append("file", JSON.stringify(payload));
 
       // Attach JD File
@@ -303,8 +298,6 @@ export function PostJob({ editJobId = null }) {
       console.log("FINAL PAYLOAD FormData constructed:", payload);
 
       if (editJobId) {
-        // We leave edit job for later if needed, but using createJobMutation for posting
-        // If editJobId is passed, maybe it should be a useUpdateJob hook, but not specified in task
         toast.info("Edit Job not yet migrated to new hook");
       } else {
         await createJobMutation.mutateAsync(formData);
@@ -326,7 +319,6 @@ export function PostJob({ editJobId = null }) {
       const resData = error.response?.data;
 
       if (resData?.errors) {
-        // Extract first error message from DRF errors object
         const firstKey = Object.keys(resData.errors)[0];
         if (firstKey) {
           const firstError = resData.errors[firstKey];
@@ -364,10 +356,7 @@ export function PostJob({ editJobId = null }) {
       {showJdPopup && (
         <JdFormPopup
           jobData={jobData}
-          handleChange={handleChange}
           industryOptions={industryOptions}
-          customIndustry={customIndustry}
-          setCustomIndustry={setCustomIndustry}
           setShowJdPopup={setShowJdPopup}
           handlePostJob={handlePostJob}
           isPending={createJobMutation.isPending}
