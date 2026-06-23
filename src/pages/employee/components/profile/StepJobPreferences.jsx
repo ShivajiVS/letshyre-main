@@ -96,6 +96,12 @@ function StepJobPreferences({ onNext, onBack }) {
     setValue(type, file);
   };
 
+  const handleViewFile = (file) => {
+    if (!file) return;
+    const url = URL.createObjectURL(file);
+    window.open(url, "_blank");
+  };
+
   const handleNextClick = async () => {
     // Strict validation: exact match or fail
     const trimmedSearch = industrySearch?.trim() || "";
@@ -215,22 +221,37 @@ function StepJobPreferences({ onNext, onBack }) {
           font-size: 14px;
           border: 1px solid #e2e8f0;
           box-shadow: var(--pc-shadow-soft);
-          max-width: 250px;
+          width: 100%;
         }
         .doc-chip span {
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
+          flex: 1;
         }
-        .doc-chip button {
+        .doc-chip-actions {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+          margin-left: 16px;
+        }
+        .doc-btn {
           background: none;
           border: none;
-          color: #94a3b8;
           cursor: pointer;
           font-size: 16px;
-          margin-left: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: color 0.2s;
+          padding: 0;
         }
-        .doc-chip button:hover { color: var(--pc-error); }
+        .doc-btn-view { color: #3b82f6; }
+        .doc-btn-view:hover { color: #2563eb; }
+        .doc-btn-replace { color: #64748b; }
+        .doc-btn-replace:hover { color: #475569; }
+        .doc-btn-delete { color: #94a3b8; }
+        .doc-btn-delete:hover { color: var(--pc-error); }
         
         .doc-upload-item {
           display: flex;
@@ -263,10 +284,6 @@ function StepJobPreferences({ onNext, onBack }) {
           }
           .doc-action, .upload-btn-job, .doc-chip {
             width: 100%;
-          }
-          .doc-chip {
-            max-width: none;
-            justify-content: space-between;
           }
           .notice-proof-grid {
             grid-template-columns: 1fr;
@@ -510,12 +527,32 @@ function StepJobPreferences({ onNext, onBack }) {
                     <i className="bi bi-file-earmark-check text-green-600 mr-2"></i>{" "}
                     {resignationLetter.name}
                   </span>
-                  <button
-                    type="button"
-                    onClick={() => setValue("resignation_letter", null)}
-                  >
-                    ✕
-                  </button>
+                  <div className="doc-chip-actions">
+                    <button
+                      type="button"
+                      className="doc-btn doc-btn-view"
+                      title="View File"
+                      onClick={() => handleViewFile(resignationLetter)}
+                    >
+                      <i className="bi bi-eye"></i>
+                    </button>
+                    <button
+                      type="button"
+                      className="doc-btn doc-btn-replace"
+                      title="Replace File"
+                      onClick={() => resignationRef.current.click()}
+                    >
+                      <i className="bi bi-arrow-repeat"></i>
+                    </button>
+                    <button
+                      type="button"
+                      className="doc-btn doc-btn-delete"
+                      title="Remove File"
+                      onClick={() => setValue("resignation_letter", null)}
+                    >
+                      <i className="bi bi-trash"></i>
+                    </button>
+                  </div>
                 </div>
               ) : (
                 <button
@@ -552,12 +589,32 @@ function StepJobPreferences({ onNext, onBack }) {
                     <i className="bi bi-file-earmark-check text-green-600 mr-2"></i>{" "}
                     {experienceLetter.name}
                   </span>
-                  <button
-                    type="button"
-                    onClick={() => setValue("experience_letter", null)}
-                  >
-                    ✕
-                  </button>
+                  <div className="doc-chip-actions">
+                    <button
+                      type="button"
+                      className="doc-btn doc-btn-view"
+                      title="View File"
+                      onClick={() => handleViewFile(experienceLetter)}
+                    >
+                      <i className="bi bi-eye"></i>
+                    </button>
+                    <button
+                      type="button"
+                      className="doc-btn doc-btn-replace"
+                      title="Replace File"
+                      onClick={() => experienceRef.current.click()}
+                    >
+                      <i className="bi bi-arrow-repeat"></i>
+                    </button>
+                    <button
+                      type="button"
+                      className="doc-btn doc-btn-delete"
+                      title="Remove File"
+                      onClick={() => setValue("experience_letter", null)}
+                    >
+                      <i className="bi bi-trash"></i>
+                    </button>
+                  </div>
                 </div>
               ) : (
                 <button
@@ -679,12 +736,32 @@ function StepJobPreferences({ onNext, onBack }) {
                       <i className="bi bi-file-earmark-check text-green-600 mr-2"></i>{" "}
                       {noticePeriodProof.name}
                     </span>
-                    <button
-                      type="button"
-                      onClick={() => setValue("notice_period_proof", null)}
-                    >
-                      ✕
-                    </button>
+                    <div className="doc-chip-actions">
+                      <button
+                        type="button"
+                        className="doc-btn doc-btn-view"
+                        title="View File"
+                        onClick={() => handleViewFile(noticePeriodProof)}
+                      >
+                        <i className="bi bi-eye"></i>
+                      </button>
+                      <button
+                        type="button"
+                        className="doc-btn doc-btn-replace"
+                        title="Replace File"
+                        onClick={() => noticeProofRef.current.click()}
+                      >
+                        <i className="bi bi-arrow-repeat"></i>
+                      </button>
+                      <button
+                        type="button"
+                        className="doc-btn doc-btn-delete"
+                        title="Remove File"
+                        onClick={() => setValue("notice_period_proof", null)}
+                      >
+                        <i className="bi bi-trash"></i>
+                      </button>
+                    </div>
                   </div>
                 ) : (
                   <button
@@ -726,12 +803,32 @@ function StepJobPreferences({ onNext, onBack }) {
                     <i className="bi bi-file-earmark-check text-green-600 mr-2"></i>{" "}
                     {presentOffer.name}
                   </span>
-                  <button
-                    type="button"
-                    onClick={() => setValue("present_offer", null)}
-                  >
-                    ✕
-                  </button>
+                  <div className="doc-chip-actions">
+                    <button
+                      type="button"
+                      className="doc-btn doc-btn-view"
+                      title="View File"
+                      onClick={() => handleViewFile(presentOffer)}
+                    >
+                      <i className="bi bi-eye"></i>
+                    </button>
+                    <button
+                      type="button"
+                      className="doc-btn doc-btn-replace"
+                      title="Replace File"
+                      onClick={() => offerRef.current.click()}
+                    >
+                      <i className="bi bi-arrow-repeat"></i>
+                    </button>
+                    <button
+                      type="button"
+                      className="doc-btn doc-btn-delete"
+                      title="Remove File"
+                      onClick={() => setValue("present_offer", null)}
+                    >
+                      <i className="bi bi-trash"></i>
+                    </button>
+                  </div>
                 </div>
               ) : (
                 <button
