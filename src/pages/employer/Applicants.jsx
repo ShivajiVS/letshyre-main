@@ -101,13 +101,6 @@ export function Applicants() {
                 <span className={`applicant-status ${(app.status || "applied").toLowerCase()}`}>
                   {app.status || "Applied"}
                 </span>
-
-                <button 
-                  className="btn-view-profile"
-                  onClick={() => navigate(`/employer/unlocked-candidates/${app.candidate_id}`)}
-                >
-                  View Profile
-                </button>
               </div>
             ))}
           </div>
