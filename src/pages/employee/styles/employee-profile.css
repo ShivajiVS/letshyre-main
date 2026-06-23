@@ -288,6 +288,7 @@
 }
 
 .pp-heading {
+  font-family: "Inter", "Roboto", sans-serif;
   font-size: 18px;
   font-weight: 600;
   margin-bottom: 10px;
@@ -351,8 +352,6 @@
   z-index: 1;
 }
 
-
-
 /* h5 label inside timeline and edu blocks */
 .pp-time-item h5,
 .pp-edu h5 {
@@ -413,7 +412,7 @@
   z-index: 1;
   background: linear-gradient(135deg, #b2cdf6 0%, #bbd4f9 100%);
   border-radius: 20px;
-  padding: 35px 20px 25px;
+  padding: 25px 20px 25px;
   overflow: visible;
 }
 
@@ -431,28 +430,28 @@
 
 /* TEXT ALIGNMENT FIXES HERE */
 .gauge-text-block {
-  position: absolute;
-  top: 72%; /* Pushed further down into the arc space */
-  left: 50%;
-  transform: translate(-50%, -50%);
   text-align: center;
   width: 100%;
+  margin-top: -55px; /* Pull text up closer to the arch */
 }
 
 .gauge-pct {
-  font-size: 50px; /* Slightly scaled down to fit cleanly */
+  font-family: "Inter", "Roboto", sans-serif;
+  font-size: 38px;
   font-weight: 800;
-  color: #5b8df6;
+  color: #1e3a8a; /* High contrast dark blue */
   line-height: 1;
   letter-spacing: -1px;
   margin-bottom: 6px;
 }
 
 .gauge-sub {
-  font-size: 13px; /* Slightly scaled down */
+  font-family: "Inter", "Roboto", sans-serif;
+  font-size: 14px;
   color: #ffffff;
   font-weight: 500;
   line-height: 1.35;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .gauge-details-btn-container {
@@ -651,12 +650,7 @@
 }
 
 .sk-bone {
-  background: linear-gradient(
-    90deg,
-    #e8eef7 25%,
-    #d5e0f0 50%,
-    #e8eef7 75%
-  );
+  background: linear-gradient(90deg, #e8eef7 25%, #d5e0f0 50%, #e8eef7 75%);
   background-size: 600px 100%;
   animation: sk-shimmer 1.4s ease-in-out infinite;
   display: block;
@@ -784,4 +778,3 @@
   flex-direction: column;
   gap: 8px;
 }
-

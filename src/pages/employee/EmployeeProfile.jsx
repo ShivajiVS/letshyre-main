@@ -76,7 +76,7 @@ function GaugeSVG({ score }) {
 
   return (
     <svg
-      viewBox="0 0 240 140"
+      viewBox="0 20 240 120"
       className="gauge-svg"
       preserveAspectRatio="xMidYMid meet"
       overflow="visible"
@@ -152,7 +152,10 @@ function ProjectItem({ title, description, technologies }) {
       <h5>{title || "Untitled Project"}</h5>
       {description && <p className="pp-project-desc">{description}</p>}
       {Array.isArray(technologies) && technologies.length > 0 && (
-        <p className="pp-grey-text" style={{ fontSize: "0.85rem", marginTop: "12px" }}>
+        <p
+          className="pp-grey-text"
+          style={{ fontSize: "0.85rem", marginTop: "12px" }}
+        >
           {technologies.join(", ")}
         </p>
       )}
@@ -335,7 +338,7 @@ export function EmployeeProfile() {
             />
             <div className="pp-avatar-overlay" />
             <div className="pp-avatar-info">
-              <h3 className="pp-avatar-name">{profile.name || "—"}</h3>
+              {/* <h3 className="pp-avatar-name">{profile.name || "—"}</h3> */}
               {/* <p className="pp-avatar-role">
                 {profile.role || profile.preferred_industry || "—"}
               </p> */}
@@ -403,7 +406,7 @@ export function EmployeeProfile() {
 
             {/* Column 3 — Status + Interview Progress */}
             <div className="grid-column right-column">
-              <div className="pp-item">
+              {/* <div className="pp-item">
                 <i className="bi bi-award" />
                 <div className="score-container">
                   <p className="pp-grey-text">Profile Completion</p>
@@ -421,8 +424,8 @@ export function EmployeeProfile() {
                     </span>
                   </div>
                 </div>
-              </div>
-              <div className="pp-item">
+              </div> */}
+              {/* <div className="pp-item">
                 <i
                   className={`bi ${profile.is_verified ? "bi-patch-check-fill" : "bi-patch-check"}`}
                   style={{ color: profile.is_verified ? "#22c55e" : undefined }}
@@ -430,7 +433,7 @@ export function EmployeeProfile() {
                 <p className="pp-grey-text">
                   {profile.is_verified ? "Verified" : "Not Verified"}
                 </p>
-              </div>
+              </div> */}
               <div className="pp-item">
                 <i className="bi bi-camera-video" />
                 <p className="pp-grey-text">
