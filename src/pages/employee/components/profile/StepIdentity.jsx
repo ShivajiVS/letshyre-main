@@ -174,6 +174,7 @@ function StepIdentity({ onNext }) {
           <input
             type="date"
             className="pc-input"
+            max={new Date().toISOString().split("T")[0]}
             {...register("dob", {
               required: "Date of Birth is required",
               validate: (val) => validateAge(val) || "Must be at least 18 years old",

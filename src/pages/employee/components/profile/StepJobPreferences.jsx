@@ -312,6 +312,7 @@ function StepJobPreferences({ onNext, onBack }) {
           <input
             type="date"
             className="pc-input"
+            max="9999-12-31"
             {...register("last_day_of_working", {
               required: "Last working day is required",
             })}
