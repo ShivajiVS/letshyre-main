@@ -621,21 +621,34 @@ body.react-joyride__overlay-open {
   overflow: hidden;
 }
 
-.react-joyride__spotlight {
-  background: transparent !important;
-  pointer-events: none !important;
-  border-radius: 16px !important;
+/* react-joyride v3 renders its spotlight as a full-viewport <svg> mask, so a
+   box-shadow here paints at the screen edges, not around the target. The blue
+   glow ring is drawn by .tour-spotlight-ring (a position:fixed element that
+   tracks the target rect) instead. */
+
+/* Our own glow ring — fixed so it escapes .emp-sidebar / .emp-main overflow
+   clipping, transparent center so the (already-lit) target shows through. */
+.tour-spotlight-ring {
+  position: fixed;
+  border-radius: 12px;
+  pointer-events: none;
+  z-index: 100000; /* above the Joyride overlay (options.zIndex = 99999) */
   box-shadow:
     0 0 0 4px rgba(79, 140, 255, 0.9),
     0 0 25px rgba(79, 140, 255, 0.6),
     0 0 50px rgba(79, 140, 255, 0.4);
-  transition: all 0.3s ease;
+  transition:
+    top 0.3s ease,
+    left 0.3s ease,
+    width 0.3s ease,
+    height 0.3s ease;
 }
 
-.react-joyride__overlay {
-  background: rgba(15, 23, 42, 0.5) !important;
-  backdrop-filter: blur(2px);
-}
+/* Do NOT set background/backdrop-filter here. In v3 the dimming is painted by
+   the child <svg> mask, which leaves the spotlight hole transparent. A
+   background or backdrop-filter on this full-viewport div would tint and blur
+   the whole screen — including the highlighted target. Dim level is controlled
+   by JOYRIDE_STYLES.options.overlayColor instead. */
 
 .tour-card {
   display: flex;
@@ -751,6 +764,12 @@ body.react-joyride__overlay-open {
   cursor: pointer;
   font-weight: 500;
   transition: color 0.2s ease;
+  /* rendered as a <button> for a11y — reset native chrome */
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: inherit;
+  line-height: 1;
 }
 
 .tour-skip:hover {

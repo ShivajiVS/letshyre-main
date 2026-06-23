@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
-import { Joyride } from "react-joyride";
-import { useNavigate, NavLink, Outlet, useLocation } from "react-router";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { Joyride, STATUS, EVENTS, ACTIONS, LIFECYCLE } from "react-joyride";
+import { useNavigate, NavLink, Link, Outlet, useLocation } from "react-router";
 
 import {
   useEmployerProfile,
@@ -74,59 +74,59 @@ const TOUR_STEPS = [
     title: "Your Hiring Hub",
     content:
       "Get a bird's-eye view of your recruitment metrics and quick shortcuts.",
-    disableBeacon: true,
+    skipBeacon: true,
   },
   {
     target: "#tour-postjob",
     title: "Hire in Minutes",
     content:
       "Upload a JD. Our AI will handle the data entry for you instantly.",
-    disableBeacon: true,
+    skipBeacon: true,
   },
   {
     target: "#tour-jobs",
     title: "View Jobs",
     content: "Manage all job postings here.",
-    disableBeacon: true,
+    skipBeacon: true,
   },
   {
     target: "#tour-candidates",
     title: "Candidates",
     content: "View all candidates here.",
-    disableBeacon: true,
+    skipBeacon: true,
   },
   {
     target: "#tour-team",
     title: "Collaborative Hiring",
     content: "Invite your team members to review candidates.",
-    disableBeacon: true,
+    skipBeacon: true,
   },
   {
     target: "#tour-subscription",
     title: "Billing & Subscriptions",
     content:
-      "cCoose a plan that fits your growth and manages your billing history in one secure place",
-    disableBeacon: true,
+      "Choose a plan that fits your growth and manage your billing history in one secure place.",
+    skipBeacon: true,
   },
   {
     target: "#tour-credits",
     title: "Balance Credits",
     content:
-      "Choose a plan that fits your growth and manages your billing history in one secure place",
-    disableBeacon: true,
+      "Track your remaining credits here and top up anytime to keep unlocking candidates.",
+    skipBeacon: true,
   },
   {
     target: "#tour-add-member",
     title: "Add Team Members",
     content:
       "Bring in more recruiters and managers to speed up your hiring decisions.",
-    disableBeacon: true,
+    skipBeacon: true,
   },
   {
     target: "#tour-profile",
     title: "Manage Your Profile",
     content: "Manage your account settings.",
-    disableBeacon: true,
+    skipBeacon: true,
   },
 ];
 
@@ -167,6 +167,152 @@ const ls = {
   set: (key, val) => localStorage.setItem(key, val),
 };
 
+/* Tour is desktop-only. Must match the `.tour-card` hide breakpoint
+   (@media max-width: 992px) in employer-dashboard-layout.css so the tour
+   never runs while its card is hidden by CSS — the old 900-vs-992 mismatch
+   left a dead-zone (901–992px) where the overlay showed but the card did not. */
+const TOUR_HIDE_MAX_WIDTH = 992;
+
+/* Versioned so adding/changing steps re-shows the tour once for returning
+   users. Bump the suffix whenever TOUR_STEPS changes meaningfully. */
+const TOUR_STORAGE_KEY = "letsHyreTour:v2";
+
+/* Matches Joyride's `spotlightPadding` so our glow ring lines up with the
+   library's cutout hole. */
+const TOUR_SPOTLIGHT_PAD = 10;
+
+/* Stable, module-level tooltip so Joyride doesn't remount it every render.
+   Uses Joyride's `size` (total steps) so it stays correct even when the
+   step list is filtered to the targets actually present in the DOM. */
+function TourTooltip({
+  step,
+  index,
+  size,
+  backProps,
+  primaryProps,
+  skipProps,
+  isLastStep,
+}) {
+  return (
+    <div className="tour-card">
+      <div className="tour-card-left">
+        <div className="tour-step">
+          {index + 1}/{size}
+        </div>
+        <h4 className="tour-title">{step.title}</h4>
+        <p className="tour-desc">{step.content}</p>
+        <div className="tour-actions">
+          {index > 0 && (
+            <button {...backProps} className="tour-back">
+              Back
+            </button>
+          )}
+          <button {...primaryProps} className="tour-next">
+            {isLastStep ? "Finish" : "Next"}
+          </button>
+        </div>
+      </div>
+      <div className="tour-card-right">
+        <img src={tour} alt="tour" />
+      </div>
+      <button {...skipProps} className="tour-skip">
+        Skip
+      </button>
+    </div>
+  );
+}
+
+/* Owns all product-tour state: auto-start gating, persistence, target
+   filtering and the Joyride callback. `ready` should be true once the data
+   driving the step targets has loaded. */
+function useTour({ ready }) {
+  const [runTour, setRunTour] = useState(false);
+  const [steps, setSteps] = useState(TOUR_STEPS);
+  /* Bounding rect of the current step's target, used to draw our own glow
+     ring. v3 renders its spotlight as a full-viewport <svg> mask, so a
+     box-shadow on .react-joyride__spotlight can't ring the element — and a
+     ring on the element itself would be clipped by .emp-sidebar/.emp-main
+     overflow. A position:fixed ring tracking this rect avoids both. */
+  const [highlight, setHighlight] = useState(null);
+  const activeTargetRef = useRef(null);
+
+  const moveHighlightTo = useCallback((selector) => {
+    activeTargetRef.current = selector;
+    const el = selector ? document.querySelector(selector) : null;
+    if (!el) {
+      setHighlight(null);
+      return;
+    }
+    const r = el.getBoundingClientRect();
+    setHighlight({
+      top: r.top - TOUR_SPOTLIGHT_PAD,
+      left: r.left - TOUR_SPOTLIGHT_PAD,
+      width: r.width + TOUR_SPOTLIGHT_PAD * 2,
+      height: r.height + TOUR_SPOTLIGHT_PAD * 2,
+    });
+  }, []);
+
+  const endTour = useCallback(() => {
+    activeTargetRef.current = null;
+    setHighlight(null);
+    setRunTour(false);
+    ls.set(TOUR_STORAGE_KEY, "true");
+  }, []);
+
+  /* Filter to steps whose target is actually in the DOM so a missing/hidden
+     element can never leave the overlay stuck on a blank spotlight. */
+  const startTour = useCallback(() => {
+    const available = TOUR_STEPS.filter((s) =>
+      document.querySelector(s.target),
+    );
+    if (available.length === 0) return;
+    setSteps(available);
+    setRunTour(true);
+  }, []);
+
+  /* Auto-start once: desktop only, not previously seen, data settled.
+     Persist "seen" the moment it auto-opens (not only on finish) so a refresh
+     mid-tour doesn't replay it. The `?` button still replays on demand. */
+  useEffect(() => {
+    const isMobile = window.innerWidth <= TOUR_HIDE_MAX_WIDTH;
+    const seen = ls.get(TOUR_STORAGE_KEY) === "true";
+
+    if (isMobile || seen || !ready) return;
+
+    const timer = setTimeout(() => {
+      ls.set(TOUR_STORAGE_KEY, "true");
+      startTour();
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [ready, startTour]);
+
+  /* Keep the ring aligned with its target if the viewport reflows mid-step. */
+  useEffect(() => {
+    if (!runTour) return;
+    const onReflow = () => moveHighlightTo(activeTargetRef.current);
+    window.addEventListener("resize", onReflow);
+    return () => window.removeEventListener("resize", onReflow);
+  }, [runTour, moveHighlightTo]);
+
+  const handleCallback = useCallback(
+    ({ status, action, type, lifecycle, step }) => {
+      if (lifecycle === LIFECYCLE.TOOLTIP && step?.target) {
+        moveHighlightTo(step.target);
+      }
+
+      const finished =
+        status === STATUS.FINISHED || status === STATUS.SKIPPED;
+      const closed = action === ACTIONS.CLOSE;
+      const targetMissing = type === EVENTS.TARGET_NOT_FOUND;
+
+      if (finished || closed || targetMissing) endTour();
+    },
+    [moveHighlightTo, endTour],
+  );
+
+  return { runTour, steps, highlight, startTour, handleCallback };
+}
+
 export function EmployerDashboardLayout() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -184,9 +330,6 @@ export function EmployerDashboardLayout() {
   const [inviteError, setInviteError] = useState("");
   const [inviteSuccess, setInviteSuccess] = useState("");
 
-  /* Tour auto-starts if first tour never done AND not mobile */
-  const [runTour, setRunTour] = useState(false);
-
   // ── React Query Hooks ──
   const { data: profileData, isLoading: profileLoading } = useEmployerProfile();
   const { data: creditsData, isLoading: creditsLoading } = useEmployerCredits();
@@ -195,6 +338,19 @@ export function EmployerDashboardLayout() {
 
   const credits = creditsData?.available_credits || 0;
   const teamCount = teamData?.count || 0;
+
+  /* Product tour — auto-starts once data has settled so every step target
+     (#tour-credits, #tour-add-member, …) is in the DOM before Joyride looks
+     for it. `startTour` is also exposed for the manual replay trigger. */
+  const {
+    runTour,
+    steps: tourSteps,
+    highlight: tourHighlight,
+    startTour,
+    handleCallback,
+  } = useTour({
+    ready: !profileLoading && !creditsLoading && !teamLoading,
+  });
 
   const isSubPage = SUB_ITEMS.some(({ to }) => location.pathname === to);
 
@@ -215,16 +371,6 @@ export function EmployerDashboardLayout() {
       onSubPage ? "subscription" : normalizePath(location.pathname),
     );
   }, [location.pathname]);
-
-  /* ── on mount: popup + conditionally start tour ── */
-  useEffect(() => {
-    const isMobile = window.innerWidth <= 900;
-    const firstTourDone = ls.get("letsHyreTourDone") === "true";
-
-    if (!isMobile && !firstTourDone) {
-      setTimeout(() => setRunTour(true), 500);
-    }
-  }, []);
 
   /* ── show popup conditionally based on team count ── */
   useEffect(() => {
@@ -329,88 +475,32 @@ export function EmployerDashboardLayout() {
     }
   };
 
-  const handleJoyrideCallback = (data) => {
-    const { status, action, type } = data;
-
-    // Stop tour and permanently mark it as done
-    if (
-      status === "finished" ||
-      status === "skipped" ||
-      action === "close" ||
-      type === "tour:end"
-    ) {
-      setRunTour(false);
-      ls.set("letsHyreTourDone", "true");
-    }
-  };
-
   return (
     <div className="emp-dashboard">
       <Joyride
-        steps={TOUR_STEPS}
+        steps={tourSteps}
         run={runTour}
         continuous
         showSkipButton
         scrollToFirstStep
-        disableBeacon
-        spotlightClicks
-        callback={handleJoyrideCallback}
+        callback={handleCallback}
         styles={JOYRIDE_STYLES}
-        tooltipComponent={({
-          step,
-          index,
-          backProps,
-          primaryProps,
-          skipProps,
-          isLastStep,
-        }) => (
-          <div className="tour-card">
-            <div className="tour-card-left">
-              <div className="tour-step">
-                {index + 1}/{TOUR_STEPS.length}
-              </div>
-              <h4 className="tour-title">{step.title}</h4>
-              <p className="tour-desc">{step.content}</p>
-              <div className="tour-actions">
-                <button {...backProps} className="tour-back">
-                  Back
-                </button>
-                <button
-                  {...primaryProps}
-                  className="tour-next"
-                  onClick={(e) => {
-                    if (primaryProps.onClick) primaryProps.onClick(e);
-                    if (isLastStep) {
-                      handleJoyrideCallback({
-                        status: "finished",
-                        type: "tour:end",
-                      });
-                    }
-                  }}
-                >
-                  {isLastStep ? "Finish" : "Next"}
-                </button>
-              </div>
-            </div>
-            <div className="tour-card-right">
-              <img src={tour} alt="tour" />
-            </div>
-            <span
-              {...skipProps}
-              className="tour-skip"
-              onClick={(e) => {
-                if (skipProps.onClick) skipProps.onClick(e);
-                handleJoyrideCallback({
-                  status: "skipped",
-                  type: "step:after",
-                });
-              }}
-            >
-              Skip
-            </span>
-          </div>
-        )}
+        tooltipComponent={TourTooltip}
       />
+
+      {/* Glow ring around the active step's target — v3's own spotlight is an
+          SVG mask that can't carry our box-shadow, so we draw it ourselves. */}
+      {runTour && tourHighlight && (
+        <div
+          className="tour-spotlight-ring"
+          style={{
+            top: tourHighlight.top,
+            left: tourHighlight.left,
+            width: tourHighlight.width,
+            height: tourHighlight.height,
+          }}
+        />
+      )}
 
       {/* ── SIDEBAR ── */}
       <aside className={`emp-sidebar ${mobileMenuOpen ? "open" : ""}`}>
@@ -529,8 +619,14 @@ export function EmployerDashboardLayout() {
                 </>
               )}
             </button>
-            <div className="emp-top-icons">
-              <i className="bi bi-bell" />
+            <div
+              className="emp-top-icons"
+              role="button"
+              tabIndex={0}
+              title="Replay product tour"
+              onClick={startTour}
+            >
+              <i className="bi bi-question-circle" />
             </div>
             {/* <div className="emp-user-name">
               {profileLoading ? (
