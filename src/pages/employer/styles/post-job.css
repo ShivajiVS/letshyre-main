@@ -42,54 +42,42 @@
   margin-bottom: 10px;
 }
 
-/* NEW UI for active upload state */
-.jd-upload-active {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  animation: fadeIn 0.3s ease-in-out;
+/* Conditional styling when file is uploaded to remove dashed border */
+.emp-post-job-upload.jd-upload-step-active {
+  border: none;
+  background-color: transparent;
+  padding: 0;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(5px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.jd-upload-icon-wrapper {
-  font-size: 40px;
-  color: #3b6df0;
-  margin-bottom: -10px;
-}
-
-/* Uploaded File Highlight Card */
-.jd-file-highlight {
-  display: flex;
-  flex-direction: column;
+/* --- Unified Premium Card Overhaul --- */
+.jd-unified-card {
   background-color: #ffffff;
   border: 1px solid #e2e8f0;
-  padding: 16px;
-  border-radius: 16px;
-  margin-bottom: 28px;
+  border-radius: 20px;
   width: 100%;
-  max-width: 420px;
-  box-shadow:
-    0 4px 20px rgba(0, 0, 0, 0.04),
-    0 1px 3px rgba(0, 0, 0, 0.02);
-  transition: all 0.3s ease;
+  max-width: 500px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05), 0 4px 6px rgba(0,0,0,0.03);
+  display: flex;
+  flex-direction: column;
+  animation: slideUpFade 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  overflow: hidden;
+  margin: 0 auto;
 }
 
-.jd-file-highlight:hover {
-  border-color: #cbd5e1;
-  box-shadow:
-    0 6px 24px rgba(0, 0, 0, 0.06),
-    0 2px 4px rgba(0, 0, 0, 0.02);
+@keyframes slideUpFade {
+  0% {
+    opacity: 0;
+    transform: translateY(15px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.jd-unified-header {
+  padding: 28px;
+  background-color: #f8fafc;
 }
 
 .jd-file-header {
@@ -120,7 +108,6 @@
   flex-direction: column;
   overflow: hidden;
   text-align: left;
-  margin-right: 16px;
 }
 
 .jd-file-name {
@@ -139,6 +126,9 @@
   font-size: 13px;
   font-weight: 500;
   color: #10b981; /* Success Green */
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .jd-file-actions {
@@ -146,7 +136,7 @@
   gap: 8px;
   width: 100%;
   margin-top: 16px;
-  border-top: 1px solid #f1f5f9;
+  border-top: 1px solid #e2e8f0;
   padding-top: 16px;
 }
 
@@ -183,10 +173,19 @@
   cursor: not-allowed;
 }
 
+.jd-unified-divider {
+  border: none;
+  border-top: 1px solid #e2e8f0;
+  margin: 0;
+}
+
+.jd-unified-body {
+  padding: 28px;
+  background-color: #ffffff;
+}
+
 .jd-title-input-box {
   width: 100%;
-  max-width: 380px;
-  margin-bottom: 24px;
   text-align: left;
 }
 
@@ -215,13 +214,12 @@
 
 .jd-title-input:focus {
   border-color: var(--secondary-sky-blue);
-  box-shadow: 0 0 0 4px rgba(59, 109, 240, 0.1);
+  box-shadow: 0 0 0 4px rgba(59, 109, 240, 0.12);
 }
 
-.jd-upload-actions {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
+.jd-unified-footer {
+  padding: 0 28px 28px 28px;
+  background: #ffffff;
 }
 
 /* Sleek Buttons */
@@ -421,4 +419,64 @@
 .jd-success-popup .emp-btn-primary {
   position: relative;
   z-index: 1;
+}
+
+/* Premium Gradient Analyze Button */
+.jd-analyze-btn {
+  background: linear-gradient(135deg, var(--secondary-sky-blue), #2563eb);
+  width: 100%;
+  max-width: 100%; /* Overrides the generic 380px max-width to fill the card */
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
+  transform: translateY(0);
+}
+
+.jd-analyze-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(37, 99, 235, 0.35);
+}
+
+.jd-analyze-btn i {
+  font-size: 16px;
+}
+
+/* AI Shimmering Loading State */
+.jd-analyze-btn.analyzing-active {
+  background: linear-gradient(90deg, #2563eb, #60a5fa, #3b82f6, #2563eb);
+  background-size: 300% 100%;
+  animation: ai-shimmer-bg 2s linear infinite;
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+  cursor: wait;
+}
+
+@keyframes ai-shimmer-bg {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+.jd-loading-shimmer-text {
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  animation: pulse-text 1.5s ease-in-out infinite;
+  display: flex;
+  align-items: center;
+}
+
+@keyframes pulse-text {
+  0% { opacity: 0.8; }
+  50% { opacity: 1; }
+  100% { opacity: 0.8; }
+}
+
+.jd-spin-icon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }

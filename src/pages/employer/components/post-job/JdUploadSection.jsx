@@ -20,17 +20,20 @@ export function JdUploadSection({
   };
 
   return (
-    <div className="emp-post-job-upload">
+    <div className={`emp-post-job-upload ${fileName ? 'jd-upload-step-active' : ''}`}>
       {fileName ? (
-        <div className="jd-upload-active">
-          <div className="jd-file-highlight">
+          <div className="jd-unified-card">
+          {/* Top Section: File Info & Actions */}
+          <div className="jd-unified-header">
             <div className="jd-file-header">
               <div className="jd-file-icon-box">
                 <i className="bi bi-file-earmark-text-fill jd-file-icon"></i>
               </div>
               <div className="jd-file-details">
                 <span className="jd-file-name" title={fileName}>{fileName}</span>
-                <span className="jd-file-status">Ready for analysis</span>
+                <span className="jd-file-status">
+                  <i className="bi bi-check-circle-fill"></i> Ready for analysis
+                </span>
               </div>
             </div>
             <div className="jd-file-actions">
@@ -51,28 +54,39 @@ export function JdUploadSection({
               </button>
             </div>
           </div>
-          
-          <div className="jd-title-input-box">
-            <label>What is the Job Title?</label>
-            <input 
-              type="text" 
-              placeholder="e.g. Full Stack Engineer"
-              value={jdJobTitle}
-              onChange={(e) => setJdJobTitle(e.target.value)}
-              className="jd-title-input"
-            />
+
+          <hr className="jd-unified-divider" />
+
+          {/* Middle Section: Job Title Input */}
+          <div className="jd-unified-body">
+            <div className="jd-title-input-box">
+              <label>Confirm Job Title</label>
+              <input 
+                type="text" 
+                placeholder="e.g. Full Stack Engineer"
+                value={jdJobTitle}
+                onChange={(e) => setJdJobTitle(e.target.value)}
+                className="jd-title-input"
+              />
+            </div>
           </div>
 
-          <div className="jd-upload-actions">
-            {/* Replace button was moved inline with the file name */}
-            <button className="emp-btn-primary" onClick={handleJdUpload} disabled={isPending || !jdJobTitle.trim()}>
+          {/* Bottom Section: Primary Action */}
+          <div className="jd-unified-footer">
+            <button 
+              className={`emp-btn-primary jd-analyze-btn ${isPending ? 'analyzing-active' : ''}`} 
+              onClick={handleJdUpload} 
+              disabled={isPending || !jdJobTitle.trim()}
+            >
               {isPending ? (
-                <>
-                  <span className="jd-spinner"></span>
-                  Analyzing...
-                </>
+                <span className="jd-loading-shimmer-text">
+                  <i className="bi bi-arrow-repeat jd-spin-icon" style={{marginRight: '8px', display: 'inline-block'}}></i>
+                  Extracting JD Information...
+                </span>
               ) : (
-                "Analyze JD"
+                <>
+                  <i className="bi bi-stars"></i> Analyze JD
+                </>
               )}
             </button>
           </div>
