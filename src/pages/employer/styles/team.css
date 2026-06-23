@@ -30,9 +30,9 @@
 }
 
 .team-title {
-  color: #60a5fa; /* Blueish title matching the image */
+  color: #0776fd; /* Blueish title matching the image */
   font-size: 28px;
-  font-weight: 700;
+  font-weight: 900;
   margin: 0 0 8px 0;
 }
 
@@ -80,7 +80,9 @@
   border-radius: 50%;
   background: #ffffff;
   border: 1px solid #cbd5e1;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15), 0 0 0 4px rgba(255, 255, 255, 0.5);
+  box-shadow:
+    0 6px 16px rgba(0, 0, 0, 0.15),
+    0 0 0 4px rgba(255, 255, 255, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -95,7 +97,9 @@
 .slider-arrow:hover {
   background: #f8fafc;
   transform: translateY(-50%) scale(1.1);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2), 0 0 0 4px rgba(255, 255, 255, 0.8);
+  box-shadow:
+    0 10px 25px rgba(0, 0, 0, 0.2),
+    0 0 0 4px rgba(255, 255, 255, 0.8);
   color: #1d4ed8;
 }
 
@@ -327,10 +331,9 @@
   justify-content: center;
   padding: 64px 24px;
   background: #ffffff;
-  border: 1px dashed #cbd5e1;
   border-radius: 20px;
   text-align: center;
-  margin: 0 60px;
+  margin-top: 150px;
 }
 
 /* Forms */
@@ -408,4 +411,3 @@
     font-size: 24px;
   }
 }
-
