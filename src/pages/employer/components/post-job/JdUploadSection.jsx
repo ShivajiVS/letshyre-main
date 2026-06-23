@@ -9,20 +9,48 @@ export function JdUploadSection({
   handleJdUpload,
   isPending,
   fileInputRef,
-  handleFileChange
+  handleFileChange,
+  selectedFile
 }) {
+  const handleViewFile = () => {
+    if (selectedFile) {
+      const fileUrl = URL.createObjectURL(selectedFile);
+      window.open(fileUrl, "_blank");
+    }
+  };
+
   return (
     <div className="emp-post-job-upload">
-      <img
-        src={upload_img}
-        onClick={handleClick}
-        alt="Upload"
-        style={{ cursor: "pointer" }}
-      />
-
       {fileName ? (
         <div className="jd-upload-active">
-          <p className="file-name-success">{fileName}</p>
+          <div className="jd-file-highlight">
+            <div className="jd-file-header">
+              <div className="jd-file-icon-box">
+                <i className="bi bi-file-earmark-text-fill jd-file-icon"></i>
+              </div>
+              <div className="jd-file-details">
+                <span className="jd-file-name" title={fileName}>{fileName}</span>
+                <span className="jd-file-status">Ready for analysis</span>
+              </div>
+            </div>
+            <div className="jd-file-actions">
+              <button 
+                className="jd-file-action-btn" 
+                onClick={handleViewFile} 
+                title="View File"
+              >
+                <i className="bi bi-eye"></i> View
+              </button>
+              <button 
+                className="jd-file-action-btn" 
+                onClick={handleClick} 
+                disabled={isPending} 
+                title="Replace File"
+              >
+                <i className="bi bi-arrow-repeat"></i> Replace
+              </button>
+            </div>
+          </div>
           
           <div className="jd-title-input-box">
             <label>What is the Job Title?</label>
@@ -36,9 +64,7 @@ export function JdUploadSection({
           </div>
 
           <div className="jd-upload-actions">
-            <button className="emp-btn-outline" onClick={handleClick} disabled={isPending}>
-              Replace File
-            </button>
+            {/* Replace button was moved inline with the file name */}
             <button className="emp-btn-primary" onClick={handleJdUpload} disabled={isPending || !jdJobTitle.trim()}>
               {isPending ? (
                 <>
@@ -53,6 +79,12 @@ export function JdUploadSection({
         </div>
       ) : (
         <>
+          <img
+            src={upload_img}
+            onClick={handleClick}
+            alt="Upload"
+            style={{ cursor: "pointer", marginBottom: "15px" }}
+          />
           <h3>Drag & Drop your file here</h3>
           <p>or</p>
           <button className="emp-upload-btn" onClick={handleClick}>

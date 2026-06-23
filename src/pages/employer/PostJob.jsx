@@ -358,6 +358,7 @@ export function PostJob({ editJobId = null }) {
         isPending={parseJdMutation.isPending}
         fileInputRef={fileInputRef}
         handleFileChange={handleFileChange}
+        selectedFile={selectedFile}
       />
 
       {showJdPopup && (
