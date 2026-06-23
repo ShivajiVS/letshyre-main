@@ -9,6 +9,8 @@ function StepJobPreferences({ onNext, onBack }) {
     setValue,
     watch,
     trigger,
+    setError,
+    clearErrors,
     formState: { errors },
   } = useFormContext();
 
@@ -52,7 +54,6 @@ function StepJobPreferences({ onNext, onBack }) {
   const [industrySearch, setIndustrySearch] = useState(
     watch("preferred_industry") || "",
   );
-  const [fileError, setFileError] = useState("");
 
   const preferred_industry = watch("preferred_industry");
   const preferred_locations = watch("preferred_locations");
@@ -83,16 +84,16 @@ function StepJobPreferences({ onNext, onBack }) {
     ];
 
     if (!allowed.includes(file.type)) {
-      setFileError("Only PDF/DOC/DOCX files are allowed");
+      setError(type, { message: "Only PDF/DOC/DOCX files are allowed" });
       return;
     }
 
     if (file.size > 5 * 1024 * 1024) {
-      setFileError("File size must be less than 5MB");
+      setError(type, { message: "File size must be less than 5MB" });
       return;
     }
 
-    setFileError("");
+    clearErrors(type);
     setValue(type, file);
   };
 
@@ -125,24 +126,33 @@ function StepJobPreferences({ onNext, onBack }) {
       "notice_period_proof_type",
     ]);
 
-    if (!isValid) return;
-
+    let hasFileError = false;
     const resignation = watch("resignation_letter");
     const experience = watch("experience_letter");
     const noticeProof = watch("notice_period_proof");
 
     if (!resignation) {
-      setFileError("Resignation Letter is mandatory.");
-      return;
+      setError("resignation_letter", { message: "Resignation Letter is mandatory." });
+      hasFileError = true;
+    } else {
+      clearErrors("resignation_letter");
     }
+
     if (!experience) {
-      setFileError("Experience Letter is mandatory.");
-      return;
+      setError("experience_letter", { message: "Experience Letter is mandatory." });
+      hasFileError = true;
+    } else {
+      clearErrors("experience_letter");
     }
+
     if (!noticeProof) {
-      setFileError("Notice Period Proof file is mandatory.");
-      return;
+      setError("notice_period_proof", { message: "Notice Period Proof file is mandatory." });
+      hasFileError = true;
+    } else {
+      clearErrors("notice_period_proof");
     }
+
+    if (!isValid || hasFileError) return;
 
     onNext();
   };
@@ -511,7 +521,8 @@ function StepJobPreferences({ onNext, onBack }) {
         <label>Upload Mandatory Documents</label>
         <div className="upload-card-job">
           {/* Resignation Letter */}
-          <div className="doc-upload-item">
+          <div style={{ marginBottom: "12px" }}>
+            <div className="doc-upload-item" style={{ marginBottom: 0 }}>
             <div className="doc-info">
               <h4 className="doc-title">
                 Resignation Letter <span className="req">*</span>
@@ -571,9 +582,16 @@ function StepJobPreferences({ onNext, onBack }) {
               />
             </div>
           </div>
+          {errors.resignation_letter && (
+            <p className="field-error" style={{ marginTop: "4px", paddingLeft: "16px" }}>
+              {errors.resignation_letter.message}
+            </p>
+          )}
+        </div>
 
           {/* Experience Letter */}
-          <div className="doc-upload-item">
+          <div style={{ marginBottom: "12px" }}>
+            <div className="doc-upload-item" style={{ marginBottom: 0 }}>
             <div className="doc-info">
               <h4 className="doc-title">
                 Experience Letter <span className="req">*</span>
@@ -633,16 +651,24 @@ function StepJobPreferences({ onNext, onBack }) {
               />
             </div>
           </div>
+          {errors.experience_letter && (
+            <p className="field-error" style={{ marginTop: "4px", paddingLeft: "16px" }}>
+              {errors.experience_letter.message}
+            </p>
+          )}
+        </div>
 
           {/* Notice Period Proof */}
-          <div
-            className="doc-upload-item"
-            style={{
-              flexDirection: "column",
-              alignItems: "flex-start",
-              gap: "16px",
-            }}
-          >
+          <div style={{ marginBottom: "12px" }}>
+            <div
+              className="doc-upload-item"
+              style={{
+                flexDirection: "column",
+                alignItems: "flex-start",
+                gap: "16px",
+                marginBottom: 0,
+              }}
+            >
             <div className="doc-info" style={{ width: "100%" }}>
               <h4 className="doc-title">
                 Notice Period Proof <span className="req">*</span>
@@ -782,6 +808,12 @@ function StepJobPreferences({ onNext, onBack }) {
               </div>
             </div>
           </div>
+          {errors.notice_period_proof && (
+            <p className="field-error" style={{ marginTop: "4px", paddingLeft: "16px" }}>
+              {errors.notice_period_proof.message}
+            </p>
+          )}
+        </div>
         </div>
 
         <label style={{ marginTop: "24px", display: "block" }}>
@@ -789,7 +821,8 @@ function StepJobPreferences({ onNext, onBack }) {
         </label>
         <div className="upload-card-job" style={{ marginTop: "8px" }}>
           {/* Present Offer Letter */}
-          <div className="doc-upload-item" style={{ marginBottom: 0 }}>
+          <div style={{ marginBottom: "12px" }}>
+            <div className="doc-upload-item" style={{ marginBottom: 0 }}>
             <div className="doc-info">
               <h4 className="doc-title">Present Offer Letter</h4>
               <p className="doc-desc">
@@ -847,13 +880,13 @@ function StepJobPreferences({ onNext, onBack }) {
               />
             </div>
           </div>
+          {errors.present_offer && (
+            <p className="field-error" style={{ marginTop: "4px", paddingLeft: "16px" }}>
+              {errors.present_offer.message}
+            </p>
+          )}
         </div>
-
-        {fileError && (
-          <div className="error-msg" style={{ marginTop: 16 }}>
-            {fileError}
-          </div>
-        )}
+        </div>
       </div>
 
       <div className="pc-actions">
