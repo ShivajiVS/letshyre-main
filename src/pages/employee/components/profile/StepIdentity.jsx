@@ -62,6 +62,9 @@ function StepIdentity({ onNext }) {
 
   const location = watch("location");
   const aadhaar = watch("aadhar_number");
+  const gender = watch("gender");
+  const dob = watch("dob");
+  const address = watch("address");
 
   useEffect(() => {
     if (!location || location.length < 2) {
@@ -137,7 +140,15 @@ function StepIdentity({ onNext }) {
 
       <div className="form-grid">
         <div className="form-group">
-          <label>Gender *</label>
+          <label>
+            Gender *
+            {gender && !errors.gender && (
+              <i
+                className="bi bi-check-circle-fill"
+                style={{ color: "var(--pc-success)", marginLeft: "6px" }}
+              ></i>
+            )}
+          </label>
           <select
             className="pc-select"
             {...register("gender", { required: "Gender is required" })}
@@ -151,7 +162,15 @@ function StepIdentity({ onNext }) {
         </div>
 
         <div className="form-group">
-          <label>Date of Birth *</label>
+          <label>
+            Date of Birth *
+            {dob && validateAge(dob) && !errors.dob && (
+              <i
+                className="bi bi-check-circle-fill"
+                style={{ color: "var(--pc-success)", marginLeft: "6px" }}
+              ></i>
+            )}
+          </label>
           <input
             type="date"
             className="pc-input"
@@ -164,7 +183,15 @@ function StepIdentity({ onNext }) {
         </div>
 
         <div className="form-group" style={{ position: "relative" }}>
-          <label>Location *</label>
+          <label>
+            Location *
+            {location && !errors.location && (
+              <i
+                className="bi bi-check-circle-fill"
+                style={{ color: "var(--pc-success)", marginLeft: "6px" }}
+              ></i>
+            )}
+          </label>
           <input
             className="pc-input"
             placeholder="e.g. Mumbai, India"
@@ -192,7 +219,18 @@ function StepIdentity({ onNext }) {
         </div>
 
         <div className="form-group">
-          <label>Aadhaar Number *</label>
+          <label>
+            Aadhaar Number *
+            {aadhaar &&
+              aadhaar.replace(/\D/g, "").length === 12 &&
+              validAadhaar(aadhaar.replace(/\D/g, "")) &&
+              !errors.aadhar_number && (
+                <i
+                  className="bi bi-check-circle-fill"
+                  style={{ color: "var(--pc-success)", marginLeft: "6px" }}
+                ></i>
+              )}
+          </label>
           <input
             className="pc-input"
             placeholder="XXXX-XXXX-XXXX"
@@ -219,7 +257,15 @@ function StepIdentity({ onNext }) {
       </div>
 
       <div className="form-group">
-        <label>Full Address *</label>
+        <label>
+          Full Address *
+          {address && address.length >= 10 && !errors.address && (
+            <i
+              className="bi bi-check-circle-fill"
+              style={{ color: "var(--pc-success)", marginLeft: "6px" }}
+            ></i>
+          )}
+        </label>
         <textarea
           className="pc-textarea"
           placeholder="Enter your complete residential address..."

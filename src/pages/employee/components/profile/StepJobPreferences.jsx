@@ -17,32 +17,46 @@ function StepJobPreferences({ onNext, onBack }) {
   const offerRef = useRef(null);
   const noticeProofRef = useRef(null);
 
-  const { data: industryData, isLoading: loadingIndustries } = useGetIndustries();
-  const industries = Array.isArray(industryData?.data)
-    ? industryData.data.map((item) => item?.label || item?.value).filter(Boolean)
-    : industryData?.data || [
-        "IT / Software Development",
-        "IT / Hardware & Networking",
-        "AI / Machine Learning",
-        "Data Science / Analytics",
-        "Cyber Security / InfoSec",
-        "Finance",
-        "Healthcare",
-        "Education",
-        "Manufacturing",
-        "Sales",
-        "Marketing",
-      ];
-  
-  const allIndustries = [...industries, "Other"];
+  const { data: industryData, isLoading: loadingIndustries } =
+    useGetIndustries();
+  console.log("ind", industryData);
+  let rawIndustries = [];
+  if (Array.isArray(industryData)) {
+    rawIndustries = industryData;
+  } else if (industryData && Array.isArray(industryData.data)) {
+    rawIndustries = industryData.data;
+  }
+
+  const industries =
+    rawIndustries.length > 0
+      ? rawIndustries
+          .map((item) => item?.label || item?.value || item)
+          .filter(Boolean)
+      : [
+          "IT / Software Development",
+          "IT / Hardware & Networking",
+          "AI / Machine Learning",
+          "Data Science / Analytics",
+          "Cyber Security / InfoSec",
+          "Finance",
+          "Healthcare",
+          "Education",
+          "Manufacturing",
+          "Sales",
+          "Marketing",
+        ];
+
+  const allIndustries = [...industries];
 
   const [industryOpen, setIndustryOpen] = useState(false);
-  const [industrySearch, setIndustrySearch] = useState(watch("preferred_industry") || "");
+  const [industrySearch, setIndustrySearch] = useState(
+    watch("preferred_industry") || "",
+  );
   const [fileError, setFileError] = useState("");
 
   const preferred_industry = watch("preferred_industry");
   const preferred_locations = watch("preferred_locations");
-  
+
   // Watch files for display
   const resignationLetter = watch("resignation_letter");
   const experienceLetter = watch("experience_letter");
@@ -55,7 +69,7 @@ function StepJobPreferences({ onNext, onBack }) {
   const lwd = watch("last_day_of_working");
 
   const filteredIndustries = allIndustries.filter((item) =>
-    item.toLowerCase().includes(industrySearch.toLowerCase())
+    item.toLowerCase().includes(industrySearch.toLowerCase()),
   );
 
   const handleFile = (e, type) => {
@@ -83,6 +97,18 @@ function StepJobPreferences({ onNext, onBack }) {
   };
 
   const handleNextClick = async () => {
+    // Strict validation: exact match or fail
+    const trimmedSearch = industrySearch?.trim() || "";
+    const exactMatch = allIndustries.find(
+      (ind) => ind.toLowerCase() === trimmedSearch.toLowerCase()
+    );
+
+    if (exactMatch) {
+      setValue("preferred_industry", exactMatch);
+    } else {
+      setValue("preferred_industry", "", { shouldValidate: true });
+    }
+
     const isValid = await trigger([
       "present_or_last_working_company",
       "last_day_of_working",
@@ -90,11 +116,11 @@ function StepJobPreferences({ onNext, onBack }) {
       "expected_ctc",
       "preferred_industry",
       "preferred_locations_string", // We will use a string field and convert to array
-      "notice_period_proof_type"
+      "notice_period_proof_type",
     ]);
 
     if (!isValid) return;
-    
+
     const resignation = watch("resignation_letter");
     const experience = watch("experience_letter");
     const noticeProof = watch("notice_period_proof");
@@ -111,12 +137,7 @@ function StepJobPreferences({ onNext, onBack }) {
       setFileError("Notice Period Proof file is mandatory.");
       return;
     }
-    
-    // Ensure industry is set if typed manually
-    if (industrySearch && !allIndustries.includes(industrySearch)) {
-        setValue("preferred_industry", industrySearch);
-    }
-    
+
     onNext();
   };
 
@@ -257,7 +278,12 @@ function StepJobPreferences({ onNext, onBack }) {
         <div className="form-group">
           <label>
             Current / Last Company *
-            {company && !errors.present_or_last_working_company && <i className="bi bi-check-circle-fill" style={{ color: "var(--pc-success)", marginLeft: "6px" }}></i>}
+            {company && !errors.present_or_last_working_company && (
+              <i
+                className="bi bi-check-circle-fill"
+                style={{ color: "var(--pc-success)", marginLeft: "6px" }}
+              ></i>
+            )}
           </label>
           <input
             className="pc-input"
@@ -267,19 +293,28 @@ function StepJobPreferences({ onNext, onBack }) {
             })}
           />
           {errors.present_or_last_working_company && (
-            <p className="field-error">{errors.present_or_last_working_company.message}</p>
+            <p className="field-error">
+              {errors.present_or_last_working_company.message}
+            </p>
           )}
         </div>
 
         <div className="form-group">
           <label>
             Last Working Day *
-            {lwd && !errors.last_day_of_working && <i className="bi bi-check-circle-fill" style={{ color: "var(--pc-success)", marginLeft: "6px" }}></i>}
+            {lwd && !errors.last_day_of_working && (
+              <i
+                className="bi bi-check-circle-fill"
+                style={{ color: "var(--pc-success)", marginLeft: "6px" }}
+              ></i>
+            )}
           </label>
           <input
             type="date"
             className="pc-input"
-            {...register("last_day_of_working", { required: "Last working day is required" })}
+            {...register("last_day_of_working", {
+              required: "Last working day is required",
+            })}
           />
           {errors.last_day_of_working && (
             <p className="field-error">{errors.last_day_of_working.message}</p>
@@ -289,22 +324,36 @@ function StepJobPreferences({ onNext, onBack }) {
         <div className="form-group">
           <label>
             Current CTC (LPA) *
-            {currentCtc && !errors.current_ctc && <i className="bi bi-check-circle-fill" style={{ color: "var(--pc-success)", marginLeft: "6px" }}></i>}
+            {currentCtc && !errors.current_ctc && (
+              <i
+                className="bi bi-check-circle-fill"
+                style={{ color: "var(--pc-success)", marginLeft: "6px" }}
+              ></i>
+            )}
           </label>
           <input
             type="number"
             step="0.1"
             className="pc-input"
             placeholder="e.g. 12.5"
-            {...register("current_ctc", { required: "Current CTC is required" })}
+            {...register("current_ctc", {
+              required: "Current CTC is required",
+            })}
           />
-          {errors.current_ctc && <p className="field-error">{errors.current_ctc.message}</p>}
+          {errors.current_ctc && (
+            <p className="field-error">{errors.current_ctc.message}</p>
+          )}
         </div>
 
         <div className="form-group">
           <label>
             Expected CTC (LPA) *
-            {expectedCtc && !errors.expected_ctc && <i className="bi bi-check-circle-fill" style={{ color: "var(--pc-success)", marginLeft: "6px" }}></i>}
+            {expectedCtc && !errors.expected_ctc && (
+              <i
+                className="bi bi-check-circle-fill"
+                style={{ color: "var(--pc-success)", marginLeft: "6px" }}
+              ></i>
+            )}
           </label>
           <input
             type="number"
@@ -321,14 +370,21 @@ function StepJobPreferences({ onNext, onBack }) {
               },
             })}
           />
-          {errors.expected_ctc && <p className="field-error">{errors.expected_ctc.message}</p>}
+          {errors.expected_ctc && (
+            <p className="field-error">{errors.expected_ctc.message}</p>
+          )}
         </div>
       </div>
 
       <div className="form-group">
         <label>
           Preferred Industry *
-          {preferred_industry && !errors.preferred_industry && <i className="bi bi-check-circle-fill" style={{ color: "var(--pc-success)", marginLeft: "6px" }}></i>}
+          {preferred_industry && !errors.preferred_industry && (
+            <i
+              className="bi bi-check-circle-fill"
+              style={{ color: "var(--pc-success)", marginLeft: "6px" }}
+            ></i>
+          )}
         </label>
         <div className="industry-wrap">
           <input
@@ -338,12 +394,26 @@ function StepJobPreferences({ onNext, onBack }) {
             onFocus={() => setIndustryOpen(true)}
             onBlur={() => setTimeout(() => setIndustryOpen(false), 200)}
             onChange={(e) => {
-              setIndustrySearch(e.target.value);
-              setValue("preferred_industry", e.target.value);
+              const val = e.target.value;
+              setIndustrySearch(val);
               setIndustryOpen(true);
+
+              const exactMatch = allIndustries.find(
+                (ind) => ind.toLowerCase() === val.trim().toLowerCase()
+              );
+
+              if (exactMatch) {
+                setValue("preferred_industry", exactMatch, { shouldValidate: true });
+              } else if (preferred_industry) {
+                setValue("preferred_industry", "", { shouldValidate: true });
+              }
             }}
           />
-          {loadingIndustries && <div style={{ fontSize: 12, marginTop: 4, color: "#64748b" }}>Loading industries...</div>}
+          {loadingIndustries && (
+            <div style={{ fontSize: 12, marginTop: 4, color: "#64748b" }}>
+              Loading industries...
+            </div>
+          )}
 
           {industryOpen && (
             <div className="industry-dropdown">
@@ -352,7 +422,9 @@ function StepJobPreferences({ onNext, onBack }) {
                   key={i}
                   className="industry-option"
                   onClick={() => {
-                    setValue("preferred_industry", item, { shouldValidate: true });
+                    setValue("preferred_industry", item, {
+                      shouldValidate: true,
+                    });
                     setIndustrySearch(item);
                     setIndustryOpen(false);
                   }}
@@ -363,26 +435,37 @@ function StepJobPreferences({ onNext, onBack }) {
               {!filteredIndustries.length && (
                 <div
                   className="industry-option"
-                  onClick={() => {
-                    setValue("preferred_industry", industrySearch, { shouldValidate: true });
-                    setIndustryOpen(false);
-                  }}
+                  style={{ color: "#94a3b8", cursor: "default" }}
                 >
-                  Use "{industrySearch}"
+                  No industries found
                 </div>
               )}
             </div>
           )}
         </div>
         {/* Hidden input to register with react-hook-form */}
-        <input type="hidden" {...register("preferred_industry", { required: "Preferred industry is required" })} />
-        {errors.preferred_industry && <p className="field-error">{errors.preferred_industry.message}</p>}
+        <input
+          type="hidden"
+          {...register("preferred_industry", {
+            required: "Please select a valid industry from the dropdown",
+          })}
+        />
+        {errors.preferred_industry && (
+          <p className="field-error">{errors.preferred_industry.message}</p>
+        )}
       </div>
 
       <div className="form-group">
         <label>
           Preferred Locations *
-          {preferred_locations && preferred_locations.length > 0 && !errors.preferred_locations_string && <i className="bi bi-check-circle-fill" style={{ color: "var(--pc-success)", marginLeft: "6px" }}></i>}
+          {preferred_locations &&
+            preferred_locations.length > 0 &&
+            !errors.preferred_locations_string && (
+              <i
+                className="bi bi-check-circle-fill"
+                style={{ color: "var(--pc-success)", marginLeft: "6px" }}
+              ></i>
+            )}
         </label>
         <input
           className="pc-input"
@@ -390,144 +473,289 @@ function StepJobPreferences({ onNext, onBack }) {
           {...register("preferred_locations_string", {
             required: "At least one preferred location is required",
             onChange: (e) => {
-               // Sync with the actual array field if needed, or we just parse it on submit
-               const arr = e.target.value.split(",").map(x => x.trim()).filter(Boolean);
-               setValue("preferred_locations", arr);
-            }
+              // Sync with the actual array field if needed, or we just parse it on submit
+              const arr = e.target.value
+                .split(",")
+                .map((x) => x.trim())
+                .filter(Boolean);
+              setValue("preferred_locations", arr);
+            },
           })}
         />
-        {errors.preferred_locations_string && <p className="field-error">{errors.preferred_locations_string.message}</p>}
+        {errors.preferred_locations_string && (
+          <p className="field-error">
+            {errors.preferred_locations_string.message}
+          </p>
+        )}
       </div>
 
       <div className="form-group">
-        <label>
-          Upload Mandatory Documents
-        </label>
+        <label>Upload Mandatory Documents</label>
         <div className="upload-card-job">
-          
           {/* Resignation Letter */}
           <div className="doc-upload-item">
             <div className="doc-info">
-              <h4 className="doc-title">Resignation Letter <span className="req">*</span></h4>
-              <p className="doc-desc">Official resignation acceptance or email.</p>
+              <h4 className="doc-title">
+                Resignation Letter <span className="req">*</span>
+              </h4>
+              <p className="doc-desc">
+                Official resignation acceptance or email.
+              </p>
             </div>
             <div className="doc-action">
               {resignationLetter ? (
                 <div className="doc-chip">
-                  <span><i className="bi bi-file-earmark-check text-green-600 mr-2"></i> {resignationLetter.name}</span>
-                  <button type="button" onClick={() => setValue("resignation_letter", null)}>✕</button>
+                  <span>
+                    <i className="bi bi-file-earmark-check text-green-600 mr-2"></i>{" "}
+                    {resignationLetter.name}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setValue("resignation_letter", null)}
+                  >
+                    ✕
+                  </button>
                 </div>
               ) : (
-                <button type="button" className="upload-btn-job" onClick={() => resignationRef.current.click()}>
+                <button
+                  type="button"
+                  className="upload-btn-job"
+                  onClick={() => resignationRef.current.click()}
+                >
                   <i className="bi bi-upload"></i> Upload
                 </button>
               )}
-              <input hidden ref={resignationRef} type="file" onChange={(e) => handleFile(e, "resignation_letter")} />
+              <input
+                hidden
+                ref={resignationRef}
+                type="file"
+                onChange={(e) => handleFile(e, "resignation_letter")}
+              />
             </div>
           </div>
 
           {/* Experience Letter */}
           <div className="doc-upload-item">
             <div className="doc-info">
-              <h4 className="doc-title">Experience Letter <span className="req">*</span></h4>
-              <p className="doc-desc">Experience or relieving letter from past company.</p>
+              <h4 className="doc-title">
+                Experience Letter <span className="req">*</span>
+              </h4>
+              <p className="doc-desc">
+                Experience or relieving letter from past company.
+              </p>
             </div>
             <div className="doc-action">
               {experienceLetter ? (
                 <div className="doc-chip">
-                  <span><i className="bi bi-file-earmark-check text-green-600 mr-2"></i> {experienceLetter.name}</span>
-                  <button type="button" onClick={() => setValue("experience_letter", null)}>✕</button>
+                  <span>
+                    <i className="bi bi-file-earmark-check text-green-600 mr-2"></i>{" "}
+                    {experienceLetter.name}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setValue("experience_letter", null)}
+                  >
+                    ✕
+                  </button>
                 </div>
               ) : (
-                <button type="button" className="upload-btn-job" onClick={() => experienceRef.current.click()}>
+                <button
+                  type="button"
+                  className="upload-btn-job"
+                  onClick={() => experienceRef.current.click()}
+                >
                   <i className="bi bi-upload"></i> Upload
                 </button>
               )}
-              <input hidden ref={experienceRef} type="file" onChange={(e) => handleFile(e, "experience_letter")} />
+              <input
+                hidden
+                ref={experienceRef}
+                type="file"
+                onChange={(e) => handleFile(e, "experience_letter")}
+              />
             </div>
           </div>
 
           {/* Notice Period Proof */}
-          <div className="doc-upload-item" style={{ flexDirection: "column", alignItems: "flex-start", gap: "16px" }}>
+          <div
+            className="doc-upload-item"
+            style={{
+              flexDirection: "column",
+              alignItems: "flex-start",
+              gap: "16px",
+            }}
+          >
             <div className="doc-info" style={{ width: "100%" }}>
-              <h4 className="doc-title">Notice Period Proof <span className="req">*</span></h4>
-              <p className="doc-desc">Select the type of proof you have, then upload the corresponding document.</p>
+              <h4 className="doc-title">
+                Notice Period Proof <span className="req">*</span>
+              </h4>
+              <p className="doc-desc">
+                Select the type of proof you have, then upload the corresponding
+                document.
+              </p>
             </div>
-            
-            <div className="notice-proof-grid" style={{ width: "100%", alignItems: "start" }}>
+
+            <div
+              className="notice-proof-grid"
+              style={{ width: "100%", alignItems: "start" }}
+            >
               <div style={{ width: "100%" }}>
-                <label style={{ fontSize: "13px", fontWeight: "600", color: "#475569", marginBottom: "8px", display: "flex", alignItems: "center" }}>
+                <label
+                  style={{
+                    fontSize: "13px",
+                    fontWeight: "600",
+                    color: "#475569",
+                    marginBottom: "8px",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
                   Select Proof Type *
                   <div className="pc-tooltip-container">
                     <i className="bi bi-question-circle pc-tooltip-icon"></i>
-                    <span className="pc-tooltip-text">If serving notice, upload your new offer. If already relieved, upload your relieving letter.</span>
+                    <span className="pc-tooltip-text">
+                      If serving notice, upload your new offer. If already
+                      relieved, upload your relieving letter.
+                    </span>
                   </div>
-                  {noticePeriodProofType && !errors.notice_period_proof_type && <i className="bi bi-check-circle-fill" style={{ color: "var(--pc-success)", marginLeft: "6px", fontSize: "14px" }}></i>}
+                  {noticePeriodProofType &&
+                    !errors.notice_period_proof_type && (
+                      <i
+                        className="bi bi-check-circle-fill"
+                        style={{
+                          color: "var(--pc-success)",
+                          marginLeft: "6px",
+                          fontSize: "14px",
+                        }}
+                      ></i>
+                    )}
                 </label>
                 <select
                   className="pc-select"
                   style={{ margin: 0 }}
-                  {...register("notice_period_proof_type", { required: "Notice period proof type is required" })}
+                  {...register("notice_period_proof_type", {
+                    required: "Notice period proof type is required",
+                  })}
                 >
                   <option value="">Select Proof Type</option>
                   <option value="Relieving Letter">Relieving Letter</option>
                   <option value="Offer Letter">Offer Letter</option>
                 </select>
                 {errors.notice_period_proof_type && (
-                  <p className="field-error" style={{ marginTop: "4px", textAlign: "left" }}>{errors.notice_period_proof_type.message}</p>
+                  <p
+                    className="field-error"
+                    style={{ marginTop: "4px", textAlign: "left" }}
+                  >
+                    {errors.notice_period_proof_type.message}
+                  </p>
                 )}
               </div>
 
-              <div className="doc-action" style={{ display: "flex", flexDirection: "column", justifyContent: "flex-end", height: "100%" }}>
-                <label style={{ fontSize: "12px", fontWeight: "600", color: "#475569", marginBottom: "8px", display: "block", visibility: "hidden" }}>
+              <div
+                className="doc-action"
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "flex-end",
+                  height: "100%",
+                }}
+              >
+                <label
+                  style={{
+                    fontSize: "12px",
+                    fontWeight: "600",
+                    color: "#475569",
+                    marginBottom: "8px",
+                    display: "block",
+                    visibility: "hidden",
+                  }}
+                >
                   Upload
                 </label>
                 {noticePeriodProof ? (
                   <div className="doc-chip" style={{ margin: 0 }}>
-                    <span><i className="bi bi-file-earmark-check text-green-600 mr-2"></i> {noticePeriodProof.name}</span>
-                    <button type="button" onClick={() => setValue("notice_period_proof", null)}>✕</button>
+                    <span>
+                      <i className="bi bi-file-earmark-check text-green-600 mr-2"></i>{" "}
+                      {noticePeriodProof.name}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setValue("notice_period_proof", null)}
+                    >
+                      ✕
+                    </button>
                   </div>
                 ) : (
-                  <button type="button" className="upload-btn-job" style={{ margin: 0 }} onClick={() => noticeProofRef.current.click()}>
+                  <button
+                    type="button"
+                    className="upload-btn-job"
+                    style={{ margin: 0 }}
+                    onClick={() => noticeProofRef.current.click()}
+                  >
                     <i className="bi bi-upload"></i> Upload Proof
                   </button>
                 )}
-                <input hidden ref={noticeProofRef} type="file" onChange={(e) => handleFile(e, "notice_period_proof")} />
+                <input
+                  hidden
+                  ref={noticeProofRef}
+                  type="file"
+                  onChange={(e) => handleFile(e, "notice_period_proof")}
+                />
               </div>
             </div>
           </div>
-
         </div>
 
         <label style={{ marginTop: "24px", display: "block" }}>
           Optional Documents
         </label>
         <div className="upload-card-job" style={{ marginTop: "8px" }}>
-          
           {/* Present Offer Letter */}
           <div className="doc-upload-item" style={{ marginBottom: 0 }}>
             <div className="doc-info">
               <h4 className="doc-title">Present Offer Letter</h4>
-              <p className="doc-desc">Do you have an existing offer? Upload it here.</p>
+              <p className="doc-desc">
+                Do you have an existing offer? Upload it here.
+              </p>
             </div>
             <div className="doc-action">
               {presentOffer ? (
                 <div className="doc-chip">
-                  <span><i className="bi bi-file-earmark-check text-green-600 mr-2"></i> {presentOffer.name}</span>
-                  <button type="button" onClick={() => setValue("present_offer", null)}>✕</button>
+                  <span>
+                    <i className="bi bi-file-earmark-check text-green-600 mr-2"></i>{" "}
+                    {presentOffer.name}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setValue("present_offer", null)}
+                  >
+                    ✕
+                  </button>
                 </div>
               ) : (
-                <button type="button" className="upload-btn-job" onClick={() => offerRef.current.click()}>
+                <button
+                  type="button"
+                  className="upload-btn-job"
+                  onClick={() => offerRef.current.click()}
+                >
                   <i className="bi bi-upload"></i> Upload
                 </button>
               )}
-              <input hidden ref={offerRef} type="file" onChange={(e) => handleFile(e, "present_offer")} />
+              <input
+                hidden
+                ref={offerRef}
+                type="file"
+                onChange={(e) => handleFile(e, "present_offer")}
+              />
             </div>
           </div>
-
         </div>
-        
-        {fileError && <div className="error-msg" style={{ marginTop: 16 }}>{fileError}</div>}
+
+        {fileError && (
+          <div className="error-msg" style={{ marginTop: 16 }}>
+            {fileError}
+          </div>
+        )}
       </div>
 
       <div className="pc-actions">
