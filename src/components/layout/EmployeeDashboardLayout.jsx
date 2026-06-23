@@ -310,16 +310,7 @@ export function EmployeeDashboardLayout() {
                       )}`;
                     }}
                   />
-                  <span className="cd-user-status"></span>
                 </div>
-
-                <div className="cd-user-info">
-                  <span className="cd-user-name">
-                    {userData?.name || "User"}
-                  </span>
-                </div>
-
-                <i className="bi bi-chevron-right cd-user-arrow"></i>
               </div>
               <button
                 className="cd-hamburger"
