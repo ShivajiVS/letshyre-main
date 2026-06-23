@@ -301,23 +301,41 @@
   padding-left: 60px;
 }
 
-.pp-timeline::before {
-  content: "";
-  position: absolute;
-  left: 25px;
-  top: 31px;    /* center of the first dot (top:22px + half of 18px height) */
-  bottom: 31px; /* center of the last dot from the container bottom */
-  width: 3px;
-  background: #5a8df6;
-  border-radius: 10px;
-}
-
 .pp-time-item {
   position: relative;
   margin-bottom: 14px;
   background: #eef3fb;
   padding: 20px 22px;
   border-radius: 14px;
+}
+
+.pp-time-item::after {
+  content: "";
+  position: absolute;
+  left: calc(-33px - 1.5px);
+  top: 48px;
+  bottom: -36px;
+  width: 3px;
+  background: #5a8df6;
+  border-radius: 10px;
+}
+
+.pp-time-item:last-child::after {
+  display: block;
+  bottom: 30px; /* Stop the line earlier so it hides behind the dot */
+}
+
+.pp-timeline::after {
+  content: "";
+  position: absolute;
+  left: 14px;
+  bottom: 22px; /* Align the dot with the line's end properly */
+  width: 18px;
+  height: 18px;
+  background: #5a8df6;
+  border: 4px solid #dbe7ff;
+  border-radius: 50%;
+  z-index: 2; /* Ensure dot is strictly above the line */
 }
 
 .pp-time-item::before {
@@ -330,12 +348,10 @@
   background: #5a8df6;
   border: 4px solid #dbe7ff;
   border-radius: 50%;
+  z-index: 1;
 }
 
-.pp-time-item:last-child::before {
-  background: white;
-  border: 3px solid #5a8df6;
-}
+
 
 /* h5 label inside timeline and edu blocks */
 .pp-time-item h5,
@@ -503,17 +519,20 @@
 }
 
 .pp-skills span {
-  padding: 7px 14px;
-  border-radius: 8px;
-  border: 2px solid #6e97ff;
-  background: #f7f9ff;
+  padding: 6px 16px;
+  border-radius: 20px;
+  background: #eef3fb;
   font-size: 14px;
-  color: #5f6b7a;
+  color: #5a8df6;
+  font-weight: 500;
+  transition: all 0.2s ease;
 }
 
 .pp-skills span:hover {
-  background: #6e97ff;
+  background: #5a8df6;
   color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(90, 141, 246, 0.25);
 }
 
 .pp-download-btn {
@@ -719,12 +738,14 @@
    EMPTY STATE
 ========================================================= */
 .ep-empty {
-  background: #f4f8ff;
-  border-radius: 10px;
-  padding: 20px;
+  background: #f8fafc;
+  border: 1px dashed #c0d0e8;
+  border-radius: 12px;
+  padding: 24px 20px;
   text-align: center;
-  color: #9aaac0;
-  font-size: 0.9rem;
+  color: #7b8a9e;
+  font-size: 0.95rem;
+  font-weight: 500;
 }
 
 /* =========================================================
@@ -743,13 +764,15 @@
   font-weight: 600;
   text-decoration: none;
   margin-top: 10px;
-  transition: all 0.18s ease;
+  transition: all 0.2s ease;
 }
 
 .pp-doc-link:hover {
   background: #5a8df6;
   color: #fff;
   border-color: #5a8df6;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(90, 141, 246, 0.25);
 }
 
 .pp-doc-link i {

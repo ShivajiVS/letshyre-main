@@ -34,9 +34,8 @@ export function EmployeeDashboardLayout() {
   const { data: userData, isLoading } = useCandidateProfile();
   const isApproved = userData?.is_approved;
 
-  const profileCompleted =
-    userData?.is_profile_complete === true ||
-    localStorage.getItem("profileCompleted") === "true";
+  const profileCompleted = userData?.is_profile_complete === true;
+  // ||localStorage.getItem("profileCompleted") === "true";
 
   const handleProfileComplete = () => {
     // Immediately patch the cache so profileCompleted flips to true on this render.
@@ -348,7 +347,7 @@ export function EmployeeDashboardLayout() {
         </div>
       )}
 
-      {userData &&
+      {/* {userData &&
         profileCompleted &&
         (!isApproved || userData?.is_rejected === true) && (
           <ProfileStatusModal
@@ -357,7 +356,7 @@ export function EmployeeDashboardLayout() {
             onLogout={() => performLogout()}
             isLoggingOut={isLoggingOut}
           />
-        )}
+        )} */}
 
       <LogoutModal
         isOpen={showLogoutModal}

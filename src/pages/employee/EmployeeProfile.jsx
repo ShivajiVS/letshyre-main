@@ -129,14 +129,7 @@ function ExperienceItem({ role, company, duration, description }) {
       <h5>{role}</h5>
       <p className="pp-grey-text">{company}</p>
       <p className="pp-grey-text">{duration}</p>
-      {description && (
-        <p
-          className="pp-grey-text"
-          style={{ marginTop: "6px", fontSize: "0.875rem" }}
-        >
-          {description}
-        </p>
-      )}
+      {description && <p className="pp-project-desc">{description}</p>}
     </div>
   );
 }
