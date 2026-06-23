@@ -112,6 +112,13 @@ export const employerRoutes = [
             },
           },
           {
+            path: "view-jobs/applicants/:jobId",
+            async lazy() {
+              const { Applicants } = await import("@/pages/employer/Applicants");
+              return { Component: Applicants };
+            },
+          },
+          {
             path: "candidate-pool",
             async lazy() {
               const { CandidatePool } =

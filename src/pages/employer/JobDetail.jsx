@@ -140,6 +140,13 @@ export function JobDetail() {
         </div>
         <div className="jd-header-actions">
           <button
+            className="btn btn-applicants"
+            style={{ backgroundColor: "#2563eb", color: "#fff", borderColor: "#2563eb" }}
+            onClick={() => navigate(`/employer/view-jobs/applicants/${jobId}`)}
+          >
+            <i className="bi bi-people"></i> View Applicants
+          </button>
+          <button
             className="btn btn-edit"
             onClick={() => setIsEditModalOpen(true)}
           >
