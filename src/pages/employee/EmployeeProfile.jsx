@@ -157,9 +157,9 @@ function ProjectItem({ title, description, technologies }) {
   return (
     <div className="pp-edu">
       <h5>{title || "Untitled Project"}</h5>
-      {description && <p className="pp-grey-text">{description}</p>}
+      {description && <p className="pp-project-desc">{description}</p>}
       {Array.isArray(technologies) && technologies.length > 0 && (
-        <p className="pp-grey-text" style={{ fontSize: "0.85rem" }}>
+        <p className="pp-grey-text" style={{ fontSize: "0.85rem", marginTop: "12px" }}>
           {technologies.join(", ")}
         </p>
       )}

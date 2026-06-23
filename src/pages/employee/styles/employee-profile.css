@@ -221,6 +221,16 @@
   font-weight: 500;
 }
 
+.pp-project-desc {
+  color: #4a5568;
+  font-size: 0.95rem;
+  font-weight: 400;
+  line-height: 1.6;
+  margin-top: 8px;
+  margin-bottom: 12px;
+  white-space: pre-line;
+}
+
 /* =========================================================
    MINI PROGRESS BAR (In Personal Details)
 ========================================================= */
