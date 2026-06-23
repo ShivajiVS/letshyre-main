@@ -4,14 +4,19 @@ import { useApplicants } from "@/hooks/employer/useApplicants";
 import "./styles/applicants.css";
 
 const ApplicantSkeleton = () => (
-  <div className="applicant-card">
-    <div className="applicant-photo-wrapper">
-      <div className="skeleton-box" style={{ width: "80px", height: "80px", borderRadius: "50%" }}></div>
+  <div className="applicant-row" style={{ pointerEvents: "none" }}>
+    <div className="applicant-info">
+      <div className="applicant-photo-wrapper">
+        <div className="skeleton-box" style={{ width: "50px", height: "50px", borderRadius: "50%" }}></div>
+      </div>
+      <div className="applicant-name-section">
+        <div className="skeleton-box" style={{ width: "120px", height: "16px", marginBottom: "4px" }}></div>
+        <div className="skeleton-box" style={{ width: "80px", height: "12px" }}></div>
+      </div>
     </div>
-    <div className="skeleton-box" style={{ width: "120px", height: "20px", marginBottom: "8px" }}></div>
-    <div className="skeleton-box" style={{ width: "80px", height: "14px", marginBottom: "16px" }}></div>
-    <div className="skeleton-box" style={{ width: "90px", height: "24px", borderRadius: "20px", marginBottom: "20px" }}></div>
-    <div className="skeleton-box" style={{ width: "100%", height: "38px", borderRadius: "8px" }}></div>
+    <div className="applicant-status-section">
+      <div className="skeleton-box" style={{ width: "80px", height: "28px", borderRadius: "20px" }}></div>
+    </div>
   </div>
 );
 
@@ -67,8 +72,8 @@ export function Applicants() {
       </div>
 
       {isLoading ? (
-        <div className="applicants-grid">
-          {[...Array(8)].map((_, i) => (
+        <div className="applicants-list">
+          {[...Array(5)].map((_, i) => (
             <ApplicantSkeleton key={i} />
           ))}
         </div>
@@ -80,27 +85,33 @@ export function Applicants() {
         </div>
       ) : (
         <>
-          <div className="applicants-grid" style={{ opacity: isFetching ? 0.6 : 1, transition: "opacity 0.2s ease" }}>
+          <div className="applicants-list" style={{ opacity: isFetching ? 0.6 : 1, transition: "opacity 0.2s ease" }}>
             {applicants.map((app) => (
-              <div className="applicant-card" key={app.id}>
-                <div className="applicant-photo-wrapper">
-                  {app.profile_photo ? (
-                    <img src={app.profile_photo} alt={app.name} className="applicant-photo" />
-                  ) : (
-                    <div className="applicant-placeholder-photo">
-                      {app.name ? app.name.charAt(0).toUpperCase() : "?"}
-                    </div>
-                  )}
+              <div className="applicant-row" key={app.id}>
+                <div className="applicant-info">
+                  <div className="applicant-photo-wrapper">
+                    {app.profile_photo ? (
+                      <img src={app.profile_photo} alt={app.name} className="applicant-photo" />
+                    ) : (
+                      <div className="applicant-placeholder-photo">
+                        {app.name ? app.name.charAt(0).toUpperCase() : "?"}
+                      </div>
+                    )}
+                  </div>
+                  
+                  <div className="applicant-name-section">
+                    <h3 className="applicant-name">{app.name}</h3>
+                    <p className="applicant-date">
+                      Applied on {new Date(app.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                    </p>
+                  </div>
                 </div>
-                
-                <h3 className="applicant-name">{app.name}</h3>
-                <p className="applicant-date">
-                  Applied on {new Date(app.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
-                </p>
 
-                <span className={`applicant-status ${(app.status || "applied").toLowerCase()}`}>
-                  {app.status || "Applied"}
-                </span>
+                <div className="applicant-status-section">
+                  <span className={`applicant-status ${(app.status || "applied").toLowerCase()}`}>
+                    {app.status || "Applied"}
+                  </span>
+                </div>
               </div>
             ))}
           </div>
