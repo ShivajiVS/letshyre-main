@@ -572,12 +572,17 @@ export function EmployeeProfile() {
                 <DocLink
                   href={profile.resignation_letter}
                   label="Resignation Letter"
-                  icon="bi-file-earmark-break"
+                  icon="bi-file-earmark-text"
+                />
+                <DocLink
+                  href={profile.notice_period_prof}
+                  label="Notice Period Proof"
+                  icon="bi-file-earmark-text"
                 />
                 <DocLink
                   href={profile.present_offer}
                   label="Present Offer Letter"
-                  icon="bi-file-earmark-check"
+                  icon="bi-file-earmark-text"
                 />
               </div>
             )}

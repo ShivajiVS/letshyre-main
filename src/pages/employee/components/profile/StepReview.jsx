@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { useSubmitProfile } from "../../../../hooks/employee/useProfile";
 
 function StepReview({ onBack, onFinish }) {
-  const { watch, getValues } = useFormContext();
+  const { getValues } = useFormContext();
   const submitProfileMutation = useSubmitProfile();
 
   const [error, setError] = useState("");
@@ -108,11 +108,11 @@ function StepReview({ onBack, onFinish }) {
       if (profileData.present_offer)
         fd.append("present_offer", profileData.present_offer);
       fd.append(
-        "notice_period_proof_type",
+        "notice_period_prof_type",
         profileData.notice_period_proof_type || "",
       );
       if (profileData.notice_period_proof)
-        fd.append("notice_period_proof", profileData.notice_period_proof);
+        fd.append("notice_period_prof", profileData.notice_period_proof);
 
       // RESUME & ROLE
       if (profileData.resume) fd.append("resume", profileData.resume);
@@ -153,7 +153,7 @@ function StepReview({ onBack, onFinish }) {
       fd.append("tech_experience", JSON.stringify(techExp));
 
       fd.append("profile_completion_score", "100");
-      fd.append("is_profile_complete", "true");
+      fd.append("is_profile_complete", true);
 
       await submitProfileMutation.mutateAsync(fd);
       onFinish();
