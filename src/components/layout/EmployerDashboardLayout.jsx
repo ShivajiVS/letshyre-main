@@ -300,8 +300,7 @@ function useTour({ ready }) {
         moveHighlightTo(step.target);
       }
 
-      const finished =
-        status === STATUS.FINISHED || status === STATUS.SKIPPED;
+      const finished = status === STATUS.FINISHED || status === STATUS.SKIPPED;
       const closed = action === ACTIONS.CLOSE;
       const targetMissing = type === EVENTS.TARGET_NOT_FOUND;
 
@@ -681,7 +680,7 @@ export function EmployerDashboardLayout() {
       </main>
 
       {/* ── POPUP: INVITE ── */}
-      {empPopup === "invite" && (
+      {/* {empPopup === "invite" && (
         <div className="locked-overlay">
           <div className="locked-card">
             <div className="locked-img">
@@ -760,7 +759,7 @@ export function EmployerDashboardLayout() {
             </div>
           </div>
         </div>
-      )}
+      )} */}
 
       {showLogoutModal && (
         <div
