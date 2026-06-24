@@ -105,7 +105,7 @@
   display: grid;
   grid-template-columns: 2.2fr 1fr;
   gap: 20px;
-  align-items: start;
+  align-items: stretch;
 }
 
 .sc-left-part-main {
@@ -219,28 +219,51 @@
 }
 
 /* ================= SKILLS CARD ================= */
+.sc-skills-column {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
 .sc-skills-card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background: white;
   border-radius: 18px;
   padding: 15px;
-  height: 100%;
+  box-sizing: border-box;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
 }
 
 .sc-skills-card h3 {
   text-align: center;
   margin-bottom: 15px;
+  flex-shrink: 0;
 }
 
 .sc-skills-list {
   background: linear-gradient(180deg, #97baf7 10%, #c9daf8 100%);
-  border-radius: 16px;
+  border-radius: 10px;
   padding: 20px;
-  height: 90%;
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 14px;
   position: relative;
+  overflow-y: auto;
+}
+
+.sc-skills-list::-webkit-scrollbar {
+  width: 3px;
+}
+.sc-skills-list::-webkit-scrollbar-thumb {
+  background: #7fa4e6;
+  border-radius: 10px;
 }
 
 .sc-skills-list::before {
@@ -482,62 +505,32 @@
   word-break: break-word;
 }
 
-.sc-qa-voice {
+/* ================= AUDIO PLAYER ================= */
+.sc-qa-audio-wrapper {
   display: flex;
-  align-items: center;
-  gap: 12px;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 8px;
 }
 
-.sc-qa-voice-icon {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  background: var(--secondary-sky-blue, #5b8dee);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
+.sc-qa-audio-container {
+  width: 100%;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 8px 16px;
+  border: 1px solid #dce8fd;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  box-sizing: border-box;
 }
 
-.sc-qa-voice-icon svg {
-  width: 18px;
-  height: 18px;
-  fill: white;
+.sc-qa-audio-player {
+  width: 100%;
+  height: 44px;
+  outline: none;
 }
 
-.sc-qa-voice-bar {
-  flex: 1;
-  height: 5px;
-  background: #b8cff5;
-  border-radius: 999px;
-  overflow: hidden;
-}
-
-.sc-qa-voice-progress {
-  height: 100%;
-  background: var(--secondary-sky-blue, #5b8dee);
-  border-radius: 999px;
-}
-
-.sc-qa-voice-time {
-  font-size: 13px;
-  font-weight: 600;
-  color: #374151;
-  white-space: nowrap;
-}
-
-.sc-qa-voice-pause {
-  display: flex;
-  gap: 3px;
-  align-items: center;
-}
-
-.sc-qa-voice-pause span {
-  display: block;
-  width: 3px;
-  height: 14px;
-  background: #374151;
-  border-radius: 2px;
+.sc-qa-audio-player::-webkit-media-controls-panel {
+  background-color: #ffffff;
 }
 
 /* ================= TABLET ================= */
@@ -545,7 +538,12 @@
   .sc-top-grid {
     grid-template-columns: 1fr;
   }
+  .sc-skills-column {
+    height: auto;
+  }
   .sc-skills-card {
+    position: relative;
+    height: 350px;
     order: 1;
     display: flex;
     flex-direction: column;
