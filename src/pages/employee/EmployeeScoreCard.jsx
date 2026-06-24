@@ -199,7 +199,24 @@ export function EmployeeScoreCard() {
                     {qa.type === "CODING" ? (
                       <code>{qa.answer_provided || "No code provided."}</code>
                     ) : qa.type === "AUDIO" ? (
-                      <p>{qa.transcript || "No transcript available."}</p>
+                      <div className="esc-qa-audio-wrapper">
+                        {qa.candidate_audio_file_url && (
+                          <div className="esc-qa-audio-container">
+                            <audio 
+                              controls 
+                              src={qa.candidate_audio_file_url} 
+                              className="esc-qa-audio-player"
+                              preload="metadata"
+                            >
+                              Your browser does not support the audio element.
+                            </audio>
+                          </div>
+                        )}
+                        <div className="esc-qa-transcript-box">
+                           <strong>Transcript: </strong>
+                           <p>{qa.transcript || "No transcript available."}</p>
+                        </div>
+                      </div>
                     ) : (
                       <p>{qa.answer_provided || "No answer provided."}</p>
                     )}
