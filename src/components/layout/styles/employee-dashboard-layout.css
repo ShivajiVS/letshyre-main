@@ -865,7 +865,6 @@
   border: none;
   background: linear-gradient(45deg, rgb(105, 167, 244), rgb(190, 235, 253));
   color: black;
-  box-shadow: 2px 2px 14px rgb(89, 95, 158);
   cursor: pointer;
 }
 
@@ -875,7 +874,6 @@
   background-color: rgb(38, 37, 37);
   color: white;
   border: none;
-  box-shadow: 2px 2px 15px rgb(49, 48, 48);
   cursor: pointer;
 }
 
@@ -944,7 +942,9 @@
   border: 3px solid var(--secondary-sky-blue, #5c8fe6);
   box-shadow: 0 4px 10px rgba(92, 143, 230, 0.35);
   display: block;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .cd-user:hover .cd-user-avatar {

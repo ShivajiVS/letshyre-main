@@ -5,7 +5,6 @@ import { useQueryClient } from "@tanstack/react-query";
 import logo from "@/assets/logo2.png";
 import EmployeeLockedOverlay from "@/components/layout/EmployeeLockedOverlay";
 import EmployeeRightPanelForJobs from "./EmployeeRightPanelForJobs";
-import ProfileStatusModal from "./ProfileStatusModal";
 import LogoutModal from "./LogoutModal";
 import ProfileCompletion from "@/pages/employee/components/profile/ProfileCompletion";
 
