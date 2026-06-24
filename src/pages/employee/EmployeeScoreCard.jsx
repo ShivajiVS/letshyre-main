@@ -75,7 +75,7 @@ export function EmployeeScoreCard() {
 
   return (
     <div className="sc-section-main">
-      <h3>Here's The Candiate's Scorecard</h3>
+      <h3>Here's the Candiate's Scorecard</h3>
       <p className="pp-grey-text">
         Your AI-generated scorecard highlights what went great and where you can
         grow for future interviews
@@ -155,15 +155,17 @@ export function EmployeeScoreCard() {
 
           {/* SKILLS */}
           {candidate_skills && candidate_skills.length > 0 && (
-            <div className="sc-skills-card">
-              <h3>Candidate Skills Evaluated</h3>
-              <div className="sc-skills-list">
-                {candidate_skills.map((skill, i) => (
-                  <div key={i} className="sc-skill">
-                    <span>{"</>"}</span>
-                    {skill}
-                  </div>
-                ))}
+            <div className="sc-skills-column">
+              <div className="sc-skills-card">
+                <h3>Candidate Skills Evaluated</h3>
+                <div className="sc-skills-list">
+                  {candidate_skills.map((skill, i) => (
+                    <div key={i} className="sc-skill">
+                      <span>{"</>"}</span>
+                      {skill}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           )}
@@ -202,9 +204,9 @@ export function EmployeeScoreCard() {
                       <div className="esc-qa-audio-wrapper">
                         {qa.candidate_audio_file_url && (
                           <div className="esc-qa-audio-container">
-                            <audio 
-                              controls 
-                              src={qa.candidate_audio_file_url} 
+                            <audio
+                              controls
+                              src={qa.candidate_audio_file_url}
                               className="esc-qa-audio-player"
                               preload="metadata"
                             >
@@ -213,8 +215,8 @@ export function EmployeeScoreCard() {
                           </div>
                         )}
                         <div className="esc-qa-transcript-box">
-                           <strong>Transcript: </strong>
-                           <p>{qa.transcript || "No transcript available."}</p>
+                          <strong>Transcript: </strong>
+                          <p>{qa.transcript || "No transcript available."}</p>
                         </div>
                       </div>
                     ) : (
