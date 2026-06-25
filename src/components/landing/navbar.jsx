@@ -22,7 +22,6 @@ export function Navbar() {
     setOpen(false);
   };
 
-  // ✅ FIX: hash-based active logic
   const getNavClass = (pathOrHash) => {
     if (pathOrHash.startsWith("/")) {
       return `ls-nav-link ${location.pathname === pathOrHash ? "ls-nav-link-active" : ""}`;
@@ -37,12 +36,16 @@ export function Navbar() {
     }
     const currentHash = location.hash || "#home";
     return `ls-mobile-link ${
-      currentHash === pathOrHash && location.pathname === "/" ? "ls-mobile-link-active" : ""
+      currentHash === pathOrHash && location.pathname === "/"
+        ? "ls-mobile-link-active"
+        : ""
     }`;
   };
 
   return (
-    <header className={`ls-navbar hide-on-print ${isScrolled ? "ls-navbar-scrolled" : ""}`}>
+    <header
+      className={`ls-navbar hide-on-print ${isScrolled ? "ls-navbar-scrolled" : ""}`}
+    >
       <div className="ls-navbar-inner">
         <div className="ls-logo-area">
           <NavLink to="/#home" className="ls-logo-text">
