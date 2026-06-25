@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import overlay_img from "@/assets/JD-Upload.png";
 import { useUpdateJob } from "@/hooks/employer/useEmployerJobs";
+import { useIndustries } from "@/hooks/useFindJobs";
 
 export const EditJobModal = ({ job, onClose }) => {
   const updateMutation = useUpdateJob();
+  const { data: industries = [], isLoading: industriesLoading } =
+    useIndustries();
   const [updateError, setUpdateError] = useState(null);
 
   //  Map API fields explicitly instead of blind spread
@@ -107,20 +110,72 @@ export const EditJobModal = ({ job, onClose }) => {
             <div className="jd-row-3">
               <div className="jd-field">
                 <label>Job Title</label>
-                <input value={editingJob.title} disabled />
+                <input
+                  value={editingJob.title}
+                  onChange={(e) =>
+                    setEditingJob((prev) => ({
+                      ...prev,
+                      title: e.target.value,
+                    }))
+                  }
+                />
               </div>
               <div className="jd-field">
                 <label>Work Type</label>
-                <input value={editingJob.work_type} disabled />
+                <select
+                  value={editingJob.work_type}
+                  onChange={(e) =>
+                    setEditingJob((prev) => ({
+                      ...prev,
+                      work_type: e.target.value,
+                    }))
+                  }
+                >
+                  <option value="">Select Work Type</option>
+                  <option value="on_site">On-site</option>
+                  <option value="remote">Remote</option>
+                  <option value="hybrid">Hybrid</option>
+                </select>
               </div>
               <div className="jd-field">
                 <label>Employment Type</label>
-                <input value={editingJob.employment_type} disabled />
+                <select
+                  value={editingJob.employment_type}
+                  onChange={(e) =>
+                    setEditingJob((prev) => ({
+                      ...prev,
+                      employment_type: e.target.value,
+                    }))
+                  }
+                >
+                  <option value="">Select Employment Type</option>
+                  <option value="full_time">Full Time</option>
+                  <option value="part_time">Part Time</option>
+                  <option value="contract">Contract</option>
+                </select>
               </div>
             </div>
             <div className="jd-box">
               <label>Industry</label>
-              <input value={editingJob.industry} disabled />
+              <select
+                value={editingJob.industry}
+                onChange={(e) =>
+                  setEditingJob((prev) => ({
+                    ...prev,
+                    industry: e.target.value,
+                  }))
+                }
+                disabled={industriesLoading}
+              >
+                <option value="">
+                  {industriesLoading ? "Loading..." : "Select Industry"}
+                </option>
+                {industries.map((ind) => (
+                  <option key={ind.value} value={ind.value}>
+                    {ind.label}
+                  </option>
+                ))}
+              </select>
             </div>
             <div className="jd-box">
               <label>Must-Have Skills (comma separated)</label>
@@ -210,6 +265,18 @@ export const EditJobModal = ({ job, onClose }) => {
                   }
                 />
               </div>
+            </div>
+            <div className="jd-box">
+              <label>Location</label>
+              <input
+                value={editingJob.location}
+                onChange={(e) =>
+                  setEditingJob((prev) => ({
+                    ...prev,
+                    location: e.target.value,
+                  }))
+                }
+              />
             </div>
             <div className="jd-row-3">
               <div className="jd-field">

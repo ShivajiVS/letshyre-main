@@ -75,10 +75,10 @@ export function ViewJobs() {
         </div>
       </div>
       <div className="cd-job-tabs">
-        {["all", "open", "closed", "paused", "pending"].map((tab) => (
+        {["All", "Open", "Closed", "Paused"].map((tab) => (
           <button
             key={tab}
-            className={`cd-tab ${urlStatus.toLowerCase() === tab ? "active" : ""}`}
+            className={`cd-tab ${urlStatus.toLowerCase() === tab.toLowerCase() ? "active" : ""}`}
             onClick={() => handleTabChange(tab)}
           >
             {tab.toUpperCase()}
