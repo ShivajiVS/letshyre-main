@@ -60,7 +60,7 @@ function StepResume({ onNext, onBack }) {
         if (jobStatus === "completed") {
           const result = statusData.data;
           resumeId = result.ai_resume_id;
-          roles = result?.suggested_roles?.roles?.filter(Boolean) || [];
+          roles = (result?.suggested_roles?.suggested_roles || result?.suggested_roles?.roles || []).filter(Boolean);
           break;
         }
 
@@ -283,7 +283,6 @@ function StepResume({ onNext, onBack }) {
             <button type="button" className="btn-primary">Select File</button>
           </div>
         )}
-
         {file && (
           <>
             <div className="file-active-card">
