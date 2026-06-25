@@ -214,6 +214,7 @@ export function PostJob({ editJobId = null }) {
         country: data.country || "",
         state: data.state || "",
         city: data.city || "",
+        location: data.location || "",
 
         education: data.minimum_education || "",
         specialization: data.specialization || "",
@@ -250,6 +251,7 @@ export function PostJob({ editJobId = null }) {
         country: validatedData.country,
         state: validatedData.state,
         city: validatedData.city,
+        location: validatedData.location || "",
 
         work_mode:
           validatedData.work_type === "Hybrid"

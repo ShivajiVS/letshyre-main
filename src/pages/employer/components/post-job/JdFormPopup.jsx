@@ -157,7 +157,13 @@ export function JdFormPopup({
               </div>
             </div>
 
-            {/* ===== EDUCATION ===== */}
+            <div className="jd-box">
+              <label>Location (Full Address)</label>
+              <input {...register("location")} placeholder="e.g. 123 Tech Park, Bangalore" />
+              {errors.location && <span className="jd-error-text">{errors.location.message}</span>}
+            </div>
+
+            {/* ===== EDUCATION & DEADLINE ===== */}
             <div className="jd-row-3">
               <div className="jd-field">
                 <label>Minimum Education</label>
@@ -170,10 +176,7 @@ export function JdFormPopup({
                 <input {...register("specialization")} />
                 {errors.specialization && <span className="jd-error-text">{errors.specialization.message}</span>}
               </div>
-            </div>
 
-            {/* ===== DEADLINE ===== */}
-            <div className="jd-row-3">
               <div className="jd-field">
                 <label>Application Deadline</label>
                 <input 

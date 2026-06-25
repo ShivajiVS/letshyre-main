@@ -13,6 +13,7 @@ export const jobSchema = z.object({
   country: z.string().min(1, "Country is required"),
   state: z.string().min(1, "State is required"),
   city: z.string().min(1, "City is required"),
+  location: z.string().optional(),
 
   education: z.string().min(1, "Education is required"),
   specialization: z.string().min(1, "Specialization is required"),
