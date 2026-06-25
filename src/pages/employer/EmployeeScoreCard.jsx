@@ -232,9 +232,9 @@ export function EmployeeScoreCard() {
                     >
                       {qa.type || "UNKNOWN"}
                     </span>
-                    <span className="sc-qa-score-pill">
+                    {/* <span className="sc-qa-score-pill">
                       Score: {qa.earned_points || 0}/{qa.max_points || 0}
-                    </span>
+                    </span> */}
                   </div>
 
                   {/* Question */}
@@ -282,12 +282,12 @@ export function EmployeeScoreCard() {
                       </div>
                     )}
 
-                    {qa.transcript && qa.type === "AUDIO" && (
+                    {/* {qa.transcript && qa.type === "AUDIO" && (
                       <div className="audio-transcript">
                         <strong>Transcript:</strong>
                         <p>{qa.transcript}</p>
                       </div>
-                    )}
+                    )} */}
 
                     {qa.feedback && (
                       <div className="qa-feedback-box">
