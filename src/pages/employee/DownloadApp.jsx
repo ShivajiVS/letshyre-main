@@ -3,14 +3,12 @@ import { Helmet } from "react-helmet-async";
 import { Link } from "react-router";
 import { motion } from "framer-motion";
 import { useDesktopAppReleases } from "../../hooks/employee/useDesktopAppReleases";
-import { downloadDesktopAppFile } from "../../services/employee/desktopApp.service";
 
 import "./styles/employee-profile.css";
 import "./styles/download-app.css";
 
 export function DownloadApp() {
   const [os, setOs] = useState("Windows");
-  const [isDownloading, setIsDownloading] = useState(false);
   const { data: releases, isLoading } = useDesktopAppReleases();
 
   useEffect(() => {
@@ -30,17 +28,15 @@ export function DownloadApp() {
 
   const isAvailable = activeRelease?.available ?? false;
 
-  const handleDownload = async (e) => {
+  const handleDownload = (e) => {
     e.preventDefault();
-    if (!isAvailable || isDownloading) return;
+    if (!isAvailable) return;
 
     try {
-      setIsDownloading(true);
-      const blob = await downloadDesktopAppFile(os.toLowerCase());
+      const downloadUrl = `${import.meta.env.VITE_API_BASE_URL}commonapp/v1/desktop_app/${os.toLowerCase()}/download/`;
       
-      const url = window.URL.createObjectURL(new Blob([blob]));
       const link = document.createElement("a");
-      link.href = url;
+      link.href = downloadUrl;
       
       const filename = activeRelease?.original_filename || `LetsHyre-${os}.exe`;
       link.setAttribute("download", filename);
@@ -49,16 +45,12 @@ export function DownloadApp() {
       link.click();
       
       link.parentNode.removeChild(link);
-      window.URL.revokeObjectURL(url);
     } catch (error) {
-      console.error("Failed to download file", error);
-    } finally {
-      setIsDownloading(false);
+      console.error("Failed to trigger download", error);
     }
   };
 
   const getDownloadText = () => {
-    if (isDownloading) return "Downloading...";
     if (!isAvailable) return "Coming Soon";
     if (os === "Mac") return "Download for Mac";
     if (os === "Linux") return "Download for Linux";
@@ -148,14 +140,14 @@ export function DownloadApp() {
           </div>
         </motion.div>
 
-        {isLoading || isDownloading ? (
+        {isLoading ? (
           <motion.div
             className="da-download-btn"
             style={{ opacity: 0.7, cursor: "not-allowed" }}
             variants={itemVariants}
           >
             <i className="bi bi-arrow-repeat da-download-icon da-spin-icon" />
-            {isDownloading ? "Downloading..." : "Loading releases..."}
+            Loading releases...
           </motion.div>
         ) : (
           <motion.button

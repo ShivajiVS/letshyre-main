@@ -94,7 +94,13 @@ export function Footer() {
             <li>Features</li>
             <li>Pricing</li>
             <li>AI Interview Demo</li>
-            <li>Integrations</li>
+            <li
+              onClick={() => {
+                navigate("/download");
+              }}
+            >
+              Download application
+            </li>
           </ul>
         </div>
 
