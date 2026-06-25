@@ -11,7 +11,6 @@ import {
 
 import "./styles/employee-profile.css";
 
-
 const CX = 120,
   CY = 128,
   R = 90,
@@ -58,10 +57,15 @@ function arcD(startDeg, endDeg) {
 function GaugeSVG({ score }) {
   const scoreDeg = (score / 100) * 180;
   const half = GAP_DEG / 2;
-  const leftEnd = Math.max(180 - scoreDeg + half, 0.5);
-  const rightStart = Math.min(180 - scoreDeg - half, 179.5);
+  const boundary = 180 - scoreDeg;
+
+  // Let the gap scale down as we approach the ends so it smoothly disappears
+  const actualHalf = Math.min(half, boundary, 180 - boundary);
+  const leftEnd = boundary + actualHalf;
+  const rightStart = boundary - actualHalf;
+
   const dLeft = score > 0 ? arcD(180, leftEnd) : "";
-  const dRight = score < 100 && rightStart > 1 ? arcD(rightStart, 0) : "";
+  const dRight = score < 100 && rightStart > 0 ? arcD(rightStart, 0) : "";
 
   return (
     <svg
@@ -111,21 +115,16 @@ function GaugeSVG({ score }) {
   );
 }
 
-/** A single entry in the work experience timeline. */
+/** A single work experience block in the timeline. */
 function ExperienceItem({ role, company, duration, description }) {
   return (
     <div className="pp-time-item">
-      <h5>{role}</h5>
-      <p className="pp-grey-text">{company}</p>
-      <p className="pp-grey-text">{duration}</p>
-      {description && (
-        <p
-          className="pp-grey-text"
-          style={{ marginTop: "6px", fontSize: "0.875rem" }}
-        >
-          {description}
-        </p>
-      )}
+      <div className="pp-exp-header">
+        <h5>{role}</h5>
+        <span className="pp-exp-duration">{duration}</span>
+      </div>
+      <p className="pp-exp-company">{company}</p>
+      {description && <p className="pp-desc-text">{description}</p>}
     </div>
   );
 }
@@ -133,10 +132,17 @@ function ExperienceItem({ role, company, duration, description }) {
 /** A single education block. */
 function EducationItem({ degree, institution, duration }) {
   return (
-    <div className="pp-edu">
-      <h5>{institution}</h5>
-      <p className="pp-grey-text">{degree}</p>
-      <p className="pp-grey-text">{duration}</p>
+    <div className="pp-edu-box">
+      <div className="pp-edu-icon">
+        <i className="bi bi-mortarboard" />
+      </div>
+      <div className="pp-edu-details" style={{ flex: 1 }}>
+        <div className="pp-edu-header">
+          <h5>{institution}</h5>
+          <p className="pp-edu-date">{duration}</p>
+        </div>
+        <p className="pp-edu-degree">{degree}</p>
+      </div>
     </div>
   );
 }
@@ -146,7 +152,7 @@ function ProjectItem({ name, description }) {
   return (
     <div className="pp-edu">
       <h5>{name || "Untitled Project"}</h5>
-      {description && <p className="pp-grey-text">{description}</p>}
+      {description && <p className="pp-desc-text">{description}</p>}
     </div>
   );
 }
@@ -211,14 +217,14 @@ function ScoreCard({ score, interviewAttempts, maxInterviews, candidateId }) {
         </div>
       </div>
 
-      <div className="gauge-details-btn-container">
-        <Link 
-          to={`/employer/employee-score-card?id=${candidateId}`} 
+      {/* <div className="gauge-details-btn-container">
+        <Link
+          to={`/employer/employee-score-card?id=${candidateId}`}
           className="gauge-details-btn"
         >
           Check Full Details
         </Link>
-      </div>
+      </div> */}
     </div>
   );
 }
@@ -227,7 +233,9 @@ function ErrorState({ onRetry }) {
   return (
     <div className="ep-error-banner">
       <i className="bi bi-wifi-off" />
-      <p>Could not load the candidate's profile. Please check your connection.</p>
+      <p>
+        Could not load the candidate's profile. Please check your connection.
+      </p>
       <button className="ep-retry-btn" onClick={onRetry}>
         Try Again
       </button>
@@ -259,8 +267,13 @@ function ProfileLoadingSkeleton() {
 export function EmployeeProfile() {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
-  
-  const { data: raw, isLoading, isError, refetch } = useUnlockedCandidateProfile(id);
+
+  const {
+    data: raw,
+    isLoading,
+    isError,
+    refetch,
+  } = useUnlockedCandidateProfile(id);
 
   /* Map the employer API response to the profile structure */
   const profile = raw
@@ -289,10 +302,12 @@ export function EmployeeProfile() {
         resume: raw.candidate_resume,
         is_verified: raw.candidate_is_verified,
         profile_completion_score: raw.candidate_profile_completion_score,
-        interview_attempts_used: parseField(raw.candidate_interview_scores).length,
+        interview_attempts_used: parseField(raw.candidate_interview_scores)
+          .length,
         max_interviews_allowed: 3,
         // Calculate present company based on experience
-        present_or_last_working_company: parseField(raw.candidate_experience)[0]?.company || null,
+        present_or_last_working_company:
+          parseField(raw.candidate_experience)[0]?.company || null,
       }
     : null;
 
@@ -347,9 +362,9 @@ export function EmployeeProfile() {
               }}
             />
             <div className="pp-avatar-overlay" />
-            <div className="pp-avatar-info">
+            {/* <div className="pp-avatar-info">
               <h3 className="pp-avatar-name">{profile.name || "—"}</h3>
-            </div>
+            </div> */}
           </div>
         </div>
 
@@ -413,7 +428,7 @@ export function EmployeeProfile() {
 
             {/* Column 3 — Status + Interview Progress */}
             <div className="grid-column right-column">
-              <div className="pp-item">
+              {/* <div className="pp-item">
                 <i className="bi bi-award" />
                 <div className="score-container">
                   <p className="pp-grey-text">Profile Completion</p>
@@ -431,8 +446,8 @@ export function EmployeeProfile() {
                     </span>
                   </div>
                 </div>
-              </div>
-              <div className="pp-item">
+              </div> */}
+              {/* <div className="pp-item">
                 <i
                   className={`bi ${profile.is_verified ? "bi-patch-check-fill" : "bi-patch-check"}`}
                   style={{ color: profile.is_verified ? "#22c55e" : undefined }}
@@ -440,7 +455,8 @@ export function EmployeeProfile() {
                 <p className="pp-grey-text">
                   {profile.is_verified ? "Verified" : "Not Verified"}
                 </p>
-              </div>
+              </div> */}
+
               <div className="pp-item">
                 <i className="bi bi-camera-video" />
                 <p className="pp-grey-text">
@@ -526,8 +542,14 @@ export function EmployeeProfile() {
               <h4 className="pp-heading">Roles Applied</h4>
               {profile.roles_applied.map((role, i) => (
                 <div className="pp-role" key={i}>
-                  {role.job_title} 
-                  <span style={{ fontSize: "12px", marginLeft: "10px", opacity: 0.8 }}>
+                  {role.job_title}
+                  <span
+                    style={{
+                      fontSize: "12px",
+                      marginLeft: "10px",
+                      opacity: 0.8,
+                    }}
+                  >
                     ({role.status})
                   </span>
                 </div>
@@ -552,20 +574,42 @@ export function EmployeeProfile() {
           {/* CTC */}
           <div className="pp-card">
             <h4 className="pp-heading">CTC &amp; Salary Expectations</h4>
-            <div className="pp-edu">
-              <h5>Current CTC</h5>
-              <p className="pp-grey-text">{formatCTC(profile.current_ctc)}</p>
-              <h5>Expected CTC</h5>
-              <p className="pp-grey-text">{formatCTC(profile.expected_ctc)}</p>
+            <div className="pp-ctc-grid">
+              <div className="pp-ctc-box">
+                <div className="pp-ctc-icon">
+                  <i className="bi bi-wallet2" />
+                </div>
+                <div className="pp-ctc-details">
+                  <h5>Current CTC</h5>
+                  <p className="pp-ctc-value">
+                    {formatCTC(profile.current_ctc)}
+                    {formatCTC(profile.current_ctc) !== "N/A" && " LPA"}
+                  </p>
+                </div>
+              </div>
+              <div className="pp-ctc-box">
+                <div className="pp-ctc-icon">
+                  <i className="bi bi-cash-stack" />
+                </div>
+                <div className="pp-ctc-details">
+                  <h5>Expected CTC</h5>
+                  <p className="pp-ctc-value">
+                    {formatCTC(profile.expected_ctc)}
+                    {formatCTC(profile.expected_ctc) !== "N/A" && " LPA"}
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
 
           {/* Notice Period */}
           <div className="pp-card">
             <h4 className="pp-heading">Notice Period</h4>
-            <div className="pp-edu">
-              <h5>Availability</h5>
-              <p className="pp-grey-text">{profile.notice_period || "Not specified"}</p>
+            <div className="pp-address-box">
+              <i className="bi bi-clock-history pp-address-icon" />
+              <p className="pp-address-text">
+                {profile.notice_period || "Not specified"}
+              </p>
             </div>
           </div>
 
@@ -594,8 +638,9 @@ export function EmployeeProfile() {
           {profile.address && (
             <div className="pp-card">
               <h4 className="pp-heading">Address</h4>
-              <div className="pp-edu">
-                <p className="pp-grey-text">{profile.address}</p>
+              <div className="pp-address-box">
+                <i className="bi bi-geo-alt-fill pp-address-icon" />
+                <p className="pp-address-text">{profile.address}</p>
               </div>
             </div>
           )}

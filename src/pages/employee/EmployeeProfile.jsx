@@ -224,8 +224,8 @@ function ScoreCard({ score, interviewAttempts, maxInterviews }) {
       </div>
 
       <div className="gauge-details-btn-container">
-        <Link to="/employer/employee-score-card" className="gauge-details-btn">
-          Check Full Details
+        <Link to="/employer/score-cards-list" className="gauge-details-btn">
+          View Scorecards
         </Link>
       </div>
     </div>

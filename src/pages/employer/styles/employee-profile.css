@@ -209,6 +209,14 @@
   font-weight: 500;
 }
 
+.pp-desc-text {
+  color: rgb(127, 126, 126);
+  margin: 6px 0 0 0;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.7;
+}
+
 /* =========================================================
    MINI PROGRESS BAR (In Personal Details)
 ========================================================= */
@@ -328,10 +336,10 @@
   margin-bottom: 6px;
 }
 
-/* p value that follows an h5 — adds gap before the next label */
+/* p value that follows an h5 — tightened to group subtitles */
 .pp-time-item h5 + p,
 .pp-edu h5 + p {
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 
 /* Last p inside a block needs no extra bottom gap */
@@ -339,11 +347,157 @@
 .pp-edu p:last-child {
   margin-bottom: 0;
 }
+
+.pp-exp-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2px;
+}
+
+.pp-exp-company {
+  color: #1e293b;
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 0 0 6px 0;
+}
+
+.pp-exp-duration {
+  background: #e2e8f0;
+  color: #475569;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
 .pp-edu {
   background: #eef3fb;
   padding: 18px;
   border-radius: 14px;
   margin-bottom: 14px;
+}
+
+.pp-edu-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  margin-bottom: 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+}
+
+.pp-edu-icon {
+  width: 48px;
+  height: 48px;
+  background: #f0fdf4;
+  color: #22c55e;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.pp-edu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 6px;
+}
+
+.pp-edu-details h5 {
+  color: #0f172a;
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 0;
+  font-family: "Inter", "Roboto", sans-serif;
+}
+
+.pp-edu-details .pp-edu-degree {
+  color: #475569;
+  font-size: 0.95rem;
+  margin: 0 0 4px 0;
+  font-weight: 500;
+}
+
+.pp-edu-details .pp-edu-date {
+  color: #94a3b8;
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.pp-address-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #f8fafc;
+  padding: 16px 20px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.pp-address-icon {
+  color: #5a8df6;
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.pp-address-text {
+  margin: 0;
+  color: #475569;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  font-family: "Inter", "Roboto", sans-serif;
+}
+
+.pp-ctc-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.pp-ctc-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #f8fafc;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.pp-ctc-icon {
+  width: 40px;
+  height: 40px;
+  background: #eef3fb;
+  color: #5a8df6;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+
+.pp-ctc-details h5 {
+  color: #64748b;
+  font-size: 0.8rem;
+  margin: 0 0 4px 0;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.pp-ctc-value {
+  color: #0f172a;
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 0;
+  font-family: "Inter", "Roboto", sans-serif;
 }
 
 /* =========================================================
@@ -377,7 +531,7 @@
   z-index: 1;
   background: linear-gradient(135deg, #b2cdf6 0%, #bbd4f9 100%);
   border-radius: 20px;
-  padding: 35px 20px 25px;
+  padding: 15px 20px 45px; /* Shifted up by 20px for balance */
   overflow: visible;
 }
 
@@ -396,7 +550,7 @@
 /* TEXT ALIGNMENT FIXES HERE */
 .gauge-text-block {
   position: absolute;
-  top: 72%; /* Pushed further down into the arc space */
+  top: 75%; /* Centered nicely within the arc space */
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
