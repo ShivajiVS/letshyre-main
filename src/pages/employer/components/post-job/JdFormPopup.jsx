@@ -69,8 +69,9 @@ export function JdFormPopup({
                 <label>Employment Type</label>
                 <select className="jd-input" {...register("employment_type")}>
                   <option value="">Select Employment Type</option>
-                  <option value="Full-Time Employee">Full-Time Employee</option>
-                  <option value="Part-Time Employee">Part-Time Employee</option>
+                  <option value="Full Time">Full Time</option>
+                  <option value="Part Time">Part Time</option>
+                  <option value="Contract">Contract</option>
                 </select>
                 {errors.employment_type && <span className="jd-error-text">{errors.employment_type.message}</span>}
               </div>

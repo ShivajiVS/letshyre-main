@@ -259,9 +259,11 @@ export function PostJob({ editJobId = null }) {
               : "on_site",
 
         employment_type:
-          validatedData.employment_type === "Full-Time Employee"
+          validatedData.employment_type === "Full Time"
             ? "full_time"
-            : "part_time",
+            : validatedData.employment_type === "Contract"
+              ? "contract"
+              : "part_time",
 
         industry_type:
           validatedData.industry_type === "other"
