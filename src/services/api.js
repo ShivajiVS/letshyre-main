@@ -131,7 +131,7 @@ api.interceptors.response.use(
         }
 
         const res = await axios.post(
-          `${import.meta.env.VITE_API_BASE_URL}/user/v1/login_refresh/`,
+          `${import.meta.env.VITE_API_BASE_URL}user/v1/login_refresh/`,
           {
             refresh_token: refreshToken,
           },
