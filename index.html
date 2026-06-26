@@ -32,137 +32,90 @@
       rel="stylesheet"
     />
     <style>
-      :root {
-        --primary-lite-blue: #f6faff;
-        --secondary-sky-blue: #6296ef;
-        --brand-blue: #2563eb;
-        --slate-900: #0f172a;
-        --font-primary02: "Merriweather", serif;
-      }
-
       * {
         padding: 0;
         margin: 0;
         box-sizing: border-box;
       }
 
-      .letshyre-boot-container {
+      .lh-boot {
         display: flex;
         flex-direction: column;
+        align-items: center;
         justify-content: center;
-        align-items: center;
         height: 100vh;
-        width: 100vw;
-        background-color: var(--primary-lite-blue);
+        width: 100%;
+        background: radial-gradient(ellipse at 50% 40%, #eef4ff 0%, #f8fafc 60%);
         position: fixed;
-        top: 0;
-        left: 0;
+        inset: 0;
+        animation: lh-fadeIn 0.5s ease-out both;
       }
 
-      /* Geometric Morph Loader */
-      .morph-loader {
-        width: 40px;
-        height: 40px;
-        background-color: var(--brand-blue);
-        margin-bottom: 30px;
-        animation: morph 2s infinite ease-in-out;
-        box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2);
+      .lh-boot-logo {
+        height: 48px;
+        width: auto;
+        object-fit: contain;
+        user-select: none;
+        pointer-events: none;
       }
 
-      .letshyre-brand {
-        font-family: var(--font-primary02);
-        font-size: 2.5rem;
-        font-weight: 800;
-        color: var(--slate-900);
-        position: relative;
-        overflow: hidden;
-      }
-
-      /* Text Shimmer Effect */
-      .letshyre-brand span {
-        color: var(--brand-blue);
-        background: linear-gradient(
-          to right,
-          var(--brand-blue) 0%,
-          #93c5fd 50%,
-          var(--brand-blue) 100%
-        );
-        background-size: 200% auto;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        animation: text-shimmer 2s linear infinite;
-      }
-
-      .letshyre-status {
-        margin-top: 15px;
-        font-family: "Segoe UI", sans-serif;
-        font-size: 0.9rem;
-        color: #94a3b8;
-        font-weight: 500;
-        letter-spacing: 0.5px;
-      }
-
-      /* Animations */
-      @keyframes morph {
-        0% {
-          transform: scale(1) rotate(0deg);
-          border-radius: 4px;
-        }
-        25% {
-          transform: scale(1.2) rotate(90deg);
-          border-radius: 50%;
-          background-color: var(--secondary-sky-blue);
-        }
-        50% {
-          transform: scale(1) rotate(180deg);
-          border-radius: 4px;
-        }
-        75% {
-          transform: scale(1.2) rotate(270deg);
-          border-radius: 50%;
-          background-color: var(--brand-blue);
-        }
-        100% {
-          transform: scale(1) rotate(360deg);
-          border-radius: 4px;
-        }
-      }
-
-      @keyframes text-shimmer {
-        to {
-          background-position: 200% center;
-        }
-      }
-
-      /* Subtle enter animation for the whole content */
-      .content-fade {
-        animation: fadeIn 0.6s ease-out forwards;
+      .lh-dots {
         display: flex;
-        flex-direction: column;
-        align-items: center;
+        gap: 8px;
+        margin-top: 32px;
       }
 
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: scale(0.95);
+      .lh-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background-color: #2563eb;
+        animation: lh-bounce 1.4s ease-in-out infinite both;
+      }
+
+      .lh-dot:nth-child(1) { animation-delay: 0s; }
+      .lh-dot:nth-child(2) { animation-delay: 0.16s; }
+      .lh-dot:nth-child(3) { animation-delay: 0.32s; }
+
+      .lh-tagline {
+        margin-top: 20px;
+        font-family: "Segoe UI", system-ui, sans-serif;
+        font-size: 0.82rem;
+        color: #94a3b8;
+        letter-spacing: 0.04em;
+        animation: lh-fadeIn 0.6s 0.4s ease-out both;
+      }
+
+      @keyframes lh-bounce {
+        0%, 80%, 100% {
+          transform: scale(0.4);
+          opacity: 0.3;
         }
-        to {
-          opacity: 1;
+        40% {
           transform: scale(1);
+          opacity: 1;
         }
+      }
+
+      @keyframes lh-fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+
+      @media (max-width: 480px) {
+        .lh-boot-logo { height: 38px; }
+        .lh-dot { width: 6px; height: 6px; }
       }
     </style>
   </head>
   <body>
     <div id="root">
-      <div class="letshyre-boot-container">
-        <div class="content-fade">
-          <div class="morph-loader"></div>
-
-          <div class="letshyre-brand">Lets<span>hyre</span></div>
-
-          <div class="letshyre-status">Syncing assets</div>
+      <div class="lh-boot">
+        <img src="/logo2.png" alt="Letshyre" class="lh-boot-logo" />
+        <div class="lh-dots">
+          <div class="lh-dot"></div>
+          <div class="lh-dot"></div>
+          <div class="lh-dot"></div>
         </div>
       </div>
     </div>
