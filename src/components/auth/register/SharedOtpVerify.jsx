@@ -156,17 +156,6 @@ export function SharedOtpVerify({ email, otpSessionKey, onNext, role }) {
       <p className="cl-sub-para" style={{ marginBottom: 0 }}>
         Enter the OTP we sent to your email
       </p>
-      <p
-        className="cl-sub-para"
-        style={{
-          color: "#666",
-          fontSize: "13px",
-          marginBottom: "15px",
-        }}
-      >
-        Please check your inbox, including the <strong>spam</strong> or{" "}
-        <strong>promotions</strong> folder.
-      </p>
 
       <form className="cl-form" onSubmit={handleSubmit}>
         <div className="otp-inputs">
@@ -195,6 +184,16 @@ export function SharedOtpVerify({ email, otpSessionKey, onNext, role }) {
         >
           {verifyMutation.isPending ? "Verifying..." : "Verify & Continue"}
         </button>
+        <p
+          className="cl-sub-para"
+          style={{
+            color: "black",
+            fontSize: "13px",
+            marginBottom: "5px",
+          }}
+        >
+          Check Spam folder if not received
+        </p>
       </form>
 
       <p className="otp-help-text">Didn’t receive code?</p>

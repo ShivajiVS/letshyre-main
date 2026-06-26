@@ -214,10 +214,10 @@ export function EmployeeScoreCard() {
                             </audio>
                           </div>
                         )}
-                        <div className="esc-qa-transcript-box">
+                        {/* <div className="esc-qa-transcript-box">
                           <strong>Transcript: </strong>
                           <p>{qa.transcript || "No transcript available."}</p>
-                        </div>
+                        </div> */}
                       </div>
                     ) : (
                       <p>{qa.answer_provided || "No answer provided."}</p>
