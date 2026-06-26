@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
+import { useQueryClient } from "@tanstack/react-query";
 
 import {
   useOpenJobs,
@@ -17,6 +18,7 @@ import "@/pages/employer/styles/candidate-pool.css";
 
 export function CandidatePool() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   // ================= STATE =================
   const [selectedJobId, setSelectedJobId] = useState(null);
@@ -116,6 +118,7 @@ export function CandidatePool() {
             data?.message || "Candidate Profile Unlocked successfully.",
           );
           setCandidateToUnlock(null);
+          queryClient.invalidateQueries({ queryKey: ["employerCredits"] });
         },
         onError: (error) => {
           showError(
